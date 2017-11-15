@@ -39,6 +39,7 @@ import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.FotoController;
 import com.datatakehnn.controllers.NovedadController;
+import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.models.foto_model.Foto;
 import com.datatakehnn.models.novedad_model.Novedad;
 import com.datatakehnn.services.coords.CoordsService;
@@ -49,7 +50,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -226,20 +230,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             Snackbar.make(container, "Debe Tomar la Foto 2", Snackbar.LENGTH_SHORT).show();
             cancel = true;
         } else {
-            //Snackbar.make(container, "Fotos Registradas", Snackbar.LENGTH_SHORT).show();
-            final AlertDialog.Builder builder = new AlertDialog.Builder(FotosActivity.this);
-            builder.setTitle("Notificación");
-            builder.setMessage("Poste Registrado");
-            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(getApplicationContext(), SyncActivity.class);
-                    startActivity(i);
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            registerAll();
         }
     }
     //endregion
@@ -281,6 +272,35 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     //endregion
 
     //region METHODS
+    public void registerAll() {
+        Elemento elemento = elementoController.getLast();
+        String horaFin = obtenerHora();
+        elemento.setHora_Fin(horaFin);
+        elementoController.update(elemento);
+        //Snackbar.make(container, "Fotos Registradas", Snackbar.LENGTH_SHORT).show();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(FotosActivity.this);
+        builder.setTitle("Notificación");
+        builder.setMessage("Poste Registrado");
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent(getApplicationContext(), SyncActivity.class);
+                startActivity(i);
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private String obtenerHora() {
+        //Obtener Hora
+        Calendar cal = Calendar.getInstance();
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String hora = timeFormat.format(cal.getTime());
+        return hora;
+    }
+
     private void tomarFoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         file = Uri.fromFile(getOutputMediaFile());
@@ -312,6 +332,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     public void resultTomarFoto1() {
         ivFoto1.setImageURI(file);
+
+        //TODO
         Foto foto = new Foto();
         foto.setElemento_Id(elemento_id);
         foto.setDescripcion(edtFotoPoste1.getText().toString());

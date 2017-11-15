@@ -96,7 +96,6 @@ public class NovedadController {
         return novedad;
     }
 
-
     //Devuelve un Listado de Novedades por Id del Poste
     public List<Novedad> getListNovedadesByElementoId(long elemento_id) {
         List<Novedad> novedades = SQLite.select().from(Novedad.class).where
