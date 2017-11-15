@@ -325,7 +325,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         }
     }
 
-
+    //limpiar campos
     private void limpiarCampos() {
 
         String title_detalle_cable= String.format(getString(R.string.title_detalle_cable));
