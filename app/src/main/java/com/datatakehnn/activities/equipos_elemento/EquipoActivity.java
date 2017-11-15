@@ -116,11 +116,9 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
 
     //region SETUP INJECTION
     private void setupInjection() {
-
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.equipoController = EquipoController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
-
         Elemento elemento = elementoController.getLast();
         Elemento_Id = elemento.getElemento_Id();
     }

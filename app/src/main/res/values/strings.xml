@@ -15,6 +15,7 @@
     <!--Titles Activities-->
     <string name="title_cables">Cables</string>
     <string name="title_equipos">Equipos</string>
+    <string name="title_menu">Menu</string>
 
 
     <!--Login-->

@@ -53,6 +53,16 @@
             android:name=".activities.equipos_elemento.EquipoActivity"
             android:theme="@style/MiTema.NoActionBar" />
 
+        <activity
+            android:name=".activities.fotos.FotosActivity"
+            android:theme="@style/MiTema.NoActionBar" />
+
+        <activity
+            android:name=".activities.menu.MainMenuActivity"
+            android:theme="@style/MiTema.NoActionBar" >
+
+        </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -69,8 +79,7 @@
 
         <service android:name=".services.coords.CoordsService" />
 
-        <activity android:name=".activities.fotos.FotosActivity"
-            android:theme="@style/MiTema.NoActionBar"></activity>
+
     </application>
 
 </manifest>

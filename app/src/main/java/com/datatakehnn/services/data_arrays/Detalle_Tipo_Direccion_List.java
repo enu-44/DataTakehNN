@@ -10,7 +10,8 @@ import java.util.List;
  * Created by user on 15/11/2017.
  */
 
-class Detalle_Tipo_Direccion_List {
+public class Detalle_Tipo_Direccion_List {
+
     private static Detalle_Tipo_Direccion[] list_detalle_tipo_direccion = {
             new Detalle_Tipo_Direccion(1,
                     "#"
