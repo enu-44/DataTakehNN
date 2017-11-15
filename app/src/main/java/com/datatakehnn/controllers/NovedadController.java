@@ -46,6 +46,7 @@ public class NovedadController {
         novedad.setElemento_Id(novedadNew.getElemento_Id());
         novedad.setDescripcion(novedadNew.getDescripcion());
         novedad.setDetalle_Tipo_Novedad_Nombre(novedadNew.getDetalle_Tipo_Novedad_Nombre());
+        novedad.setTipo_Novedad_Id(novedadNew.getTipo_Novedad_Id());
         novedad.save();
         return novedad;
     }
@@ -63,6 +64,7 @@ public class NovedadController {
         novedad.setElemento_Id(novedadNew.getElemento_Id());
         novedad.setDescripcion(novedadNew.getDescripcion());
         novedad.setDetalle_Tipo_Novedad_Nombre(novedadNew.getDetalle_Tipo_Novedad_Nombre());
+        novedad.setTipo_Novedad_Id(novedadNew.getTipo_Novedad_Id());
         novedad.save();
         return novedad;
     }
@@ -74,20 +76,28 @@ public class NovedadController {
         novedad.setElemento_Id(novedadNew.getElemento_Id());
         novedad.setDescripcion(novedadNew.getDescripcion());
         novedad.setDetalle_Tipo_Novedad_Nombre(novedadNew.getDetalle_Tipo_Novedad_Nombre());
+        novedad.setTipo_Novedad_Id(novedadNew.getTipo_Novedad_Id());
         novedad.setImage_Novedad(novedadNew.getImage_Novedad());
         novedad.save();
         return novedad;
     }
 
-    //Obtener novedad registrada por detalle_tipo_id y elemento_id
-    public Novedad getByDetalleAndElemento(long detalle_novedad_id, long elemento_id) {
-        Novedad byNovedad = SQLite.select().from(Novedad.class).where
-                (Novedad_Table.Detalle_Tipo_Novedad_Id.eq(detalle_novedad_id)).and(Novedad_Table.Elemento_Id.eq(elemento_id))
-                .querySingle();
-        return byNovedad;
+    //Devuelve un Detalle_Tipo_Novedad por Id
+    public Detalle_Tipo_Novedad getDetalleById(long detalle_novedad_id) {
+        Detalle_Tipo_Novedad detalle_tipo_novedad = SQLite.select().from(Detalle_Tipo_Novedad.class).where(Detalle_Tipo_Novedad_Table.Detalle_Tipo_Novedad_Id.eq(detalle_novedad_id)).querySingle();
+        return detalle_tipo_novedad;
     }
 
 
+    //Devuelve una novedad por Tipo_Novedad y por Id de Poste
+    public Novedad getNovedadByTipoAndElementoId(long tipo_novedad_id, long elemento_id) {
+        Novedad novedad = SQLite.select().from(Novedad.class).where(Novedad_Table.Tipo_Novedad_Id.eq(tipo_novedad_id))
+                .and(Novedad_Table.Elemento_Id.eq(elemento_id)).querySingle();
+        return novedad;
+    }
+
+
+    //Devuelve un Listado de Novedades por Id del Poste
     public List<Novedad> getListNovedadesByElementoId(long elemento_id) {
         List<Novedad> novedades = SQLite.select().from(Novedad.class).where
                 (Novedad_Table.Elemento_Id.eq(elemento_id))
@@ -106,5 +116,12 @@ public class NovedadController {
         List<Detalle_Tipo_Novedad> lis = SQLite.select().from(Detalle_Tipo_Novedad.class).where(Detalle_Tipo_Novedad_Table.Tipo_Novedad_Id.eq(tipo_novedad.getTipo_Novedad_Id())).queryList();
         return lis;
     }
+
+    public Novedad getLast() {
+        Novedad novedad = new Select().from(Novedad.class).where().orderBy(Novedad_Table.Novedad_Id, false).querySingle();
+        return novedad;
+    }
+
+
 }
 

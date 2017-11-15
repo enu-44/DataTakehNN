@@ -35,7 +35,6 @@ import android.widget.TextView;
 import com.datatakehnn.R;
 import com.datatakehnn.activities.fotos.adapter.OnItemClickListenerFoto;
 import com.datatakehnn.activities.fotos.adapter.RecyclerAdapterFoto;
-import com.datatakehnn.activities.menu.MainMenuActivity;
 import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.FotoController;
@@ -234,7 +233,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+                    Intent i = new Intent(getApplicationContext(), SyncActivity.class);
                     startActivity(i);
                 }
             });

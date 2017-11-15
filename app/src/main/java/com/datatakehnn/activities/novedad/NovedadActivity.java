@@ -102,7 +102,7 @@ public class NovedadActivity extends AppCompatActivity {
 
     private void registerNovedad() {
         Novedad novedad = new Novedad();
-        Elemento elemento = new Elemento();
+        Elemento elemento;
         long elemento_id = 0;
         elemento = elementoController.getLast();
         if (elemento == null) {
@@ -110,19 +110,22 @@ public class NovedadActivity extends AppCompatActivity {
         } else {
             elemento_id = elemento.getElemento_Id() + 1;
         }
-        Novedad hayNovedad = novedadController.getByDetalleAndElemento(Detalle_Tipo_Novedad_Id, elemento_id);
+        Detalle_Tipo_Novedad detalle_tipo_novedad = novedadController.getDetalleById(Detalle_Tipo_Novedad_Id);
+        long tipo_novedad_id = detalle_tipo_novedad.getTipo_Novedad_Id();
+
+        Novedad hayNovedad = novedadController.getNovedadByTipoAndElementoId(tipo_novedad_id, elemento_id);
         if (hayNovedad == null) {
             novedad.setElemento_Id(elemento_id);
             novedad.setDetalle_Tipo_Novedad_Id(Detalle_Tipo_Novedad_Id);
             novedad.setDescripcion(edtNovedad.getText().toString());
             novedad.setDetalle_Tipo_Novedad_Nombre(Detalle_Tipo_Novedad_Nombre);
+            novedad.setTipo_Novedad_Id(tipo_novedad_id);
             novedadController.register(novedad);
         } else {
-            novedad.setElemento_Id(elemento_id);
-            novedad.setDetalle_Tipo_Novedad_Id(Detalle_Tipo_Novedad_Id);
-            novedad.setDescripcion(edtNovedad.getText().toString());
-            novedad.setDetalle_Tipo_Novedad_Nombre(Detalle_Tipo_Novedad_Nombre);
-            novedadController.update(novedad);
+            hayNovedad.setDetalle_Tipo_Novedad_Id(Detalle_Tipo_Novedad_Id);
+            hayNovedad.setDescripcion(edtNovedad.getText().toString());
+            hayNovedad.setDetalle_Tipo_Novedad_Nombre(Detalle_Tipo_Novedad_Nombre);
+            novedadController.update(hayNovedad);
         }
         setResult(RESULT_OK);
         finish();
