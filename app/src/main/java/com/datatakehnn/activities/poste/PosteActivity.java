@@ -25,14 +25,20 @@ import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.NovedadController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.controllers.UsuarioController;
+import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.models.estado_model.Estado;
 import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento;
 import com.datatakehnn.models.material_model.Material;
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento;
 import com.datatakehnn.models.retenidas_model.Cantidad_Retenidas;
+import com.datatakehnn.models.tipo_direccion_model.Detalle_Tipo_Direccion;
+import com.datatakehnn.models.tipo_direccion_model.Tipo_Direccion;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.data_arrays.Cantidad_Retenidas_List;
+import com.datatakehnn.services.data_arrays.Detalle_Tipo_Cable_List;
+import com.datatakehnn.services.data_arrays.Detalle_Tipo_Direccion_List;
+import com.datatakehnn.services.data_arrays.Tipo_Direccion_List;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.text.DateFormat;
@@ -82,6 +88,23 @@ public class PosteActivity extends AppCompatActivity {
     @BindView(R.id.spinnerLongitudPoste)
     MaterialBetterSpinner spinnerLongitudPoste;
 
+    ///Direcciones
+    @BindView(R.id.spinnerTipoDireccion)
+    MaterialBetterSpinner spinnerTipoDireccion;
+    @BindView(R.id.spinnerDetalleTipoDireccion)
+    MaterialBetterSpinner spinnerDetalleTipoDireccion;
+
+    @BindView(R.id.edtTipoDireccion)
+    EditText edtTipoDireccion;
+    @BindView(R.id.edtDetalleTipoDireccion)
+    EditText edtDetalleTipoDireccion;
+    @BindView(R.id.edtReferencia)
+    EditText edtReferencia;
+
+
+
+
+
 
     //Declaracion Arrays
     List<Estado> listEstado = new ArrayList<>();
@@ -89,6 +112,8 @@ public class PosteActivity extends AppCompatActivity {
     List<Material> materials = new ArrayList<>();
     List<Nivel_Tension_Elemento> nivel_tension_elementos = new ArrayList<>();
     List<Cantidad_Retenidas> cantidad_retenidas = new ArrayList<>();
+    List<Tipo_Direccion> tipo_direccions = new ArrayList<>();
+    List<Detalle_Tipo_Direccion> detalle_tipo_direccions = new ArrayList<>();
 
     //Variables Globals
     long Material_Id;
@@ -100,6 +125,10 @@ public class PosteActivity extends AppCompatActivity {
     Date dateFecha;
     String hora;
     Double Altura_Disponible;
+    //Direccion
+
+    String Nombre_Tipo_Direccion;
+    String Nombre_Detalle_Tipo_Direccion;
 
     private static int RESULT_ACTIVITY = 1;
 
@@ -149,6 +178,10 @@ public class PosteActivity extends AppCompatActivity {
         materials = sincronizacionGetInformacionController.getListMaterial();
         nivel_tension_elementos = sincronizacionGetInformacionController.getListNivel_Tension_Elemento();
         cantidad_retenidas = Cantidad_Retenidas_List.getListCantidadRetenidas();
+        tipo_direccions= Tipo_Direccion_List.getListTipo_Direccion();
+        detalle_tipo_direccions= Detalle_Tipo_Direccion_List.getListDetalle_Tipo_Direccion();
+        //Direcciones
+
 
         ///Adapaters
         spinnerEstado.setAdapter(null);
@@ -223,6 +256,31 @@ public class PosteActivity extends AppCompatActivity {
             }
         });
 
+
+        //Direccion
+        /*--------------------------------------------------------------------------------------------*/
+        spinnerTipoDireccion.setAdapter(null);
+        ArrayAdapter<Tipo_Direccion> tipo_direccionArrayAdapter =
+                new ArrayAdapter<Tipo_Direccion>(this, android.R.layout.simple_spinner_dropdown_item, tipo_direccions);
+        spinnerTipoDireccion.setAdapter(tipo_direccionArrayAdapter);
+        spinnerTipoDireccion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Nombre_Tipo_Direccion = tipo_direccions.get(position).getNombre();
+            }
+        });
+
+        spinnerDetalleTipoDireccion.setAdapter(null);
+        ArrayAdapter<Detalle_Tipo_Direccion> detalle_tipo_direccionArrayAdapter =
+                new ArrayAdapter<Detalle_Tipo_Direccion>(this, android.R.layout.simple_spinner_dropdown_item, detalle_tipo_direccions);
+        spinnerDetalleTipoDireccion.setAdapter(detalle_tipo_direccionArrayAdapter);
+        spinnerDetalleTipoDireccion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Nombre_Detalle_Tipo_Direccion = detalle_tipo_direccions.get(position).getNombre();
+            }
+        });
+
     }
 
 
@@ -237,6 +295,21 @@ public class PosteActivity extends AppCompatActivity {
                 cancel = true;
             }
         }
+        if (spinnerTipoDireccion.getText().toString().isEmpty()) {
+            boolean cancel = false;
+            View focusView = null;
+            spinnerTipoDireccion.setError(getString(R.string.error_field_required));
+            focusView = spinnerTipoDireccion;
+            cancel = true;
+        }
+        if (edtTipoDireccion.getText().toString().isEmpty()) {
+            boolean cancel = false;
+            View focusView = null;
+            edtTipoDireccion.setError(getString(R.string.error_field_required));
+            focusView = edtTipoDireccion;
+            cancel = true;
+        }
+
         if (edtResistenciaMecanica.isEnabled() == true) {
             String resistencia_mecanica = edtResistenciaMecanica.getText().toString();
             boolean cancel = false;
@@ -404,9 +477,10 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
         elemento.setAltura_Disponible(Altura_Disponible);
         elemento.setIs_Sync(false);
+        elemento.setDireccion(Nombre_Tipo_Direccion+" "+edtTipoDireccion.getText().toString()+" "+Nombre_Detalle_Tipo_Direccion+" "+edtDetalleTipoDireccion.getText().toString());
+        elemento.setReferencia_Localizacion(edtReferencia.getText().toString());
         elementoController.register(elemento);
         //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
-
         Intent i = new Intent(this, CablesElementoActivity.class);
         startActivity(i);
     }
@@ -441,8 +515,6 @@ public class PosteActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
 }
 
 

@@ -35,4 +35,9 @@ public class Tipo_Direccion {
     public void setNombre(String nombre) {
         Nombre = nombre;
     }
+
+    @Override
+    public String toString() {
+        return Nombre;
+    }
 }
