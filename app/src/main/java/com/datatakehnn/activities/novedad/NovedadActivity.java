@@ -39,6 +39,7 @@ public class NovedadActivity extends AppCompatActivity {
     EditText edtNovedad;
 
     //Tipo de novedad
+    String Detalle_Tipo_Novedad_Nombre;
     String Tipo_Novedad;
     long Detalle_Tipo_Novedad_Id;
     //Arrays
@@ -74,6 +75,7 @@ public class NovedadActivity extends AppCompatActivity {
         spinnerNovedad.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Detalle_Tipo_Novedad_Nombre = listDetalleTipoNovedad.get(position).getNombre();
                 Detalle_Tipo_Novedad_Id = listDetalleTipoNovedad.get(position).getDetalle_Tipo_Novedad_Id();
             }
         });
@@ -113,11 +115,13 @@ public class NovedadActivity extends AppCompatActivity {
             novedad.setElemento_Id(elemento_id);
             novedad.setDetalle_Tipo_Novedad_Id(Detalle_Tipo_Novedad_Id);
             novedad.setDescripcion(edtNovedad.getText().toString());
+            novedad.setDetalle_Tipo_Novedad_Nombre(Detalle_Tipo_Novedad_Nombre);
             novedadController.register(novedad);
         } else {
             novedad.setElemento_Id(elemento_id);
             novedad.setDetalle_Tipo_Novedad_Id(Detalle_Tipo_Novedad_Id);
             novedad.setDescripcion(edtNovedad.getText().toString());
+            novedad.setDetalle_Tipo_Novedad_Nombre(Detalle_Tipo_Novedad_Nombre);
             novedadController.update(novedad);
         }
         setResult(RESULT_OK);
@@ -145,15 +149,11 @@ public class NovedadActivity extends AppCompatActivity {
                 focusView = spinnerNovedad;
                 cancel = true;
             } else {
-
                 registerNovedad();
-
-
             }
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     //endregion

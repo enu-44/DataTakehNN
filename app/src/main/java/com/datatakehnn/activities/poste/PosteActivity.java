@@ -11,10 +11,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 
@@ -25,7 +25,6 @@ import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.NovedadController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.controllers.UsuarioController;
-import com.datatakehnn.custom.HintSpinnerAdapter;
 import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.models.estado_model.Estado;
 import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento;
@@ -34,11 +33,6 @@ import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Element
 import com.datatakehnn.models.retenidas_model.Cantidad_Retenidas;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.data_arrays.Cantidad_Retenidas_List;
-import com.datatakehnn.services.data_arrays.Estado_List;
-import com.datatakehnn.services.data_arrays.Longitud_Elemento_List;
-import com.datatakehnn.services.data_arrays.Material_List;
-import com.datatakehnn.services.data_arrays.Nivel_Tension_Elemento_List;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.text.DateFormat;
@@ -73,6 +67,10 @@ public class PosteActivity extends AppCompatActivity {
     RadioButton radioButtonSiPlaca;
     @BindView(R.id.edtResistenciaMecanica)
     EditText edtResistenciaMecanica;
+    @BindView(R.id.textInputLayoutCodigoApoyo)
+    TextInputLayout textInputLayoutCodigoApoyo;
+    @BindView(R.id.textInputLayoutResistenciaMecanica)
+    TextInputLayout textInputLayoutResistenciaMecanica;
 
     @BindView(R.id.spinnerMaterial)
     MaterialBetterSpinner spinnerMaterial;
@@ -102,6 +100,7 @@ public class PosteActivity extends AppCompatActivity {
     String fecha;
     Date dateFecha;
     String hora;
+    Double Altura_Disponible;
 
     private static int RESULT_ACTIVITY = 1;
 
@@ -110,6 +109,10 @@ public class PosteActivity extends AppCompatActivity {
     NovedadController novedadController;
     ElementoController elementoController;
     UsuarioController usuarioController;
+    @BindView(R.id.edtAlturaDisponible)
+    EditText edtAlturaDisponible;
+    @BindView(R.id.ibCalcularAltura)
+    ImageButton ibCalcularAltura;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +141,7 @@ public class PosteActivity extends AppCompatActivity {
         hora = timeFormat.format(cal.getTime());
 
     }
+
     private void loadInformacionMaster() {
 
         //Listas
@@ -278,6 +282,13 @@ public class PosteActivity extends AppCompatActivity {
             spinnerNivelTension.setError(getString(R.string.error_field_required));
             focusView = spinnerNivelTension;
             cancel = true;
+        }
+        if (edtAlturaDisponible.getText().toString().isEmpty()) {
+            boolean cancel = false;
+            View focusView = null;
+            edtAlturaDisponible.setError(getString(R.string.error_field_required));
+            focusView = edtAlturaDisponible;
+            cancel = true;
         } else {
             //TODO Registrar el poste
             Elemento elemento = new Elemento();
@@ -289,6 +300,7 @@ public class PosteActivity extends AppCompatActivity {
             } else {
                 elemento_id = elemento.getElemento_Id() + 1;
             }
+            Altura_Disponible = Double.parseDouble(edtAlturaDisponible.getText().toString());
             Usuario usuario = new Usuario();
             usuario = usuarioController.getLoggedUser();
             long id_usuario = usuario.getUsuario_Id();
@@ -303,6 +315,7 @@ public class PosteActivity extends AppCompatActivity {
             elemento.setEstado_Id(Estado_Id);
             elemento.setRetenidas(Cantidad_Retenidas);
             elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
+            elemento.setAltura_Disponible(Altura_Disponible);
             elemento.setIs_Sync(false);
             elementoController.register(elemento);
             Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
@@ -310,8 +323,8 @@ public class PosteActivity extends AppCompatActivity {
             Intent i = new Intent(this, CablesElementoActivity.class);
             startActivity(i);
         }
-    }
 
+    }
 
 
     //endregion
@@ -333,51 +346,58 @@ public class PosteActivity extends AppCompatActivity {
     //endregion
 
     //region EVENTS
-    @OnClick({R.id.radioButtonNoCodigoApoyo, R.id.radioButtonSiCodigoApoyo, R.id.radioButtonNoPlaca, R.id.radioButtonSiPlaca})
+    @OnClick({R.id.radioButtonNoCodigoApoyo, R.id.radioButtonSiCodigoApoyo, R.id.radioButtonNoPlaca, R.id.radioButtonSiPlaca, R.id.ibCalcularAltura})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.radioButtonNoCodigoApoyo:
                 edtCodigoApoyo.setEnabled(false);
                 Intent i = new Intent(this, NovedadActivity.class);
                 i.putExtra("Nombre", "Codigo Apoyo");
-                startActivityForResult(i, RESULT_ACTIVITY);
+                startActivityForResult(i, 100);
                 edtCodigoApoyo.getText().clear();
                 break;
             case R.id.radioButtonSiCodigoApoyo:
                 edtCodigoApoyo.setEnabled(true);
+                textInputLayoutCodigoApoyo.setVisibility(View.VISIBLE);
                 break;
             case R.id.radioButtonNoPlaca:
                 edtResistenciaMecanica.setEnabled(false);
                 Intent j = new Intent(this, NovedadActivity.class);
                 j.putExtra("Nombre", "Resistencia Mecanica");
-                startActivityForResult(j, RESULT_ACTIVITY);
+                startActivityForResult(j, 200);
                 edtResistenciaMecanica.getText().clear();
                 break;
             case R.id.radioButtonSiPlaca:
+                textInputLayoutResistenciaMecanica.setVisibility(View.VISIBLE);
                 edtResistenciaMecanica.setEnabled(true);
                 break;
-                /*
-            case R.id.radioButtonEstadoMalo:
-                Intent k = new Intent(this, NovedadActivity.class);
-                //TODO pasar parámetro de que es novedad de placa.
-                startActivityForResult(k, RESULT_ACTIVITY);
+            case R.id.ibCalcularAltura:
+                String packageName = "com.nfa.distancemeter";
+                Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
+                if (intent != null) {
+                    startActivity(intent);
+                } else {
+                    Snackbar.make(container, "No puede acceder a la app", Snackbar.LENGTH_SHORT).show();
+                }
                 break;
-            case R.id.radioButtonEstadoBueno:
-                break;*/
         }
     }
+
 
     //endregion
 
     //region ON ACTIVITY RESULT
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == RESULT_ACTIVITY) && (resultCode == RESULT_OK)) {
+        if ((requestCode == 100) && (resultCode == RESULT_OK)) {
             Snackbar.make(container, getString(R.string.message_novedad), Snackbar.LENGTH_SHORT).show();
-
+            textInputLayoutCodigoApoyo.setVisibility(View.GONE);
+        }
+        if ((requestCode == 200) && (resultCode == RESULT_OK)) {
+            Snackbar.make(container, getString(R.string.message_novedad), Snackbar.LENGTH_SHORT).show();
+            textInputLayoutResistenciaMecanica.setVisibility(View.GONE);
         }
     }
-
 
 
     //endregion
@@ -410,6 +430,7 @@ public class PosteActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 
     //endregion
 }

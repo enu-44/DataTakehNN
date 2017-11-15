@@ -1,5 +1,6 @@
 package com.datatakehnn.activities.equipos_elemento;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -22,6 +23,7 @@ import com.datatakehnn.R;
 import com.datatakehnn.activities.cables_elemento.adapter.AdapterCablesElemento;
 import com.datatakehnn.activities.equipos_elemento.adapter.AdapterEquipo;
 import com.datatakehnn.activities.equipos_elemento.adapter.OnItemClickListenerEquipo;
+import com.datatakehnn.activities.fotos.FotosActivity;
 import com.datatakehnn.controllers.CablesController;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.EquipoController;
@@ -43,16 +45,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,OnItemClickListenerEquipo,SwipeRefreshLayout.OnRefreshListener {
+public class EquipoActivity extends AppCompatActivity implements MainViewEquipo, OnItemClickListenerEquipo, SwipeRefreshLayout.OnRefreshListener {
 
     //UI Elements
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView( R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView( R.id.txtResults)
+    @BindView(R.id.txtResults)
     TextView txtResults;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -64,8 +66,8 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     MaterialBetterSpinner spinnerTipo;
 
     //Variables Gloabals
-    private  boolean Conectado_Red_Electrica=true;
-    private boolean Medidor_Red=true;
+    private boolean Conectado_Red_Electrica = true;
+    private boolean Medidor_Red = true;
     private long Empresa_Id;
     private long Elemento_Id;
     private long Tipo_Equipo_Id;
@@ -75,11 +77,11 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     public String Nombre_Empresa;
 
     //Declaracion Arrays
-    List<Empresa> empresaList=new ArrayList<>();
-    List<Tipo_Equipo> tipo_equipos=new ArrayList<>();
+    List<Empresa> empresaList = new ArrayList<>();
+    List<Tipo_Equipo> tipo_equipos = new ArrayList<>();
 
     //Listas
-    List<Equipo_Elemento>equipo_elementoList= new ArrayList<>();
+    List<Equipo_Elemento> equipo_elementoList = new ArrayList<>();
 
     //Adapters
     ArrayAdapter<Empresa> empresaArrayAdapter;
@@ -112,12 +114,12 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     //region SETUP INJECTION
     private void setupInjection() {
 
-        this.sincronizacionGetInformacionController= SincronizacionGetInformacionController.getInstance(this);
-        this.equipoController= EquipoController.getInstance(this);
-        this.elementoController= ElementoController.getInstance(this);
+        this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
+        this.equipoController = EquipoController.getInstance(this);
+        this.elementoController = ElementoController.getInstance(this);
 
-        Elemento elemento= elementoController.getLast();
-        Elemento_Id= elemento.getElemento_Id();
+        Elemento elemento = elementoController.getLast();
+        Elemento_Id = elemento.getElemento_Id();
     }
 
 
@@ -133,8 +135,8 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     //region METHODS
 
     private void initAdapter() {
-        if(adapter==null){
-            adapter= new AdapterEquipo(this, new ArrayList<Equipo_Elemento>(),this);
+        if (adapter == null) {
+            adapter = new AdapterEquipo(this, new ArrayList<Equipo_Elemento>(), this);
         }
     }
 
@@ -147,11 +149,11 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
         //VALIDACION
         boolean cancel = false;
         View focusView = null;
-        if(spinnerOperador.getText().toString().isEmpty()){
+        if (spinnerOperador.getText().toString().isEmpty()) {
             spinnerOperador.setError(getString(R.string.error_field_required));
             focusView = spinnerOperador;
             cancel = true;
-        }else if(spinnerTipo.getText().toString().isEmpty()){
+        } else if (spinnerTipo.getText().toString().isEmpty()) {
             spinnerTipo.setError(getString(R.string.error_field_required));
             focusView = spinnerTipo;
             cancel = true;
@@ -167,7 +169,7 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     }
 
     private void registerEquipos() {
-        Equipo_Elemento equipo_elemento=   new Equipo_Elemento(
+        Equipo_Elemento equipo_elemento = new Equipo_Elemento(
                 1,
                 Tipo_Equipo_Id,
                 Elemento_Id,
@@ -180,14 +182,14 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
 
         equipoController.register(equipo_elemento);
         limpiarCampos();
-        onMessageOk(R.color.colorAccent,"Cable Registrado");
+        onMessageOk(R.color.colorAccent, "Cable Registrado");
         loadListEquipos();
     }
 
     private void loadListEquipos() {
         adapter.clear();
         equipo_elementoList.clear();
-        equipo_elementoList= equipoController.getListEquipoElement(Elemento_Id);
+        equipo_elementoList = equipoController.getListEquipoElement(Elemento_Id);
         setContent(equipo_elementoList);
         resultsList(equipo_elementoList);
         hideProgress();
@@ -197,8 +199,8 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     private void loadListSpinners() {
 
         //Listas
-        empresaList= sincronizacionGetInformacionController.getListEmpresas();
-        tipo_equipos= sincronizacionGetInformacionController.getListTipoEquipo();
+        empresaList = sincronizacionGetInformacionController.getListEmpresas();
+        tipo_equipos = sincronizacionGetInformacionController.getListTipoEquipo();
 
         //Spinner
         //Empresas Operadoras
@@ -210,8 +212,8 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
         spinnerOperador.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Empresa_Id=  empresaList.get(position).getEmpresa_Id();
-                Nombre_Empresa= empresaList.get(position).getNombre();
+                Empresa_Id = empresaList.get(position).getEmpresa_Id();
+                Nombre_Empresa = empresaList.get(position).getNombre();
             }
         });
 
@@ -224,20 +226,19 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
         spinnerTipo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Tipo_Equipo_Id=  tipo_equipos.get(position).getTipo_Equipo_Id();
-                Nombre_Tipo_Equipo= tipo_equipos.get(position).getNombre();
+                Tipo_Equipo_Id = tipo_equipos.get(position).getTipo_Equipo_Id();
+                Nombre_Tipo_Equipo = tipo_equipos.get(position).getNombre();
             }
         });
     }
 
 
-
     private void limpiarCampos() {
-        String title_tipo_cable= String.format(getString(R.string.title_tipo_equipo));
+        String title_tipo_cable = String.format(getString(R.string.title_tipo_equipo));
         spinnerTipo.setText("");
         spinnerTipo.setHint(title_tipo_cable);
 
-        String title_empresa= String.format(getString(R.string.title_empresa));
+        String title_empresa = String.format(getString(R.string.title_empresa));
         spinnerOperador.setText("");
         spinnerOperador.setHint(title_empresa);
 
@@ -275,7 +276,7 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.container), message, Snackbar.LENGTH_LONG);
         View sbView = snackbar.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(this,colorPrimary));
+        sbView.setBackgroundColor(ContextCompat.getColor(this, colorPrimary));
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done, 0, 0, 0);
         // textView.setCompoundDrawablePadding(getResources().getDimensionPixelOffset(R.dimen.activity_horizontal_margin));
@@ -285,12 +286,12 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
 
     @Override
     public void onMessageError(int colorPrimary, String message) {
-        onMessageOk(colorPrimary,message);
+        onMessageOk(colorPrimary, message);
     }
 
     @Override
     public void resultsList(List<Equipo_Elemento> listResult) {
-        String results= String.format(getString(R.string.results_global_search),
+        String results = String.format(getString(R.string.results_global_search),
                 listResult.size());
         txtResults.setText(results);
     }
@@ -332,7 +333,8 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_done) {
-
+            Intent i = new Intent(this, FotosActivity.class);
+            startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -348,28 +350,28 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
 
     @Override
     public void onClickDelete(Equipo_Elemento equipo_elemento) {
-        Response response= equipoController.DeleteEquipoByElemento(equipo_elemento.getEquipo_Elemento_Id());
-        onMessageOk(R.color.orange,getString(R.string.message_delete_global));
+        Response response = equipoController.DeleteEquipoByElemento(equipo_elemento.getEquipo_Elemento_Id());
+        onMessageOk(R.color.orange, getString(R.string.message_delete_global));
         loadListEquipos();
     }
     //endregion
 
     //region EVENTS
 
-    @OnClick({R.id.radioButtonSiConectadoRedElectrica, R.id.radioButtonNoConectadoRedElectrica,R.id.radioButtonNoMedidor,R.id.radioButtonSiMedidor, R.id.btnAddEquipos})
+    @OnClick({R.id.radioButtonSiConectadoRedElectrica, R.id.radioButtonNoConectadoRedElectrica, R.id.radioButtonNoMedidor, R.id.radioButtonSiMedidor, R.id.btnAddEquipos})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.radioButtonSiMedidor:
-                Medidor_Red=true;
+                Medidor_Red = true;
                 break;
             case R.id.radioButtonNoMedidor:
-                Medidor_Red=false;
+                Medidor_Red = false;
                 break;
             case R.id.radioButtonSiConectadoRedElectrica:
-                Conectado_Red_Electrica=true;
+                Conectado_Red_Electrica = true;
                 break;
             case R.id.radioButtonNoConectadoRedElectrica:
-                Conectado_Red_Electrica=false;
+                Conectado_Red_Electrica = false;
                 break;
             case R.id.btnAddEquipos:
                 validarRegistrarEquipo();

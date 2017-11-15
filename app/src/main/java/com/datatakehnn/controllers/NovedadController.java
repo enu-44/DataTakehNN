@@ -45,6 +45,7 @@ public class NovedadController {
         novedad.setDetalle_Tipo_Novedad_Id(novedadNew.getDetalle_Tipo_Novedad_Id());
         novedad.setElemento_Id(novedadNew.getElemento_Id());
         novedad.setDescripcion(novedadNew.getDescripcion());
+        novedad.setDetalle_Tipo_Novedad_Nombre(novedadNew.getDetalle_Tipo_Novedad_Nombre());
         novedad.save();
         return novedad;
     }
@@ -61,6 +62,19 @@ public class NovedadController {
         novedad.setDetalle_Tipo_Novedad_Id(novedadNew.getDetalle_Tipo_Novedad_Id());
         novedad.setElemento_Id(novedadNew.getElemento_Id());
         novedad.setDescripcion(novedadNew.getDescripcion());
+        novedad.setDetalle_Tipo_Novedad_Nombre(novedadNew.getDetalle_Tipo_Novedad_Nombre());
+        novedad.save();
+        return novedad;
+    }
+
+    public Novedad updateWithFoto(Novedad novedadNew) {
+        Novedad novedad = new Novedad();
+        novedad.setNovedad_Id(novedadNew.getNovedad_Id());
+        novedad.setDetalle_Tipo_Novedad_Id(novedadNew.getDetalle_Tipo_Novedad_Id());
+        novedad.setElemento_Id(novedadNew.getElemento_Id());
+        novedad.setDescripcion(novedadNew.getDescripcion());
+        novedad.setDetalle_Tipo_Novedad_Nombre(novedadNew.getDetalle_Tipo_Novedad_Nombre());
+        novedad.setImage_Novedad(novedadNew.getImage_Novedad());
         novedad.save();
         return novedad;
     }
@@ -74,8 +88,11 @@ public class NovedadController {
     }
 
 
-    public List<Novedad> getListNovedades() {
-        List<Novedad> novedades = new Select().from(Novedad.class).where().orderBy(Novedad_Table.Novedad_Id, true).queryList();
+    public List<Novedad> getListNovedadesByElementoId(long elemento_id) {
+        List<Novedad> novedades = SQLite.select().from(Novedad.class).where
+                (Novedad_Table.Elemento_Id.eq(elemento_id))
+                .queryList();
+
         return novedades;
     }
 

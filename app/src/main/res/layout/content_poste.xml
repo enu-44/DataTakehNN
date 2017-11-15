@@ -347,9 +347,19 @@
                 android:layout_height="30dp"
                 android:background="#ffffff"
                 android:drawablePadding="16dp"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/ibCalcularAltura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/textInputLayoutAlturaDisponible"
+            android:layout_alignRight="@id/textInputLayoutAlturaDisponible"
+            android:layout_below="@+id/textInputLayoutAlturaDisponible"
+            android:src="@android:drawable/ic_input_add" />
+
 
     </RelativeLayout>
 
