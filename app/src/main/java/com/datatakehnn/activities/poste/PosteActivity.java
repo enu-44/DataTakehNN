@@ -137,7 +137,7 @@ public class PosteActivity extends AppCompatActivity {
 
         //Obtener Hora
         Calendar cal = Calendar.getInstance();
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
         hora = timeFormat.format(cal.getTime());
 
     }
@@ -165,7 +165,7 @@ public class PosteActivity extends AppCompatActivity {
                     Intent i = new Intent(PosteActivity.this, NovedadActivity.class);
                     i.putExtra("Nombre", "Estado");
                     //TODO pasar parámetro de que es novedad de código de Apoyo.
-                    startActivityForResult(i, RESULT_ACTIVITY);
+                    startActivityForResult(i, 300);
                 }
             }
         });
@@ -290,38 +290,7 @@ public class PosteActivity extends AppCompatActivity {
             focusView = edtAlturaDisponible;
             cancel = true;
         } else {
-            //TODO Registrar el poste
-            Elemento elemento = new Elemento();
-            long elemento_id = 0;
-            elemento = elementoController.getLast();
-            if (elemento == null) {
-                elemento = new Elemento();
-                elemento_id = 1;
-            } else {
-                elemento_id = elemento.getElemento_Id() + 1;
-            }
-            Altura_Disponible = Double.parseDouble(edtAlturaDisponible.getText().toString());
-            Usuario usuario = new Usuario();
-            usuario = usuarioController.getLoggedUser();
-            long id_usuario = usuario.getUsuario_Id();
-            elemento.setElemento_Id(elemento_id);
-            elemento.setUsuario_Id(id_usuario);
-            elemento.setFecha_Levantamiento(fecha);
-            elemento.setHora_Inicio(hora);
-            elemento.setCodigo_Apoyo(edtCodigoApoyo.getText().toString());
-            elemento.setMaterial_Id(Material_Id);
-            elemento.setLongitud_Elemento_Id(Longitud_Elemento_Id);
-            elemento.setResistencia_Mecanica(edtResistenciaMecanica.getText().toString());
-            elemento.setEstado_Id(Estado_Id);
-            elemento.setRetenidas(Cantidad_Retenidas);
-            elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
-            elemento.setAltura_Disponible(Altura_Disponible);
-            elemento.setIs_Sync(false);
-            elementoController.register(elemento);
-            Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
-
-            Intent i = new Intent(this, CablesElementoActivity.class);
-            startActivity(i);
+            registerElemento();
         }
 
     }
@@ -397,8 +366,51 @@ public class PosteActivity extends AppCompatActivity {
             Snackbar.make(container, getString(R.string.message_novedad), Snackbar.LENGTH_SHORT).show();
             textInputLayoutResistenciaMecanica.setVisibility(View.GONE);
         }
+        if ((requestCode == 300) && (resultCode == RESULT_OK)) {
+            Snackbar.make(container, getString(R.string.message_novedad), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
+
+    //endregion
+
+
+    //region METHODS
+    public void registerElemento() {
+        //TODO Registrar el poste
+        Elemento elemento = new Elemento();
+        long elemento_id = 0;
+        elemento = elementoController.getLast();
+        if (elemento == null) {
+            elemento = new Elemento();
+            elemento_id = 1;
+        } else {
+            elemento_id = elemento.getElemento_Id() + 1;
+        }
+        Altura_Disponible = Double.parseDouble(edtAlturaDisponible.getText().toString());
+
+        Usuario usuario = new Usuario();
+        usuario = usuarioController.getLoggedUser();
+        long id_usuario = usuario.getUsuario_Id();
+        elemento.setElemento_Id(elemento_id);
+        elemento.setUsuario_Id(id_usuario);
+        elemento.setFecha_Levantamiento(fecha);
+        elemento.setHora_Inicio(hora);
+        elemento.setCodigo_Apoyo(edtCodigoApoyo.getText().toString());
+        elemento.setMaterial_Id(Material_Id);
+        elemento.setLongitud_Elemento_Id(Longitud_Elemento_Id);
+        elemento.setResistencia_Mecanica(edtResistenciaMecanica.getText().toString());
+        elemento.setEstado_Id(Estado_Id);
+        elemento.setRetenidas(Cantidad_Retenidas);
+        elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
+        elemento.setAltura_Disponible(Altura_Disponible);
+        elemento.setIs_Sync(false);
+        elementoController.register(elemento);
+        //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
+
+        Intent i = new Intent(this, CablesElementoActivity.class);
+        startActivity(i);
+    }
 
     //endregion
 
@@ -432,7 +444,6 @@ public class PosteActivity extends AppCompatActivity {
     }
 
 
-    //endregion
 }
 
 

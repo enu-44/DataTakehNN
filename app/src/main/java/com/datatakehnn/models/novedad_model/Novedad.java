@@ -40,16 +40,22 @@ public class Novedad extends BaseModel {
     @Column
     public Blob Image_Novedad;
 
+    @SerializedName("Tipo_Novedad_Id")
+    @Column
+    public long Tipo_Novedad_Id;
+
+
     public Novedad() {
     }
 
-    public Novedad(long novedad_Id, long detalle_Tipo_Novedad_Id, String detalle_Tipo_Novedad_Nombre, long elemento_Id, String descripcion, Blob image_Novedad) {
+    public Novedad(long novedad_Id, long detalle_Tipo_Novedad_Id, String detalle_Tipo_Novedad_Nombre, long elemento_Id, String descripcion, Blob image_Novedad, long tipo_Novedad_Id) {
         Novedad_Id = novedad_Id;
         Detalle_Tipo_Novedad_Id = detalle_Tipo_Novedad_Id;
         Detalle_Tipo_Novedad_Nombre = detalle_Tipo_Novedad_Nombre;
         Elemento_Id = elemento_Id;
         Descripcion = descripcion;
         Image_Novedad = image_Novedad;
+        Tipo_Novedad_Id = tipo_Novedad_Id;
     }
 
     //Methods
@@ -99,5 +105,13 @@ public class Novedad extends BaseModel {
 
     public void setImage_Novedad(Blob image_Novedad) {
         Image_Novedad = image_Novedad;
+    }
+
+    public long getTipo_Novedad_Id() {
+        return Tipo_Novedad_Id;
+    }
+
+    public void setTipo_Novedad_Id(long tipo_Novedad_Id) {
+        Tipo_Novedad_Id = tipo_Novedad_Id;
     }
 }
