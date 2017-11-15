@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -71,6 +72,9 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
     //Instances
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
 
+    //Item Menu
+    Menu menuGlobal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,10 +102,19 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
     //endregion
 
     //region MENU
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_sync, menu);
-        return super.onCreateOptionsMenu(menu);
+        menuGlobal=menu;
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_workshops, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_sync, menuGlobal);
+        MenuItem item = menuGlobal.findItem(R.id.action_done);
+        item.setVisible(false);
+        return true;
     }
 
     @Override
@@ -196,7 +209,8 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
                     tipo_equipos);
 
             showSnakBar(R.color.colorAccent,  getString(R.string.message_information_sync));
-
+            MenuItem item = menuGlobal.findItem(R.id.action_done);
+            item.setVisible(true);
             sync = true;
             progressBar.setVisibility(View.GONE);
 

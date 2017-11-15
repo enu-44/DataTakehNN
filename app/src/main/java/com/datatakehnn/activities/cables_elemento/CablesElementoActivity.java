@@ -1,5 +1,6 @@
 package com.datatakehnn.activities.cables_elemento;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
@@ -10,10 +11,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -309,9 +312,18 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
      limpiarCampos();
      onMessageOk(R.color.colorAccent,"Cable Registrado");
      loadListCablesElementos();
+     hideKeyboard();
     }
 
-
+    //Ocultar teclado
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        try {
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        } catch (NullPointerException npe) {
+            Log.e(getLocalClassName(), Log.getStackTraceString(npe));
+        }
+    }
 
 
     private void limpiarCampos() {
