@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.datatakehnn">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+    <application
+        android:name=".services.aplication.DataTakeApp"
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@mipmap/logo_datatakeh"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/MiTema">
+        <activity
+            android:name=".activities.splash.SplashActivity"
+            android:theme="@style/NoTransparenceLightOrange">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.login.LoginActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.CoordsActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.poste.PosteActivity"
+            android:parentActivityName=".activities.sync.SyncActivity"
+            android:theme="@style/MiTema.NoActionBar" />
+        <activity
+            android:name=".activities.sync.SyncActivity"
+            android:theme="@style/MiTema.NoActionBar" />
+        <activity
+            android:name=".activities.novedad.NovedadActivity"
+            android:theme="@style/MiTema.NoActionBar" />
+        <activity
+            android:name=".activities.cables_elemento.CablesElementoActivity"
+            android:theme="@style/MiTema.NoActionBar" />
+
+
+        <activity
+            android:name=".activities.equipos_elemento.EquipoActivity"
+            android:theme="@style/MiTema.NoActionBar"></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <!-- SERVICES -->
+        <!-- Servicio de conectividad a internet -->
+        <receiver
+            android:name=".services.connection_internet.ConnectivityReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".services.coords.CoordsService" />
+
+    </application>
+
+</manifest>

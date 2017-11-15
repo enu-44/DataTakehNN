@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">DatatakEH</string>
+    <string name="logo">logo</string>
+
+    <string name="habilitar_gps">Habilitar gps</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="gps_deshabilitado">El gps está deshabilitado</string>
+    <string name="pregunta_codigo_apoyo">¿Código de apoyo visible?</string>
+    <string name="no">No</string>
+    <string name="si">Sí</string>
+    <string name="novedad">Novedad</string>
+    <string name="codigo_apoyo">Código de apoyo</string>
+
+
+    <!--Titles Activities-->
+    <string name="title_cables">Cables</string>
+    <string name="title_equipos">Equipos</string>
+
+
+    <!--Login-->
+    <string name="cedula">Cédula</string>
+    <string name="usuario">Usuario</string>
+    <string name="contraseña">Contraseña</string>
+
+
+    <!--VALIDACIONES-->
+    <!-- Strings related to login -->
+    <string name="error_field_required">Este campo es requerido</string>
+
+
+    <!--MESSAGES LIST-->
+    <!--..............................................................................-->
+
+    <string name="message_information_sync">Informacion Sincronizada</string>
+
+    <string name="message_not_connection">Verifique su Conexion a Internet</string>    <!--Connection-->
+    <string name="message_connection">Conectado a Internet</string>
+    <string name="message_novedad">Novedad Registrada</string> <!--Novedad-->
+    <string name="message_sincronize_information">Se debe Sincronizar primero la información</string>
+
+
+    <string name="message_delete_global">Item Eliminado</string> <!--Novedad-->
+    <!--..............................................................................-->
+
+    <!--POSTE-->
+    <string name="altura_disponible">Altura Disponible</string>
+    <string name="bueno">Bueno</string>
+    <string name="malo">Malo</string>
+    <string name="estado">Estado</string>
+    <string name="resistencia_mecanica">Resistencia Mecánica</string>
+    <string name="tiene_placa">¿Tiene Placa ?</string>
+
+
+    <!---CABLES ELEMENTO-->
+    <string name="pregunta_cables_rbt">¿Esta el cable sobre RBT?</string>
+    <string name="title_detalle_cable">Detalle</string>
+    <string name="title_tipo_cable">Tipo</string>
+    <string name="title_empresa">Empresa</string>
+
+
+    <!--EQUIPOS ELEMENTOS-->
+    <string name="title_conectado_red_electrica">¿Conectado RE?</string>
+    <string name="question_conectado_red_electrica">¿Conectado Red Electrica?</string>
+    <string name="title_medidor">¿ Medidor ?</string>
+    <string name="title_tipo_equipo">Tipo</string>
+
+    <!--GLOBALS STRING-->
+    <string name="results_global_search">Mostrando %d Resultados</string>
+    <string name="prompt_buscar_global">Buscar...</string>
+
+    <string name="cancel_global">Cancelar</string>
+    <string name="save_global">Guardar</string>
+    <string name="delete_global">Eliminar</string>
+    <string name="edit_global">Editar</string>
+    <string name="config_globañ">Configurar</string>
+
+    <string name="cantidad_global">Cant. %d</string>
+
+
+</resources>
