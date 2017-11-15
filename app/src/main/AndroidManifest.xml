@@ -69,7 +69,8 @@
 
         <service android:name=".services.coords.CoordsService" />
 
-        <activity android:name=".activities.fotos.FotosActivity"></activity>
+        <activity android:name=".activities.fotos.FotosActivity"
+            android:theme="@style/MiTema.NoActionBar"></activity>
     </application>
 
 </manifest>
