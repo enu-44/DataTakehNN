@@ -99,15 +99,13 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     private Uri file;
     long elemento_id;
     boolean foto1 = false, foto2 = false, tomoFoto1 = false, tomoFoto2 = false;
-    File archivo;
+    boolean isEstadoFoto1 = false, isEstadoFoto2 = false, isEstadoFoto1Defecto = false, isEstadoFoto2Defecto = false;
 
     //Coordenadas
-    Location location;
     public Double Latitud;
     public Double Longitud;
     String latitud;
     String longitud;
-    boolean isEstadoFoto1 = false, isEstadoFoto2 = false, isEstadoFoto1Defecto = false, isEstadoFoto2Defecto = false;
 
     //Dataset
     List<Novedad> novedades;
@@ -128,7 +126,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         checkPermissionCamera();
         setToolbarInjection();
         setupInjection();
-        //getCoordenadas();
+        getCoordenadas();
         getData();
         initAdapter();
         initRecyclerView();
@@ -165,15 +163,14 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         toolbar.setTitle("Fotos");
     }
 
-    /*
+
     private void getCoordenadas() {
-        CoordsService servicio = new CoordsService(getApplicationContext());
-        location = servicio.getUbicacion();
-        Latitud = location.getLatitude();
-        Longitud = location.getLongitude();
+        Elemento elemento = elementoController.getLast();
+        Latitud = elemento.getLatitud();
+        Longitud = elemento.getLongitud();
         latitud = String.valueOf(Latitud);
         longitud = String.valueOf(Longitud);
-    }*/
+    }
 
     /*
     private void loadRecyclerItems() {
@@ -464,14 +461,12 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             }
         }
         if (foto1 == true) {
-            archivo = new File(mediaStorageDir.getPath() + File.separator +
+            return new File(mediaStorageDir.getPath() + File.separator +
                     "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_1" + ".jpg");
-            return archivo;
         }
         if (foto2 == true) {
-            archivo = new File(mediaStorageDir.getPath() + File.separator +
+            return new File(mediaStorageDir.getPath() + File.separator +
                     "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_2" + ".jpg");
-            return archivo;
         } else {
             return null;
         }
