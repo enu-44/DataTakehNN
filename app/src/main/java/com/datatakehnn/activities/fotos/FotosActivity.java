@@ -103,8 +103,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     //Coordenadas
     Location location;
-    public static Double Latitud;
-    public static Double Longitud;
+    public Double Latitud;
+    public Double Longitud;
     String latitud;
     String longitud;
     boolean isEstadoFoto1 = false, isEstadoFoto2 = false, isEstadoFoto1Defecto = false, isEstadoFoto2Defecto = false;
@@ -256,7 +256,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     //endregion
 
     //region EVENTS
-    @OnClick({R.id.ibTomarFoto1, R.id.ibTomarFoto2})
+    @OnClick({R.id.ibTomarFoto1, R.id.ibTomarFoto2, R.id.ivFoto1, R.id.ivFoto2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ibTomarFoto1:
@@ -273,6 +273,21 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                     tomarFoto();
                 }
                 break;
+
+            case R.id.ivFoto1:
+                foto1 = true;
+                foto2 = false;
+                String fotoPoste1_ = edtFotoPoste1.getText().toString();
+                boolean cancel_ = false;
+                View focusView_ = null;
+                if (TextUtils.isEmpty(fotoPoste1_)) {
+                    edtFotoPoste1.setError(getString(R.string.error_field_required));
+                    focusView_ = edtFotoPoste1;
+                    cancel_ = true;
+                } else {
+                    tomarFoto();
+                }
+                break;
             case R.id.ibTomarFoto2:
                 foto1 = false;
                 foto2 = true;
@@ -283,6 +298,20 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                     edtFotoPoste2.setError(getString(R.string.error_field_required));
                     focusView2 = edtFotoPoste2;
                     cancel2 = true;
+                } else {
+                    tomarFoto();
+                }
+                break;
+            case R.id.ivFoto2:
+                foto1 = false;
+                foto2 = true;
+                String fotoPoste2_ = edtFotoPoste2.getText().toString();
+                boolean cancel2_ = false;
+                View focusView2_ = null;
+                if (TextUtils.isEmpty(fotoPoste2_)) {
+                    edtFotoPoste2.setError(getString(R.string.error_field_required));
+                    focusView2_ = edtFotoPoste2;
+                    cancel2_ = true;
                 } else {
                     tomarFoto();
                 }
