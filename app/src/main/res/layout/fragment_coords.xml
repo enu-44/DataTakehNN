@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/ivCoordPoste"
-        android:layout_width="144dp"
-        android:layout_height="144dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/marker_poste" />
 
     <TextView

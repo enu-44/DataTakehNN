@@ -35,6 +35,7 @@
             android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme" />
         <activity
+            android:parentActivityName=".activities.poste.lista_postes_usuario.Poste_Usuario_Activity"
             android:name=".activities.CoordsActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />

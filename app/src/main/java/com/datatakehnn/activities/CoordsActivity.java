@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -51,6 +52,9 @@ import butterknife.Unbinder;
 public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     //Mapa
     Elemento elemento;
     //Location
@@ -59,6 +63,12 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @BindView(R.id.ivCoordPoste)
     ImageView ivCoordPoste;
+
+    @BindView(R.id.textCoordenada)
+    TextView textCoordenada;
+
+
+
     Unbinder unbinder;
 
     double latitud;
@@ -79,7 +89,7 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         ButterKnife.bind(this);
 
         elemento= getIntent().getExtras().getParcelable("Elemento");
-
+        setToolbarInjection();
         setupInjection();
 
         initMap();
@@ -94,6 +104,8 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void setupInjection() {
+
+        textCoordenada.setText(elemento.getLatitud()+","+elemento.getLongitud());
         //Llama la instancia del servicio
         this.servicioUbicacion = new CoordsService(this);
         servicioUbicacion.setView(findViewById(R.id.textCoordenada));
@@ -102,6 +114,14 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
             location = servicioUbicacion.getUbicacion();
         }catch (Exception ex){
         }
+    }
+
+    private void setToolbarInjection() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (getSupportActionBar() != null)// Habilitar Up Button
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle("Ubicacion Poste");
     }
 
 
@@ -122,9 +142,9 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         try{
             mMap = googleMap;
             // Add a marker in Sydney and move the camera
-            LatLng positionInitial = new LatLng(-0.8788717828324148, -78.189697265625);
+            LatLng positionInitial = new LatLng(-4.570868, -74.29733299999998);
             /// mMap.addMarker(new MarkerOptions().position(positionInitial).title("Ecuador"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positionInitial,10));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positionInitial,7));
             //Configuracion de InfoWindow
             mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
@@ -161,17 +181,8 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
             } else {
                 this.setLocation(location);
                 mMap.setMyLocationEnabled(true);
-                mMap.setTrafficEnabled(true);
-                mMap.setBuildingsEnabled(true);
-                // mMap.setIndoorEnabled(true);
                 mMap.getUiSettings().setZoomControlsEnabled(true);
-                mMap.getUiSettings().setTiltGesturesEnabled(true);
                 mMap.getUiSettings().setZoomGesturesEnabled (true);
-                mMap.getUiSettings().setScrollGesturesEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                mMap.getUiSettings().setMapToolbarEnabled(true);
-                mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
-                mMap.getUiSettings().setCompassEnabled(true);
             }
         }catch (Exception ex){
         }
