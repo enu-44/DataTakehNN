@@ -1,6 +1,7 @@
 package com.datatakehnn.activities.poste;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -35,6 +36,7 @@ import com.datatakehnn.models.retenidas_model.Cantidad_Retenidas;
 import com.datatakehnn.models.tipo_direccion_model.Detalle_Tipo_Direccion;
 import com.datatakehnn.models.tipo_direccion_model.Tipo_Direccion;
 import com.datatakehnn.models.usuario_model.Usuario;
+import com.datatakehnn.services.coords.CoordsService;
 import com.datatakehnn.services.data_arrays.Cantidad_Retenidas_List;
 import com.datatakehnn.services.data_arrays.Detalle_Tipo_Cable_List;
 import com.datatakehnn.services.data_arrays.Detalle_Tipo_Direccion_List;
@@ -101,10 +103,9 @@ public class PosteActivity extends AppCompatActivity {
     @BindView(R.id.edtReferencia)
     EditText edtReferencia;
 
-
-
-
-
+    //Location
+    Location location;
+    CoordsService servicioUbicacion;
 
     //Declaracion Arrays
     List<Estado> listEstado = new ArrayList<>();
@@ -125,6 +126,9 @@ public class PosteActivity extends AppCompatActivity {
     Date dateFecha;
     String hora;
     Double Altura_Disponible;
+    double latitud;
+    double longitud;
+
     //Direccion
 
     String Nombre_Tipo_Direccion;
@@ -379,6 +383,15 @@ public class PosteActivity extends AppCompatActivity {
     }
 
     private void setupInjection() {
+        //Llama la instancia del servicio
+        this.servicioUbicacion = new CoordsService(this);
+        //Guarda en un location la ubicación
+        location = servicioUbicacion.getUbicacion();
+        try{
+            latitud = location.getLatitude();
+            longitud = location.getLongitude();
+        }catch (Exception ex){
+        }
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.novedadController = NovedadController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
@@ -479,6 +492,8 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setIs_Sync(false);
         elemento.setDireccion(Nombre_Tipo_Direccion+" "+edtTipoDireccion.getText().toString()+" "+Nombre_Detalle_Tipo_Direccion+" "+edtDetalleTipoDireccion.getText().toString());
         elemento.setReferencia_Localizacion(edtReferencia.getText().toString());
+        elemento.setLongitud(longitud);
+        elemento.setLatitud(latitud);
         elementoController.register(elemento);
         //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
         Intent i = new Intent(this, CablesElementoActivity.class);

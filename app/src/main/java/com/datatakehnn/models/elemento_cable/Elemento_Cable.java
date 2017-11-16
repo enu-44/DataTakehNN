@@ -10,6 +10,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 /**
  * Created by user on 12/11/2017.
  */
+
 @Table(database = DataSource.class)
 public class Elemento_Cable extends BaseModel{
 

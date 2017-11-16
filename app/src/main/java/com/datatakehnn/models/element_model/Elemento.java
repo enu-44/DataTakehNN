@@ -1,5 +1,8 @@
 package com.datatakehnn.models.element_model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.datatakehnn.config.DataSource;
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento;
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +21,7 @@ import java.util.Date;
  * Created by user on 11/11/2017.
  */
 @Table(database = DataSource.class)
-public class Elemento extends BaseModel {
+public class Elemento extends BaseModel implements Parcelable {
     //Atributes
     @SerializedName("Id")
     @PrimaryKey
@@ -258,4 +261,73 @@ public class Elemento extends BaseModel {
     public void setReferencia_Localizacion(String referencia_Localizacion) {
         Referencia_Localizacion = referencia_Localizacion;
     }
+
+    protected Elemento(Parcel in) {
+        Elemento_Id = in.readLong();
+        Usuario_Id = in.readLong();
+        Codigo_Apoyo = in.readString();
+        Numero_Apoyo = in.readString();
+        Fecha_Levantamiento = in.readString();
+        Hora_Inicio = in.readString();
+        Hora_Fin = in.readString();
+        Resistencia_Mecanica = in.readString();
+        Retenidas = in.readLong();
+        Altura_Disponible = in.readDouble();
+        Proyecto_Id = in.readLong();
+        Material_Id = in.readLong();
+        Estado_Id = in.readLong();
+        Longitud_Elemento_Id = in.readLong();
+        Nivel_Tension_Elemento_Id = in.readLong();
+        Is_Sync = in.readByte() != 0x00;
+        Coordenadas = in.readString();
+        Latitud = in.readDouble();
+        Longitud = in.readDouble();
+        Direccion = in.readString();
+        Direccion_Aproximada_Gps = in.readString();
+        Referencia_Localizacion = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(Elemento_Id);
+        dest.writeLong(Usuario_Id);
+        dest.writeString(Codigo_Apoyo);
+        dest.writeString(Numero_Apoyo);
+        dest.writeString(Fecha_Levantamiento);
+        dest.writeString(Hora_Inicio);
+        dest.writeString(Hora_Fin);
+        dest.writeString(Resistencia_Mecanica);
+        dest.writeLong(Retenidas);
+        dest.writeDouble(Altura_Disponible);
+        dest.writeLong(Proyecto_Id);
+        dest.writeLong(Material_Id);
+        dest.writeLong(Estado_Id);
+        dest.writeLong(Longitud_Elemento_Id);
+        dest.writeLong(Nivel_Tension_Elemento_Id);
+        dest.writeByte((byte) (Is_Sync ? 0x01 : 0x00));
+        dest.writeString(Coordenadas);
+        dest.writeDouble(Latitud);
+        dest.writeDouble(Longitud);
+        dest.writeString(Direccion);
+        dest.writeString(Direccion_Aproximada_Gps);
+        dest.writeString(Referencia_Localizacion);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Elemento> CREATOR = new Parcelable.Creator<Elemento>() {
+        @Override
+        public Elemento createFromParcel(Parcel in) {
+            return new Elemento(in);
+        }
+
+        @Override
+        public Elemento[] newArray(int size) {
+            return new Elemento[size];
+        }
+    };
 }

@@ -69,10 +69,10 @@ public class CoordsService extends Service implements LocationListener {
                 return;
             }
 
-            /*locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER
+            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER
                     , 1000
                     , 1
-                    , this);  //cada minuto y 1 segundo se actualiza el GPS */
+                    , this);  //cada minuto y 1 segundo se actualiza el GPS
 
             //Traer ultima ubicacion conocida
             location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);

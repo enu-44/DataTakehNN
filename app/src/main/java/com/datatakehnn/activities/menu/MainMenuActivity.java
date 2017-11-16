@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.datatakehnn.R;
+import com.datatakehnn.activities.CoordsActivity;
 import com.datatakehnn.activities.login.LoginActivity;
 import com.datatakehnn.activities.novedad.NovedadActivity;
 import com.datatakehnn.activities.poste.PosteActivity;
@@ -58,7 +59,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
 
     //region EVENTS
-    @OnClick({R.id.imgAddElement, R.id.imgListElement, R.id.imgLogout})
+    @OnClick({R.id.imgAddElement, R.id.imgListElement, R.id.imgLogout,})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.imgAddElement:
@@ -71,7 +72,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 break;
             case R.id.imgLogout:
                 showExit();
-                break;
+
 
         }
     }

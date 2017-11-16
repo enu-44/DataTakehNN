@@ -79,19 +79,27 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         holder.txtDireccion.setText(elemento.getDireccion());
 
         try {
-            SimpleDateFormat sdfStart = new SimpleDateFormat("H:mm");
-            Date dateObjStart = sdfStart.parse(elemento.getHora_Inicio());
-            ///System.out.println(dateObjStart);
-            SimpleDateFormat sdfEnd = new SimpleDateFormat("H:mm");
-            Date dateObjEnd = sdfEnd.parse(elemento.getHora_Fin());
-            holder.txtHoraInicioFin.setText(new SimpleDateFormat("KK:mm a").format(dateObjStart)+" - "+new SimpleDateFormat("KK:mm a").format(dateObjEnd));
+
+            if(elemento.getHora_Inicio()!=null && elemento.getHora_Fin()!=null){
+                SimpleDateFormat sdfStart = new SimpleDateFormat("H:mm");
+                Date dateObjStart = sdfStart.parse(elemento.getHora_Inicio());
+                ///System.out.println(dateObjStart);
+                SimpleDateFormat sdfEnd = new SimpleDateFormat("H:mm");
+                Date dateObjEnd = sdfEnd.parse(elemento.getHora_Fin());
+                holder.txtHoraInicioFin.setText(new SimpleDateFormat("KK:mm a").format(dateObjStart)+" - "+new SimpleDateFormat("KK:mm a").format(dateObjEnd));
 
 
-            long diff = dateObjEnd.getTime() - dateObjStart.getTime();
-            long segundos = diff / 1000;
-            long minutos = segundos / 60;
+                long diff = dateObjEnd.getTime() - dateObjStart.getTime();
+                long segundos = diff / 1000;
+                long minutos = segundos / 60;
+                long horas = minutos / 60;
+                long dias = horas / 24;
 
-            holder.txtTiempo.setText(String.format(context.getString(R.string.tiempo_global),minutos));
+                holder.txtTiempo.setText(String.format(context.getString(R.string.tiempo_global),minutos));
+
+            }
+
+
 
         } catch (final ParseException e) {
             e.printStackTrace();

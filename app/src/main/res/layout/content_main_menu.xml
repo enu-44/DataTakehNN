@@ -110,12 +110,11 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
                 android:clickable="false"
+                android:src=""
                 android:contentDescription="@null" />
 
         </LinearLayout>
 
 
     </LinearLayout>
-
-
 </RelativeLayout>

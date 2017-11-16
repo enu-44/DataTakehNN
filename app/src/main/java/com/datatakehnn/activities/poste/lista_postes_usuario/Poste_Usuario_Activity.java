@@ -1,5 +1,6 @@
 package com.datatakehnn.activities.poste.lista_postes_usuario;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.datatakehnn.R;
+import com.datatakehnn.activities.CoordsActivity;
 import com.datatakehnn.activities.cables_elemento.adapter.AdapterCablesElemento;
 import com.datatakehnn.activities.poste.lista_postes_usuario.adapter.AdapterElemento;
 import com.datatakehnn.activities.poste.lista_postes_usuario.adapter.OnItemClickListenerElemento;
@@ -172,7 +174,11 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     //region IMPLEMENTS OnItemClickLestenerElemento
     @Override
     public void onItemClick(Elemento elemento) {
+
+        Intent i = new Intent(this, CoordsActivity.class);
+        i.putExtra("Elemento",elemento);
         Toast.makeText(this, "Poste: "+elemento.getCodigo_Apoyo(), Toast.LENGTH_SHORT).show();
+        startActivity(i);
     }
     //endregion
 }
