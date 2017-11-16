@@ -34,7 +34,7 @@
                     android:id="@+id/txtCodigoApoyo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="23JHSDJD"
+                    android:text=""
                     android:textSize="22dp"
                     android:textColor="@color/orange_dark"
                     android:textStyle="bold"/>
@@ -43,7 +43,7 @@
                     android:id="@+id/txtLongitud"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="20 mts"
+                    android:text=""
                     android:textColor="@color/orange_dark"
                     android:textStyle="bold"/>
 
@@ -88,8 +88,8 @@
                     android:id="@+id/txtHoraInicioFin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="10:30 AM - 10:38 AM"
-                    android:textSize="18dp"
+                    android:text=""
+                    android:textSize="15dp"
                     android:textColor="@color/black"
                     android:textStyle="bold"/>
                 <TextView
@@ -98,7 +98,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="8 min"
+                    android:text=""
                     android:textColor="@color/orange_dark"
                     android:textStyle="bold"/>
             </RelativeLayout>
@@ -137,7 +137,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/txt_title_direccion"
                         android:gravity="left"
-                        android:text="Calle 6c # 2-03"
+                        android:text=""
                         android:textColor="@color/orange_dark"
                         android:textSize="14dp"
                         android:textStyle="bold" />
@@ -166,7 +166,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/txt_title_nivel_tension"
                         android:gravity="left"
-                        android:text="23"
+                        android:text=""
                         android:textColor="@color/orange_dark"
                         android:textSize="14dp"
                         android:textStyle="bold" />

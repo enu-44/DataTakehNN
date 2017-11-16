@@ -55,8 +55,6 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     //Listas
     List<Elemento>elementosList= new ArrayList<>();
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +68,6 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         initRecyclerView();
         loadListElementsRegister();
     }
-
 
     //region SETUP INJECTION
     private void setupInjection() {
@@ -163,7 +160,6 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         adapter.setItems(items);
     }
     //endregion
-
 
     //region METHODS OVERRIDES
     @Override

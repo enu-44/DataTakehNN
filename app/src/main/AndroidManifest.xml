@@ -31,35 +31,45 @@
             </intent-filter>
         </activity>
         <activity
+            android:configChanges="screenSize|orientation"
             android:name=".activities.login.LoginActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:configChanges="screenSize|orientation"
             android:name=".activities.CoordsActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:configChanges="screenSize|orientation"
             android:name=".activities.poste.PosteActivity"
             android:parentActivityName=".activities.sync.SyncActivity"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
+            android:configChanges="screenSize|orientation"
             android:name=".activities.sync.SyncActivity"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
+            android:configChanges="screenSize|orientation"
             android:name=".activities.novedad.NovedadActivity"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
+            android:configChanges="screenSize|orientation"
             android:name=".activities.cables_elemento.CablesElementoActivity"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
+            android:configChanges="screenSize|orientation"
             android:name=".activities.equipos_elemento.EquipoActivity"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
+            android:configChanges="screenSize|orientation"
             android:name=".activities.fotos.FotosActivity"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activities.menu.MainMenuActivity"
             android:theme="@style/MiTema.NoActionBar"></activity>
 
         <activity
+            android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.menu.MainMenuActivity"
             android:name=".activities.poste.lista_postes_usuario.Poste_Usuario_Activity"
             android:theme="@style/MiTema.NoActionBar"></activity>

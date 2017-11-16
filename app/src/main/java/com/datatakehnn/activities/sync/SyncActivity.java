@@ -221,7 +221,11 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
             Longitud_Elemento longitud_elemento= sincronizacionGetInformacionController.getFirstLongitudElemento();
             if(longitud_elemento!=null){
                 if(longitud_elemento.getLongitud_Elemento_Id()>0){
+                    showSnakBar(R.color.colorAccent,  getString(R.string.message_information_sync));
+                    MenuItem item = menuGlobal.findItem(R.id.action_done);
+                    item.setVisible(true);
                     sync = true;
+                    progressBar.setVisibility(View.GONE);
                 }else{
                     showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
                     progressBar.setVisibility(View.GONE);

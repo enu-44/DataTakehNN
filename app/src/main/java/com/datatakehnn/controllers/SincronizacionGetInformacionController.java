@@ -8,8 +8,11 @@ import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad;
 import com.datatakehnn.models.empresa_model.Empresa;
 import com.datatakehnn.models.estado_model.Estado;
 import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento;
+import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento_Adapter;
+import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento_Table;
 import com.datatakehnn.models.material_model.Material;
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento;
+import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento_Table;
 import com.datatakehnn.models.reponse_generic.Response;
 import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.tipo_equipo_model.Tipo_Equipo;
@@ -241,5 +244,15 @@ public class SincronizacionGetInformacionController {
     }
 
 
+    //METODOS
+    public Longitud_Elemento getLongitudByLongitud_Elemento_Id(long Longitud_Elemento_Id){
+        Longitud_Elemento longitud_elemento = SQLite.select().from(Longitud_Elemento.class).where(Longitud_Elemento_Table.Longitud_Elemento_Id.eq(Longitud_Elemento_Id)).querySingle();
+        return longitud_elemento;
+    }
+
+    public Nivel_Tension_Elemento getNivelTensionByNivel_Tension_Elemento_Id(long Nivel_Tension_Elemento_Id){
+        Nivel_Tension_Elemento nivel_tension_elemento = SQLite.select().from(Nivel_Tension_Elemento.class).where(Nivel_Tension_Elemento_Table.Nivel_Tension_Elemento_Id.eq(Nivel_Tension_Elemento_Id)).querySingle();
+        return nivel_tension_elemento;
+    }
 
 }

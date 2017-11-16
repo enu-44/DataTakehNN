@@ -4,9 +4,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/container"
         android:layout_width="match_parent"
-
         android:layout_height="match_parent"
-        android:background="@drawable/fondo_listado"
+
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -59,6 +58,4 @@
         </RelativeLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
 </RelativeLayout>

@@ -57,6 +57,8 @@
     <string name="direccion">Direccion</string>
     <string name="nivel_tension">Nivel de Tension</string>
 
+    <string name="tiempo_global">%d  Min</string>
+
 
     <!---CABLES ELEMENTO-->
     <string name="pregunta_cables_rbt">¿Esta el cable sobre RBT?</string>

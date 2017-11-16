@@ -9,9 +9,15 @@ import android.widget.TextView;
 
 import com.datatakehnn.R;
 import com.datatakehnn.controllers.NovedadController;
+import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.models.element_model.Elemento;
+import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento;
+import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento;
 import com.datatakehnn.models.novedad_model.Novedad;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,6 +34,8 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
     public OnItemClickListenerElemento onItemClickListener;
     public Context context;
     public NovedadController novedadController;
+    public SincronizacionGetInformacionController sincronizacionGetInformacionController;
+
 
 
     public AdapterElemento(Context context, List<Elemento> dataset, OnItemClickListenerElemento onItemClickListener) {
@@ -35,6 +43,7 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         this.onItemClickListener = onItemClickListener;
         this.context= context;
         this.novedadController= NovedadController.getInstance(context);
+        this.sincronizacionGetInformacionController= SincronizacionGetInformacionController.getInstance(context);
     }
 
     public void setItems(List<Elemento> newItems) {
@@ -68,6 +77,37 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         }
 
         holder.txtDireccion.setText(elemento.getDireccion());
+
+        try {
+            SimpleDateFormat sdfStart = new SimpleDateFormat("H:mm");
+            Date dateObjStart = sdfStart.parse(elemento.getHora_Inicio());
+            ///System.out.println(dateObjStart);
+            SimpleDateFormat sdfEnd = new SimpleDateFormat("H:mm");
+            Date dateObjEnd = sdfEnd.parse(elemento.getHora_Fin());
+            holder.txtHoraInicioFin.setText(new SimpleDateFormat("KK:mm a").format(dateObjStart)+" - "+new SimpleDateFormat("KK:mm a").format(dateObjEnd));
+
+
+            long diff = dateObjEnd.getTime() - dateObjStart.getTime();
+            long segundos = diff / 1000;
+            long minutos = segundos / 60;
+
+            holder.txtTiempo.setText(String.format(context.getString(R.string.tiempo_global),minutos));
+
+        } catch (final ParseException e) {
+            e.printStackTrace();
+        }
+
+        Longitud_Elemento longitud_elemento= sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.getLongitud_Elemento_Id());
+        Nivel_Tension_Elemento nivel_tension_elemento= sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id());
+        if(longitud_elemento!=null){
+            holder.txtLongitud.setText(String.valueOf(longitud_elemento.getValor())+" "+ longitud_elemento.getUnidad_Medida());
+        }
+        if(longitud_elemento!=null){
+            holder.txtNivelTension.setText(nivel_tension_elemento.getSigla());
+        }
+
+
+
 /*
         String cantidad= String.format(context.getString(R.string.cantidad_global),
                 list.getCantidad());
