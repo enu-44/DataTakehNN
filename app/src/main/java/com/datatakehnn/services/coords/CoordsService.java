@@ -113,8 +113,7 @@ public class CoordsService extends Service implements LocationListener {
 
     public void setLocation(Location loc) {
         //Obtener la direccion de la calle a partir de la latitud y la longitud
-
-        texto.setText("Coordenadas: " + loc.getLatitude() + "," + loc.getLongitude());
+       // texto.setText("Coordenadas: " + loc.getLatitude() + "," + loc.getLongitude());
     }
 
 }
