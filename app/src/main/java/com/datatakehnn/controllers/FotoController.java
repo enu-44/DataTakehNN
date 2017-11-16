@@ -3,7 +3,9 @@ package com.datatakehnn.controllers;
 import android.content.Context;
 
 import com.datatakehnn.models.foto_model.Foto;
+import com.datatakehnn.models.foto_model.Foto_Table;
 import com.raizlabs.android.dbflow.sql.language.Delete;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 /**
  * Created by TECNOLOGIA on 13/11/2017.
@@ -60,6 +62,12 @@ public class FotoController {
         foto.setRuta_Foto(fotoNew.getRuta_Foto());
         // foto.setImage(fotoNew.getImage());
         foto.save();
+        return foto;
+    }
+
+    public Foto getByRutaFotoAndElementoId(String ruta_foto, long elemento_id) {
+        Foto foto = SQLite.select().from(Foto.class).where(Foto_Table.Ruta_Foto.eq(ruta_foto))
+                .and(Foto_Table.Elemento_Id.eq(elemento_id)).querySingle();
         return foto;
     }
 

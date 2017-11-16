@@ -90,13 +90,22 @@ public class RecyclerAdapterFoto extends RecyclerView.Adapter<RecyclerAdapterFot
             ButterKnife.bind(this, itemView);
         }
 
-        public void hacerClickListener(final Novedad respuestaNovedad, OnItemClickListenerFoto onItemClickListenerFoto) {
+        public void hacerClickListener(final Novedad respuestaNovedad, final OnItemClickListenerFoto mOnItemClickListenerFoto) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnItemClickListenerFoto.onItemClick(respuestaNovedad);
+                }
+            });
+
             ibTomarFotoRecycler.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mOnItemClickListenerFoto.onItemClick(respuestaNovedad);
                 }
             });
+
+
         }
 
 

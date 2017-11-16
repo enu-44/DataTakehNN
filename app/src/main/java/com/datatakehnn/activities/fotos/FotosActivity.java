@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,11 +47,16 @@ import com.datatakehnn.models.novedad_model.Novedad;
 import com.datatakehnn.services.coords.CoordsService;
 import com.raizlabs.android.dbflow.data.Blob;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,11 +99,15 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     private Uri file;
     long elemento_id;
     boolean foto1 = false, foto2 = false, tomoFoto1 = false, tomoFoto2 = false;
+    File archivo;
 
     //Coordenadas
     Location location;
-    Double Latitud, Longitud;
-    String latitud, longitud;
+    public static Double Latitud;
+    public static Double Longitud;
+    String latitud;
+    String longitud;
+    boolean isEstadoFoto1 = false, isEstadoFoto2 = false, isEstadoFoto1Defecto = false, isEstadoFoto2Defecto = false;
 
     //Dataset
     List<Novedad> novedades;
@@ -125,6 +135,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         //loadRecyclerItems();
     }
 
+
+    //region SET INJECTION
     private void initAdapter() {
         if (recyclerAdapterFoto == null) {
             recyclerAdapterFoto = new RecyclerAdapterFoto(this, novedades, this);
@@ -136,7 +148,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         recyclerView.setAdapter(recyclerAdapterFoto);
     }
 
-    //region SET INJECTION
     private void getData() {
         elemento_id = elementoController.getLast().getElemento_Id();
         novedades = novedadController.getListNovedadesByElementoId(elemento_id);
@@ -216,18 +227,26 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         boolean cancel_4 = false;
         View focusView_4 = null;
 
+        //
+        Drawable drawableFoto1 = ivFoto1.getDrawable();
+        Drawable drawableFoto2 = ivFoto2.getDrawable();
+        Drawable drawableFotoDefault = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            drawableFotoDefault = getDrawable(R.drawable.boton_foto);
+        }
+
         if (TextUtils.isEmpty(fotoPoste1)) {
             edtFotoPoste1.setError(getString(R.string.error_field_required));
             focusView = edtFotoPoste1;
             cancel = true;
-        } else if (tomoFoto1 == false) {
+        } else if ((tomoFoto1 == false || isEstadoFoto1Defecto == true)) {
             Snackbar.make(container, "Debe Tomar la Foto 1", Snackbar.LENGTH_SHORT).show();
             cancel = true;
         } else if (TextUtils.isEmpty(fotoPoste2)) {
             edtFotoPoste2.setError(getString(R.string.error_field_required));
             focusView = edtFotoPoste2;
             cancel = true;
-        } else if (tomoFoto2 == false) {
+        } else if ((tomoFoto2 == false || isEstadoFoto2Defecto == true)) {
             Snackbar.make(container, "Debe Tomar la Foto 2", Snackbar.LENGTH_SHORT).show();
             cancel = true;
         } else {
@@ -273,6 +292,40 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     //endregion
 
     //region METHODS
+    public byte[] convertBitmapToByte(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
+    }
+
+    public byte[] readBytes(Uri uri) throws IOException {
+        // this dynamically extends to take the bytes you read
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+        // this is storage overwritten on each iteration with bytes
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        // we need to know how may bytes were read to write them to the byteBuffer
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+
+        // and then we can return your byte array.
+        return byteBuffer.toByteArray();
+    }
+
+    private void refreshList() {
+        recyclerAdapterFoto.clear();
+        novedades.clear();
+        getData();
+        recyclerAdapterFoto.setItems(novedades);
+    }
+
+
     public void registerAll() {
         Elemento elemento = elementoController.getLast();
         String horaFin = obtenerHora();
@@ -302,90 +355,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         return hora;
     }
 
-    private void tomarFoto() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        file = Uri.fromFile(getOutputMediaFile());
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-        startActivityForResult(intent, 100);
-    }
-
-    private File getOutputMediaFile() {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "Datatakeh");
-
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("Datatakeh", "failed to create directory");
-                return null;
-            }
-        }
-        if (foto1 == true) {
-            return new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_1" + ".jpg");
-        }
-        if (foto2 == true) {
-            return new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_2" + ".jpg");
-        } else {
-            return null;
-        }
-    }
-
-    public void resultTomarFoto1() {
-        ivFoto1.setImageURI(file);
-
-        //TODO
-        Foto foto = new Foto();
-        foto.setElemento_Id(elemento_id);
-        foto.setDescripcion(edtFotoPoste1.getText().toString());
-        try {
-            image = readBytes(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Blob imagenBlob = new Blob(image);
-        foto.setImage(imagenBlob);
-        foto.setRuta_Foto(file.toString());
-        fotoController.register(foto);
-        tomoFoto1 = true;
-    }
-
-    public void resultTomarFoto2() {
-        ivFoto2.setImageURI(file);
-        Foto foto = new Foto();
-        foto.setElemento_Id(elemento_id);
-        foto.setDescripcion(edtFotoPoste2.getText().toString());
-        try {
-            image = readBytes(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        foto.setRuta_Foto(file.toString());
-        Blob imagenBlob = new Blob(image);
-        foto.setImage(imagenBlob);
-        fotoController.register(foto);
-        tomoFoto2 = true;
-    }
-
-    public byte[] readBytes(Uri uri) throws IOException {
-        // this dynamically extends to take the bytes you read
-        InputStream inputStream = getContentResolver().openInputStream(uri);
-        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-
-        // this is storage overwritten on each iteration with bytes
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-
-        // we need to know how may bytes were read to write them to the byteBuffer
-        int len = 0;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
-        }
-
-        // and then we can return your byte array.
-        return byteBuffer.toByteArray();
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -395,17 +364,10 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         return super.onKeyDown(keyCode, event);
     }
 
-    private void refreshList() {
-        recyclerAdapterFoto.clear();
-        novedades.clear();
-        getData();
-        recyclerAdapterFoto.setItems(novedades);
-    }
-
     //endregion
 
 
-    //MÉTODOS DEL ON ITEM CLICK LISTENER
+    //region MÉTODOS DEL ON ITEM CLICK LISTENER
 
     @Override
     public void onItemClick(Novedad item) {
@@ -442,15 +404,59 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     }
 
+    private void tomarFoto() {
+        if (foto1 == true) {
+            if (isEstadoFoto1 == true) {
+                ivFoto1.setImageURI(null);
+                ivFoto1.setImageResource(R.drawable.boton_foto);
+                isEstadoFoto1Defecto = true;
+            }
+        } else if (foto2 == true) {
+            if (isEstadoFoto2 == true) {
+                ivFoto2.setImageURI(null);
+                ivFoto2.setImageResource(R.drawable.boton_foto);
+                isEstadoFoto2Defecto = true;
+            }
+        }
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        file = Uri.fromFile(getOutputMediaFile());
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+        startActivityForResult(intent, 100);
+    }
+
+    private File getOutputMediaFile() {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "Datatakeh");
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("Datatakeh", "failed to create directory");
+                return null;
+            }
+        }
+        if (foto1 == true) {
+            archivo = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_1" + ".jpg");
+            return archivo;
+        }
+        if (foto2 == true) {
+            archivo = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_2" + ".jpg");
+            return archivo;
+        } else {
+            return null;
+        }
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 100) {
             if (resultCode == RESULT_OK) {
                 if (foto1 == true) {
-                    resultTomarFoto1();
-                }
-                if (foto2 == true) {
-                    resultTomarFoto2();
+                    registerFoto1();
+                } else if (foto2 == true) {
+                    registerFoto2();
                 }
             }
         }
@@ -465,6 +471,80 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 novedad.setImage_Novedad(imagenBlob);
                 novedadController.updateWithFoto(novedad);
                 refreshList();
+            }
+        }
+
+    }
+
+
+    public void registerFoto1() {
+        isEstadoFoto1 = true;
+        ivFoto1.setImageURI(file);
+        isEstadoFoto1Defecto = false;
+        String ruta_foto = file.toString();
+        Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto, elemento_id);
+        if (hayFoto != null) {
+            hayFoto.setDescripcion(edtFotoPoste1.getText().toString());
+            try {
+                image = readBytes(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Blob imagenBlob = new Blob(image);
+            hayFoto.setImage(imagenBlob);
+            fotoController.update(hayFoto);
+            tomoFoto1 = true;
+        } else {
+            Foto foto = new Foto();
+            foto.setElemento_Id(elemento_id);
+            foto.setDescripcion(edtFotoPoste1.getText().toString());
+            try {
+                image = readBytes(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Blob imagenBlob = new Blob(image);
+            foto.setImage(imagenBlob);
+            foto.setRuta_Foto(file.toString());
+            fotoController.register(foto);
+            tomoFoto1 = true;
+        }
+
+    }
+
+    public void registerFoto2() {
+        if (foto2 == true) {
+            isEstadoFoto2 = true;
+            ivFoto2.setImageURI(file);
+            isEstadoFoto2Defecto = false;
+            String ruta_foto = file.toString();
+            Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto, elemento_id);
+            if (hayFoto != null) {
+                hayFoto.setDescripcion(edtFotoPoste2.getText().toString());
+                try {
+                    image = readBytes(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Blob imagenBlob = new Blob(image);
+                hayFoto.setImage(imagenBlob);
+                fotoController.update(hayFoto);
+                tomoFoto2 = true;
+            } else {
+                Foto foto = new Foto();
+                foto.setElemento_Id(elemento_id);
+                foto.setDescripcion(edtFotoPoste2.getText().toString());
+                try {
+                    image = readBytes(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Blob imagenBlob = new Blob(image);
+                foto.setImage(imagenBlob);
+                foto.setRuta_Foto(file.toString());
+                fotoController.register(foto);
+                tomoFoto2 = true;
             }
         }
     }

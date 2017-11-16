@@ -31,47 +31,47 @@
             </intent-filter>
         </activity>
         <activity
-            android:configChanges="screenSize|orientation"
             android:name=".activities.login.LoginActivity"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme" />
         <activity
-            android:configChanges="screenSize|orientation"
             android:name=".activities.CoordsActivity"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme" />
         <activity
-            android:configChanges="screenSize|orientation"
             android:name=".activities.poste.PosteActivity"
+            android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.sync.SyncActivity"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
-            android:configChanges="screenSize|orientation"
             android:name=".activities.sync.SyncActivity"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
-            android:configChanges="screenSize|orientation"
             android:name=".activities.novedad.NovedadActivity"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
-            android:configChanges="screenSize|orientation"
             android:name=".activities.cables_elemento.CablesElementoActivity"
+            android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
-            android:configChanges="screenSize|orientation"
             android:name=".activities.equipos_elemento.EquipoActivity"
-            android:theme="@style/MiTema.NoActionBar" />
-        <activity
             android:configChanges="screenSize|orientation"
-            android:name=".activities.fotos.FotosActivity"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activities.fotos.FotosActivity"
+            android:configChanges="screenSize|orientation"
+            android:theme="@style/MiTema.NoActionBar" />
+        <activity
             android:name=".activities.menu.MainMenuActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/MiTema.NoActionBar"></activity>
 
         <activity
+            android:name=".activities.poste.lista_postes_usuario.Poste_Usuario_Activity"
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.menu.MainMenuActivity"
-            android:name=".activities.poste.lista_postes_usuario.Poste_Usuario_Activity"
             android:theme="@style/MiTema.NoActionBar"></activity>
 
         <meta-data
