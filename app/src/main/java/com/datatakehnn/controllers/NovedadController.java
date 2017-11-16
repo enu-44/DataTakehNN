@@ -96,6 +96,15 @@ public class NovedadController {
         return novedad;
     }
 
+
+/*
+    public Tipo_Novedad getTipoNovedadIdByNombre(String nombre_tipo_novedad) {
+        Tipo_Novedad tipo_novedad = SQLite.select().from(Tipo_Novedad.class).where(Tipo_Novedad_Table.Nombre.eq(nombre_tipo_novedad))
+                .querySingle();
+        return tipo_novedad;
+    }
+    */
+
     //Devuelve un Listado de Novedades por Id del Poste
     public List<Novedad> getListNovedadesByElementoId(long elemento_id) {
         List<Novedad> novedades = SQLite.select().from(Novedad.class).where
@@ -120,8 +129,6 @@ public class NovedadController {
         Novedad novedad = new Select().from(Novedad.class).where().orderBy(Novedad_Table.Novedad_Id, false).querySingle();
         return novedad;
     }
-
-
 
 
     public Novedad getNovedadByElementoId(long elemento_id) {

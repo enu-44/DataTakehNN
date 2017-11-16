@@ -32,9 +32,11 @@ import com.datatakehnn.models.estado_model.Estado;
 import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento;
 import com.datatakehnn.models.material_model.Material;
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento;
+import com.datatakehnn.models.novedad_model.Novedad;
 import com.datatakehnn.models.retenidas_model.Cantidad_Retenidas;
 import com.datatakehnn.models.tipo_direccion_model.Detalle_Tipo_Direccion;
 import com.datatakehnn.models.tipo_direccion_model.Tipo_Direccion;
+import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.coords.CoordsService;
 import com.datatakehnn.services.data_arrays.Cantidad_Retenidas_List;
@@ -53,6 +55,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 public class PosteActivity extends AppCompatActivity {
 
     //UI Elements
@@ -182,8 +185,8 @@ public class PosteActivity extends AppCompatActivity {
         materials = sincronizacionGetInformacionController.getListMaterial();
         nivel_tension_elementos = sincronizacionGetInformacionController.getListNivel_Tension_Elemento();
         cantidad_retenidas = Cantidad_Retenidas_List.getListCantidadRetenidas();
-        tipo_direccions= Tipo_Direccion_List.getListTipo_Direccion();
-        detalle_tipo_direccions= Detalle_Tipo_Direccion_List.getListDetalle_Tipo_Direccion();
+        tipo_direccions = Tipo_Direccion_List.getListTipo_Direccion();
+        detalle_tipo_direccions = Detalle_Tipo_Direccion_List.getListDetalle_Tipo_Direccion();
         //Direcciones
 
 
@@ -387,10 +390,10 @@ public class PosteActivity extends AppCompatActivity {
         this.servicioUbicacion = new CoordsService(this);
         //Guarda en un location la ubicación
         location = servicioUbicacion.getUbicacion();
-        try{
+        try {
             latitud = location.getLatitude();
             longitud = location.getLongitude();
-        }catch (Exception ex){
+        } catch (Exception ex) {
         }
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.novedadController = NovedadController.getInstance(this);
@@ -413,6 +416,10 @@ public class PosteActivity extends AppCompatActivity {
             case R.id.radioButtonSiCodigoApoyo:
                 edtCodigoApoyo.setEnabled(true);
                 textInputLayoutCodigoApoyo.setVisibility(View.VISIBLE);
+                /*
+                Tipo_Novedad tipo_novedad = novedadController.getTipoNovedadIdByNombre("Codigo Apoyo");
+                long id_tipo_novedad = tipo_novedad.getTipo_Novedad_Id();
+                Novedad novedad = novedadController.getNovedadByTipoAndElementoId(id_tipo_novedad,)*/
                 break;
             case R.id.radioButtonNoPlaca:
                 edtResistenciaMecanica.setEnabled(false);
@@ -490,7 +497,7 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
         elemento.setAltura_Disponible(Altura_Disponible);
         elemento.setIs_Sync(false);
-        elemento.setDireccion(Nombre_Tipo_Direccion+" "+edtTipoDireccion.getText().toString()+" "+Nombre_Detalle_Tipo_Direccion+" "+edtDetalleTipoDireccion.getText().toString());
+        elemento.setDireccion(Nombre_Tipo_Direccion + " " + edtTipoDireccion.getText().toString() + " " + Nombre_Detalle_Tipo_Direccion + " " + edtDetalleTipoDireccion.getText().toString());
         elemento.setReferencia_Localizacion(edtReferencia.getText().toString());
         elemento.setLongitud(longitud);
         elemento.setLatitud(latitud);
