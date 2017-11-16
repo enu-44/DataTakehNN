@@ -52,6 +52,12 @@
     <string name="tiene_placa">¿Tiene Placa ?</string>
 
 
+    <!--LISTA DE POSTES-->
+    <string name="tiempo">Tiempo</string>
+    <string name="direccion">Direccion</string>
+    <string name="nivel_tension">Nivel de Tension</string>
+
+
     <!---CABLES ELEMENTO-->
     <string name="pregunta_cables_rbt">¿Esta el cable sobre RBT?</string>
     <string name="title_detalle_cable">Detalle</string>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:padding="5dp"
+    android:foreground="@android:color/transparent"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_weight="0.5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/title_codigo_apoyo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/codigo_apoyo"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_below="@+id/title_codigo_apoyo"
+                    android:id="@+id/txtCodigoApoyo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="23JHSDJD"
+                    android:textSize="22dp"
+                    android:textColor="@color/orange_dark"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_below="@+id/txtCodigoApoyo"
+                    android:id="@+id/txtLongitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="20 mts"
+                    android:textColor="@color/orange_dark"
+                    android:textStyle="bold"/>
+
+                <!--<TextView
+                    android:id="@+id/txt_title_direccion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/txtLongitud"
+                    android:text="@string/direccion"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_below="@+id/txt_title_direccion"
+                    android:id="@+id/txtDireccion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Calle 6c # 26-06"
+                    android:textSize="18dp"
+                    android:textColor="@color/orange_dark"
+                    android:textStyle="bold"/>-->
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_weight="0.5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txt_title_tiempo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tiempo"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:layout_below="@+id/txt_title_tiempo"
+                    android:id="@+id/txtHoraInicioFin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="10:30 AM - 10:38 AM"
+                    android:textSize="18dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_below="@+id/txtHoraInicioFin"
+                    android:id="@+id/txtTiempo"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="8 min"
+                    android:textColor="@color/orange_dark"
+                    android:textStyle="bold"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <TableLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:shrinkColumns="*"
+            android:stretchColumns="*">
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_marginTop="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp">
+                    <TextView
+                        android:id="@+id/txt_title_direccion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left|center"
+                        android:text="@string/direccion"
+                        android:textColor="@color/black"
+
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtDireccion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/txt_title_direccion"
+                        android:gravity="left"
+                        android:text="Calle 6c # 2-03"
+                        android:textColor="@color/orange_dark"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_marginTop="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp">
+                    <TextView
+                        android:id="@+id/txt_title_nivel_tension"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left|center"
+                        android:text="@string/nivel_tension"
+                        android:textColor="@color/black"
+
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtNivelTension"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/txt_title_nivel_tension"
+                        android:gravity="left"
+                        android:text="23"
+                        android:textColor="@color/orange_dark"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </TableRow>
+        </TableLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/orange" />
+    </LinearLayout>
+</RelativeLayout>

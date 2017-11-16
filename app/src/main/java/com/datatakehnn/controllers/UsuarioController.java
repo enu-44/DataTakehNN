@@ -76,7 +76,7 @@ public class UsuarioController {
 
     ///Cerrar Sesion
     public Usuario logoutLogin(){
-        Usuario userfirst= SQLite.select().from(Usuario.class).querySingle();
+        Usuario userfirst= SQLite.select().from(Usuario.class).where(Usuario_Table.IsRemembered.eq(true)).querySingle();
         userfirst.setRemembered(false);
         userfirst.save();
         Usuario userUpdate=SQLite.select().from(Usuario.class).querySingle();

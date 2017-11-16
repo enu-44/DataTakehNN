@@ -52,16 +52,17 @@
         <activity
             android:name=".activities.equipos_elemento.EquipoActivity"
             android:theme="@style/MiTema.NoActionBar" />
-
         <activity
             android:name=".activities.fotos.FotosActivity"
             android:theme="@style/MiTema.NoActionBar" />
-
         <activity
             android:name=".activities.menu.MainMenuActivity"
-            android:theme="@style/MiTema.NoActionBar" >
+            android:theme="@style/MiTema.NoActionBar"></activity>
 
-        </activity>
+        <activity
+            android:parentActivityName=".activities.menu.MainMenuActivity"
+            android:name=".activities.poste.lista_postes_usuario.Poste_Usuario_Activity"
+            android:theme="@style/MiTema.NoActionBar"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

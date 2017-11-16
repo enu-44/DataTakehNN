@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.models.element_model.Elemento_Table;
+import com.datatakehnn.models.elemento_cable.Elemento_Cable;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
@@ -112,6 +113,16 @@ public class ElementoController {
         Elemento elemento = new Select().from(Elemento.class).where().orderBy(Elemento_Table.Elemento_Id, false).querySingle();
         return elemento;
     }
+
+
+    public List<Elemento> getListElementsByUserLogued(long Usuario_Id) {
+        //  List<Elemento> elementos = new Select().from(Elemento.class).queryList();
+        List<Elemento> elemento = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(Usuario_Id)).orderBy(Elemento_Table.Elemento_Id, false).queryList();
+        return elemento;
+    }
+
+
+
 
 
 }

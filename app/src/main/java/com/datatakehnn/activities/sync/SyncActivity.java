@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.datatakehnn.R;
+import com.datatakehnn.activities.menu.MainMenuActivity;
 import com.datatakehnn.activities.poste.PosteActivity;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
@@ -122,7 +123,7 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
         int id = item.getItemId();
         if (id == R.id.action_done) {
             if (sync == true) {
-                Intent i = new Intent(this, PosteActivity.class);
+                Intent i = new Intent(this, MainMenuActivity.class);
                 startActivity(i);
             } else {
 

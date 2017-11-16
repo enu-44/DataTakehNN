@@ -122,5 +122,13 @@ public class NovedadController {
     }
 
 
+
+
+    public Novedad getNovedadByElementoId(long elemento_id) {
+        Novedad novedad = SQLite.select().from(Novedad.class).where(Novedad_Table.Elemento_Id.eq(elemento_id)).querySingle();
+        return novedad;
+    }
+
+
 }
 
