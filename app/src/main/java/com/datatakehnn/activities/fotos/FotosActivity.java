@@ -234,13 +234,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         boolean cancel_4 = false;
         View focusView_4 = null;
 
-        //
-        Drawable drawableFoto1 = ivFoto1.getDrawable();
-        Drawable drawableFoto2 = ivFoto2.getDrawable();
-        Drawable drawableFotoDefault = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            drawableFotoDefault = getDrawable(R.drawable.boton_foto);
-        }
 
         if (TextUtils.isEmpty(fotoPoste1)) {
             edtFotoPoste1.setError(getString(R.string.error_field_required));
@@ -502,7 +495,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             return new File(mediaStorageDir.getPath() + File.separator +
                     "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + random + "_FOTO_1" + ".jpg");
         }
-        if (foto2 == true) {
+        else if (foto2 == true) {
             return new File(mediaStorageDir.getPath() + File.separator +
                     "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + random + "_FOTO_2" + ".jpg");
         } else {
