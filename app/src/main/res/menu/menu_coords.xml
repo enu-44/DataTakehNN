@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="Opciones"
+        android:icon="@drawable/ic_action_lateral"
         app:showAsAction="always" >
         <menu>
             <item android:id="@+id/menu_cables"
+                android:icon="@drawable/ic_action_cables"
                 android:title="Cables">
             </item>
             <item android:id="@+id/menu_equipos"
-
+                android:icon="@drawable/ic_action_equipos"
                 android:title="Equipos">
             </item>
 
             <item android:id="@+id/menu_novedades"
+                android:icon="@drawable/ic_action_novedad"
                 android:title="Novedades">
-            </item>
 
+            </item>
         </menu>
     </item>
 
