@@ -390,6 +390,7 @@ public class PosteActivity extends AppCompatActivity {
         this.intentIntegrator = new IntentIntegrator(this, PACKAGE_NAME);
         //Guarda en un location la ubicación
         //location = servicioUbicacion.getUbicacion();
+        location=((SyncActivity) syncActivity).coordsService.getUbicacion();
         try {
             latitud = location.getLatitude();
             longitud = location.getLongitude();
