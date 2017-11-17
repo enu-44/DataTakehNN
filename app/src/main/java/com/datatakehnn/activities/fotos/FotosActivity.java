@@ -100,6 +100,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     long elemento_id;
     boolean foto1 = false, foto2 = false, tomoFoto1 = false, tomoFoto2 = false;
     boolean isEstadoFoto1 = false, isEstadoFoto2 = false, isEstadoFoto1Defecto = false, isEstadoFoto2Defecto = false;
+    int contador = 0;
 
     //Coordenadas
     public Double Latitud;
@@ -246,6 +247,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         } else if ((tomoFoto2 == false || isEstadoFoto2Defecto == true)) {
             Snackbar.make(container, "Debe Tomar la Foto 2", Snackbar.LENGTH_SHORT).show();
             cancel = true;
+        } else if (contador < novedades.size()) {
+            Snackbar.make(container, "Debe registrar todas las fotos de novedades", Snackbar.LENGTH_SHORT).show();
         } else {
             registerAll();
         }
@@ -490,6 +493,9 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                     image = readBytes(file);
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+                if (novedad.getImage_Novedad() == null) {
+                    contador = contador + 1;
                 }
                 Blob imagenBlob = new Blob(image);
                 novedad.setImage_Novedad(imagenBlob);

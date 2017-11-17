@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:layout_weight="0.5"
             android:contentDescription="@null"
-            android:src="@drawable/boton_foto" />
+            android:src="@drawable/boton_foto_gris" />
 
         <TextView
             android:id="@+id/tvDescripcionFoto"
@@ -33,7 +33,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:src="@android:drawable/ic_menu_camera" />
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/ic_camera" />
 
     </LinearLayout>
 
