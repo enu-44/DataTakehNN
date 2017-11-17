@@ -1,8 +1,12 @@
 package com.datatakehnn.activities.poste;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -10,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +45,7 @@ import com.datatakehnn.models.tipo_direccion_model.Detalle_Tipo_Direccion;
 import com.datatakehnn.models.tipo_direccion_model.Tipo_Direccion;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
 import com.datatakehnn.models.usuario_model.Usuario;
+import com.datatakehnn.services.apps_integrator.IntentIntegrator;
 import com.datatakehnn.services.coords.CoordsService;
 import com.datatakehnn.services.data_arrays.Cantidad_Retenidas_List;
 import com.datatakehnn.services.data_arrays.Detalle_Tipo_Cable_List;
@@ -50,7 +56,10 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -60,6 +69,7 @@ import butterknife.OnClick;
 
 public class PosteActivity extends AppCompatActivity {
 
+    private static final String TAG ="" ;
     //UI Elements
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -112,6 +122,10 @@ public class PosteActivity extends AppCompatActivity {
     Location location;
     CoordsService servicioUbicacion;
 
+    //Medidor de diatancias
+    private String PACKAGE_NAME = "com.nfa.distancemeter";
+    IntentIntegrator intentIntegrator;
+
     //Declaracion Arrays
     List<Estado> listEstado = new ArrayList<>();
     List<Longitud_Elemento> longitud_elementos = new ArrayList<>();
@@ -151,6 +165,9 @@ public class PosteActivity extends AppCompatActivity {
     @BindView(R.id.ibCalcularAltura)
     ImageButton ibCalcularAltura;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +177,7 @@ public class PosteActivity extends AppCompatActivity {
         setupInjection();
         loadInformacionMaster();
         obtenerFechayHora();
+
     }
 
     //region METHODS
@@ -178,6 +196,8 @@ public class PosteActivity extends AppCompatActivity {
         hora = timeFormat.format(cal.getTime());
 
     }
+
+
 
     private void loadInformacionMaster() {
 
@@ -388,8 +408,11 @@ public class PosteActivity extends AppCompatActivity {
     }
 
     private void setupInjection() {
+
+
         //Llama la instancia del servicio
         this.servicioUbicacion = new CoordsService(this);
+        this.intentIntegrator= new IntentIntegrator(this,PACKAGE_NAME );
         //Guarda en un location la ubicación
         location = servicioUbicacion.getUbicacion();
         try {
@@ -435,16 +458,18 @@ public class PosteActivity extends AppCompatActivity {
                 edtResistenciaMecanica.setEnabled(true);
                 break;
             case R.id.ibCalcularAltura:
-                String packageName = "com.nfa.distancemeter";
+                String packageName = PACKAGE_NAME;
                 Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
                 if (intent != null) {
                     startActivity(intent);
                 } else {
-                    Snackbar.make(container, "No puede acceder a la app", Snackbar.LENGTH_SHORT).show();
+                    intentIntegrator.showDownloadDialog();
                 }
                 break;
         }
     }
+
+
 
 
     //endregion
