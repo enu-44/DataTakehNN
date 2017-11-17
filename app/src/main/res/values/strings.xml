@@ -73,6 +73,13 @@
     <string name="title_medidor">¿ Medidor ?</string>
     <string name="title_tipo_equipo">Tipo</string>
 
+    <!-- PÉRDIDAS -->
+    <string name="lampara_adicional">¿Lámpara Adicional?</string>
+    <string name="cantidad_lampara_adicional">Cantidad de Lámparas Adicionales</string>
+    <string name="lampara_encendida_dia">¿Lámpara encendida de día?</string>
+    <string name="conexion_ilicita">¿Conexión Ílicita?</string>
+    <string name="poda">¿Requiere Poda?</string>
+
     <!--GLOBALS STRING-->
     <string name="results_global_search">Mostrando %d Resultados</string>
     <string name="prompt_buscar_global">Buscar...</string>
