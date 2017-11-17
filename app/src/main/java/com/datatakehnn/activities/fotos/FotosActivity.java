@@ -447,10 +447,15 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 isEstadoFoto2Defecto = true;
             }
         }
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        file = Uri.fromFile(getOutputMediaFile());
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-        startActivityForResult(intent, 100);
+        try {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            file = Uri.fromFile(getOutputMediaFile());
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+            startActivityForResult(intent, 100);
+        } catch (Exception e) {
+            e.getMessage().toString();
+        }
+
     }
 
     private File getOutputMediaFile() {
