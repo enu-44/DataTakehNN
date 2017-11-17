@@ -363,7 +363,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         //Snackbar.make(container, "Fotos Registradas", Snackbar.LENGTH_SHORT).show();
         final AlertDialog.Builder builder = new AlertDialog.Builder(FotosActivity.this);
         builder.setTitle("Notificación");
-        builder.setMessage("Poste Registrado");
+        builder.setMessage("¿Confirma todos los datos?");
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

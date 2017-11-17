@@ -1,11 +1,13 @@
 package com.datatakehnn.activities.equipos_elemento;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -346,8 +348,19 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_done) {
-            Intent i = new Intent(this, FotosActivity.class);
-            startActivity(i);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(EquipoActivity.this);
+            builder.setTitle("Notificación");
+            builder.setMessage("¿Confirma todos los datos?");
+            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent i = new Intent(getApplicationContext(), FotosActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
         return super.onOptionsItemSelected(item);
     }

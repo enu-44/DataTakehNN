@@ -1,10 +1,12 @@
 package com.datatakehnn.activities.poste;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -503,8 +505,20 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setLatitud(latitud);
         elementoController.register(elemento);
         //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
-        Intent i = new Intent(this, CablesElementoActivity.class);
-        startActivity(i);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(PosteActivity.this);
+        builder.setTitle("Notificación");
+        builder.setMessage("¿Confirma todos los datos?");
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
+                startActivity(i);
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     //endregion

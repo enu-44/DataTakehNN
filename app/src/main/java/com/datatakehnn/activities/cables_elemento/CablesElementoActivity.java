@@ -1,11 +1,13 @@
 package com.datatakehnn.activities.cables_elemento;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,16 +47,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CablesElementoActivity extends AppCompatActivity implements OnItemClickListenerCable,MainViewCablesElemento,SwipeRefreshLayout.OnRefreshListener {
+public class CablesElementoActivity extends AppCompatActivity implements OnItemClickListenerCable, MainViewCablesElemento, SwipeRefreshLayout.OnRefreshListener {
 
     //UI Elements
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView( R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView( R.id.txtResults)
+    @BindView(R.id.txtResults)
     TextView txtResults;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -70,12 +72,12 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     EditText edtCantidad;
 
     //Declaracion Arrays
-    List<Empresa> empresaList=new ArrayList<>();
-    List<Tipo_Cable> tipo_cables=new ArrayList<>();
-    List<Detalle_Tipo_Cable> detalle_tipo_cables=new ArrayList<>();
+    List<Empresa> empresaList = new ArrayList<>();
+    List<Tipo_Cable> tipo_cables = new ArrayList<>();
+    List<Detalle_Tipo_Cable> detalle_tipo_cables = new ArrayList<>();
 
     //Variables Gloabals
-    private  boolean SOBRE_REDES_BT=true;
+    private boolean SOBRE_REDES_BT = true;
     private long Detalle_Tipo_Cable_Id;
     private long Empresa_Id;
     private long Elemento_Id;
@@ -86,7 +88,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
 
 
     //Listas
-    List<Elemento_Cable>elemento_cables_List= new ArrayList<>();
+    List<Elemento_Cable> elemento_cables_List = new ArrayList<>();
 
     //Adapters
     ArrayAdapter<Detalle_Tipo_Cable> detalle_tipo_cableArrayAdapter;
@@ -127,12 +129,12 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     }
 
     private void setupInjection() {
-        this.sincronizacionGetInformacionController= SincronizacionGetInformacionController.getInstance(this);
-        this.cablesController= CablesController.getInstance(this);
-        this.elementoController= ElementoController.getInstance(this);
+        this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
+        this.cablesController = CablesController.getInstance(this);
+        this.elementoController = ElementoController.getInstance(this);
 
-        Elemento elemento= elementoController.getLast();
-        Elemento_Id= elemento.getElemento_Id();
+        Elemento elemento = elementoController.getLast();
+        Elemento_Id = elemento.getElemento_Id();
 
     }
 
@@ -149,8 +151,19 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_done) {
-            Intent i = new Intent(this, EquipoActivity.class);
-            startActivity(i);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(CablesElementoActivity.this);
+            builder.setTitle("Notificación");
+            builder.setMessage("¿Confirma todos los datos?");
+            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent i = new Intent(getApplicationContext(), EquipoActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -160,8 +173,8 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     //region METHODS
 
     private void initAdapter() {
-        if(adapter==null){
-            adapter= new AdapterCablesElemento(this, new ArrayList<Elemento_Cable>(),this);
+        if (adapter == null) {
+            adapter = new AdapterCablesElemento(this, new ArrayList<Elemento_Cable>(), this);
         }
     }
 
@@ -173,8 +186,8 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     private void loadListSpinners() {
 
         //Listas
-        empresaList= sincronizacionGetInformacionController.getListEmpresas();
-        tipo_cables= sincronizacionGetInformacionController.getListTipo_Cable();
+        empresaList = sincronizacionGetInformacionController.getListEmpresas();
+        tipo_cables = sincronizacionGetInformacionController.getListTipo_Cable();
 
 
         //Spinner
@@ -187,8 +200,8 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         spinnerOperador.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Empresa_Id=  empresaList.get(position).getEmpresa_Id();
-                Nombre_Empresa= empresaList.get(position).getNombre();
+                Empresa_Id = empresaList.get(position).getEmpresa_Id();
+                Nombre_Empresa = empresaList.get(position).getNombre();
 
             }
         });
@@ -202,10 +215,10 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         spinnerTipo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                long tipo_Cable_Id=  tipo_cables.get(position).getTipo_Cable_Id();
-                Nombre_Tipo_Cable= tipo_cables.get(position).getNombre();
+                long tipo_Cable_Id = tipo_cables.get(position).getTipo_Cable_Id();
+                Nombre_Tipo_Cable = tipo_cables.get(position).getNombre();
                 detalle_tipo_cables.clear();
-                detalle_tipo_cables= sincronizacionGetInformacionController.getListDetalleTipo_Cable(tipo_Cable_Id);
+                detalle_tipo_cables = sincronizacionGetInformacionController.getListDetalleTipo_Cable(tipo_Cable_Id);
                 notifyChangeAdapterDetalleCables(detalle_tipo_cables);
             }
         });
@@ -218,18 +231,18 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     //Carga el detalle de cables
     private void notifyChangeAdapterDetalleCables(List<Detalle_Tipo_Cable> arrayList) {
         spinnerDetalle.setAdapter(null);
-         detalle_tipo_cableArrayAdapter =
+        detalle_tipo_cableArrayAdapter =
                 new ArrayAdapter<Detalle_Tipo_Cable>(this, android.R.layout.simple_dropdown_item_1line, arrayList);
         spinnerDetalle.setAdapter(detalle_tipo_cableArrayAdapter);
-        String title= String.format(getString(R.string.title_detalle_cable));
+        String title = String.format(getString(R.string.title_detalle_cable));
         spinnerDetalle.setText("");
         spinnerDetalle.setHint(title);
 
         spinnerDetalle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Detalle_Tipo_Cable_Id=  detalle_tipo_cables.get(position).getDetalle_Tipo_Cable_Id();
-                Nombre_Detalle_Tipo_Cable= detalle_tipo_cables.get(position).getNombre();
+                Detalle_Tipo_Cable_Id = detalle_tipo_cables.get(position).getDetalle_Tipo_Cable_Id();
+                Nombre_Detalle_Tipo_Cable = detalle_tipo_cables.get(position).getNombre();
             }
         });
     }
@@ -237,7 +250,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     private void loadListCablesElementos() {
         adapter.clear();
         elemento_cables_List.clear();
-        elemento_cables_List= cablesController.getList_Cable_Element(Elemento_Id);
+        elemento_cables_List = cablesController.getList_Cable_Element(Elemento_Id);
         setContent(elemento_cables_List);
         resultsList(elemento_cables_List);
         hideProgress();
@@ -248,22 +261,19 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         //VALIDACION
         boolean cancel = false;
         View focusView = null;
-        if(spinnerOperador.getText().toString().isEmpty()){
+        if (spinnerOperador.getText().toString().isEmpty()) {
             spinnerOperador.setError(getString(R.string.error_field_required));
             focusView = spinnerOperador;
             cancel = true;
-        }else if(spinnerTipo.getText().toString().isEmpty()){
+        } else if (spinnerTipo.getText().toString().isEmpty()) {
             spinnerTipo.setError(getString(R.string.error_field_required));
             focusView = spinnerTipo;
             cancel = true;
-        }
-
-        else if(spinnerDetalle.getText().toString().isEmpty()){
+        } else if (spinnerDetalle.getText().toString().isEmpty()) {
             spinnerDetalle.setError(getString(R.string.error_field_required));
             focusView = spinnerDetalle;
             cancel = true;
-        }
-        else if(edtCantidad.getText().toString().isEmpty()){
+        } else if (edtCantidad.getText().toString().isEmpty()) {
             edtCantidad.setError(getString(R.string.error_field_required));
             focusView = edtCantidad;
             cancel = true;
@@ -282,20 +292,20 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
 
     private void registerCables() {
 
-        long cantidad=  Long.parseLong(edtCantidad.getText().toString());
-        Elemento_Cable elementoCable=   new Elemento_Cable(
-                 Detalle_Tipo_Cable_Id,
-                 Elemento_Id,
-                 "Codigo",
-                 Empresa_Id,
-                 cantidad,
-                 SOBRE_REDES_BT,
-                 Nombre_Detalle_Tipo_Cable,
-                 Nombre_Tipo_Cable,
-                 Nombre_Empresa
+        long cantidad = Long.parseLong(edtCantidad.getText().toString());
+        Elemento_Cable elementoCable = new Elemento_Cable(
+                Detalle_Tipo_Cable_Id,
+                Elemento_Id,
+                "Codigo",
+                Empresa_Id,
+                cantidad,
+                SOBRE_REDES_BT,
+                Nombre_Detalle_Tipo_Cable,
+                Nombre_Tipo_Cable,
+                Nombre_Empresa
 
-         );
-         cablesController.register(elementoCable);
+        );
+        cablesController.register(elementoCable);
 
 
          /*
@@ -309,10 +319,10 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
                 Nombre_Tipo_Cable,
                 Nombre_Empresa);*/
 
-     limpiarCampos();
-     onMessageOk(R.color.colorAccent,"Cable Registrado");
-     loadListCablesElementos();
-     hideKeyboard();
+        limpiarCampos();
+        onMessageOk(R.color.colorAccent, "Cable Registrado");
+        loadListCablesElementos();
+        hideKeyboard();
     }
 
     //Ocultar teclado
@@ -328,15 +338,15 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     //limpiar campos
     private void limpiarCampos() {
 
-        String title_detalle_cable= String.format(getString(R.string.title_detalle_cable));
+        String title_detalle_cable = String.format(getString(R.string.title_detalle_cable));
         spinnerDetalle.setText("");
         spinnerDetalle.setHint(title_detalle_cable);
 
-        String title_tipo_cable= String.format(getString(R.string.title_tipo_cable));
+        String title_tipo_cable = String.format(getString(R.string.title_tipo_cable));
         spinnerTipo.setText("");
         spinnerTipo.setHint(title_tipo_cable);
 
-        String title_empresa= String.format(getString(R.string.title_empresa));
+        String title_empresa = String.format(getString(R.string.title_empresa));
         spinnerOperador.setText("");
         spinnerOperador.setHint(title_empresa);
         edtCantidad.setText("1");
@@ -377,7 +387,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.container), message, Snackbar.LENGTH_LONG);
         View sbView = snackbar.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(this,colorPrimary));
+        sbView.setBackgroundColor(ContextCompat.getColor(this, colorPrimary));
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done, 0, 0, 0);
         // textView.setCompoundDrawablePadding(getResources().getDimensionPixelOffset(R.dimen.activity_horizontal_margin));
@@ -387,12 +397,12 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
 
     @Override
     public void onMessageError(int colorPrimary, String message) {
-        onMessageOk(colorPrimary,message);
+        onMessageOk(colorPrimary, message);
     }
 
     @Override
     public void resultsList(List<Elemento_Cable> listResult) {
-        String results= String.format(getString(R.string.results_global_search),
+        String results = String.format(getString(R.string.results_global_search),
                 listResult.size());
         txtResults.setText(results);
     }
@@ -411,9 +421,9 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
 
     @Override
     public void onClickDelete(Elemento_Cable elemento_cable) {
-        Response response= cablesController.DeleteCableByElemento(elemento_cable.getElemento_Cable_Id());
+        Response response = cablesController.DeleteCableByElemento(elemento_cable.getElemento_Cable_Id());
 
-        onMessageOk(R.color.orange,getString(R.string.message_delete_global));
+        onMessageOk(R.color.orange, getString(R.string.message_delete_global));
         loadListCablesElementos();
     }
     //endregion
@@ -442,10 +452,10 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.radioButtonSiRedesBt:
-                SOBRE_REDES_BT=true;
+                SOBRE_REDES_BT = true;
                 break;
             case R.id.radioButtonNoRedesBt:
-                SOBRE_REDES_BT=false;
+                SOBRE_REDES_BT = false;
                 break;
             case R.id.btnAddCables:
                 registrarCable();
