@@ -1,8 +1,11 @@
 package com.datatakehnn.activities.poste;
 
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.location.Location;
@@ -27,8 +30,10 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 
 import com.datatakehnn.R;
+import com.datatakehnn.activities.CoordsActivity;
 import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
 import com.datatakehnn.activities.novedad.NovedadActivity;
+import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.NovedadController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
@@ -69,7 +74,7 @@ import butterknife.OnClick;
 
 public class PosteActivity extends AppCompatActivity {
 
-    private static final String TAG ="" ;
+    private static final String TAG = "";
     //UI Elements
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -120,7 +125,6 @@ public class PosteActivity extends AppCompatActivity {
 
     //Location
     Location location;
-    CoordsService servicioUbicacion;
 
     //Medidor de diatancias
     private String PACKAGE_NAME = "com.nfa.distancemeter";
@@ -160,12 +164,11 @@ public class PosteActivity extends AppCompatActivity {
     NovedadController novedadController;
     ElementoController elementoController;
     UsuarioController usuarioController;
+    SyncActivity syncActivity;
     @BindView(R.id.edtAlturaDisponible)
     EditText edtAlturaDisponible;
     @BindView(R.id.ibCalcularAltura)
     ImageButton ibCalcularAltura;
-
-
 
 
     @Override
@@ -196,7 +199,6 @@ public class PosteActivity extends AppCompatActivity {
         hora = timeFormat.format(cal.getTime());
 
     }
-
 
 
     private void loadInformacionMaster() {
@@ -314,86 +316,60 @@ public class PosteActivity extends AppCompatActivity {
 
 
     private void validacionRegisterElement() {
-        if (edtCodigoApoyo.isEnabled() == true) {
-            String codigo_apoyo = edtCodigoApoyo.getText().toString();
-            boolean cancel = false;
-            View focusView = null;
-            if (TextUtils.isEmpty(codigo_apoyo)) {
-                edtCodigoApoyo.setError(getString(R.string.error_field_required));
-                focusView = edtCodigoApoyo;
-                cancel = true;
-            }
-        }
-        if (spinnerTipoDireccion.getText().toString().isEmpty()) {
-            boolean cancel = false;
-            View focusView = null;
+        boolean cancel = false;
+        View focusView = null;
+        if (edtCodigoApoyo.isEnabled() == true && edtCodigoApoyo.getText().toString().isEmpty()) {
+            edtCodigoApoyo.setError(getString(R.string.error_field_required));
+            focusView = edtCodigoApoyo;
+            cancel = true;
+        } else if (spinnerTipoDireccion.getText().toString().isEmpty()) {
             spinnerTipoDireccion.setError(getString(R.string.error_field_required));
             focusView = spinnerTipoDireccion;
             cancel = true;
-        }
-        if (edtTipoDireccion.getText().toString().isEmpty()) {
-            boolean cancel = false;
-            View focusView = null;
+        } else if (edtTipoDireccion.getText().toString().isEmpty()) {
             edtTipoDireccion.setError(getString(R.string.error_field_required));
             focusView = edtTipoDireccion;
             cancel = true;
-        }
-
-        if (edtResistenciaMecanica.isEnabled() == true) {
-            String resistencia_mecanica = edtResistenciaMecanica.getText().toString();
-            boolean cancel = false;
-            View focusView = null;
-            if (TextUtils.isEmpty(resistencia_mecanica)) {
-                edtResistenciaMecanica.setError(getString(R.string.error_field_required));
-                focusView = edtResistenciaMecanica;
-                cancel = true;
-            }
-        }
-        if (spinnerMaterial.getText().toString().isEmpty()) {
-            boolean cancel = false;
-            View focusView = null;
+        } else if (edtTipoDireccion.getText().toString().isEmpty()) {
+            edtTipoDireccion.setError(getString(R.string.error_field_required));
+            focusView = edtTipoDireccion;
+            cancel = true;
+        } else if (spinnerMaterial.getText().toString().isEmpty()) {
             spinnerMaterial.setError(getString(R.string.error_field_required));
             focusView = spinnerMaterial;
             cancel = true;
-        }
-        if (spinnerLongitudPoste.getText().toString().isEmpty()) {
-            boolean cancel = false;
-            View focusView = null;
+        } else if (spinnerLongitudPoste.getText().toString().isEmpty()) {
             spinnerLongitudPoste.setError(getString(R.string.error_field_required));
             focusView = spinnerLongitudPoste;
             cancel = true;
-        }
-        if (spinnerEstado.getText().toString().isEmpty()) {
-            boolean cancel = false;
-            View focusView = null;
+        } else if (edtResistenciaMecanica.isEnabled() == true && edtResistenciaMecanica.getText().toString().isEmpty()) {
+            edtResistenciaMecanica.setError(getString(R.string.error_field_required));
+            focusView = edtResistenciaMecanica;
+            cancel = true;
+        } else if (spinnerEstado.getText().toString().isEmpty()) {
             spinnerEstado.setError(getString(R.string.error_field_required));
             focusView = spinnerEstado;
             cancel = true;
-        }
-        if (spinnerCantidadRetenidas.getText().toString().isEmpty()) {
-            boolean cancel = false;
-            View focusView = null;
+        } else if (spinnerCantidadRetenidas.getText().toString().isEmpty()) {
             spinnerCantidadRetenidas.setError(getString(R.string.error_field_required));
             focusView = spinnerCantidadRetenidas;
             cancel = true;
-        }
-        if (spinnerNivelTension.getText().toString().isEmpty()) {
-            boolean cancel = false;
-            View focusView = null;
+        } else if (spinnerNivelTension.getText().toString().isEmpty()) {
             spinnerNivelTension.setError(getString(R.string.error_field_required));
             focusView = spinnerNivelTension;
             cancel = true;
-        }
-        if (edtAlturaDisponible.getText().toString().isEmpty()) {
-            boolean cancel = false;
-            View focusView = null;
+        } else if (edtAlturaDisponible.getText().toString().isEmpty()) {
             edtAlturaDisponible.setError(getString(R.string.error_field_required));
             focusView = edtAlturaDisponible;
             cancel = true;
+        }
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
         } else {
             registerElemento();
         }
-
     }
 
 
@@ -409,12 +385,11 @@ public class PosteActivity extends AppCompatActivity {
 
     private void setupInjection() {
 
-
+        this.syncActivity = SyncActivity.getInstance(this);
         //Llama la instancia del servicio
-        this.servicioUbicacion = new CoordsService(this);
-        this.intentIntegrator= new IntentIntegrator(this,PACKAGE_NAME );
+        this.intentIntegrator = new IntentIntegrator(this, PACKAGE_NAME);
         //Guarda en un location la ubicación
-        location = servicioUbicacion.getUbicacion();
+        //location = servicioUbicacion.getUbicacion();
         try {
             latitud = location.getLatitude();
             longitud = location.getLongitude();
@@ -470,8 +445,6 @@ public class PosteActivity extends AppCompatActivity {
     }
 
 
-
-
     //endregion
 
     //region ON ACTIVITY RESULT
@@ -507,7 +480,6 @@ public class PosteActivity extends AppCompatActivity {
             elemento_id = elemento.getElemento_Id() + 1;
         }
         Altura_Disponible = Double.parseDouble(edtAlturaDisponible.getText().toString());
-
         Usuario usuario = new Usuario();
         usuario = usuarioController.getLoggedUser();
         long id_usuario = usuario.getUsuario_Id();
@@ -536,6 +508,7 @@ public class PosteActivity extends AppCompatActivity {
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((SyncActivity) syncActivity).coordsService.closeService();
                 Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
                 startActivity(i);
             }
@@ -544,6 +517,19 @@ public class PosteActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
     }
 
     //endregion

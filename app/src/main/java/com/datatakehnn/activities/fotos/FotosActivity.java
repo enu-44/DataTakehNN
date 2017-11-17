@@ -122,6 +122,9 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     //byte[] image
     byte[] image;
 
+    //Activity
+    SyncActivity syncActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +163,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         this.novedadController = novedadController.getInstance(this);
         this.elementoController = elementoController.getInstance(this);
         this.fotoController = fotoController.getInstance(this);
+        this.syncActivity=SyncActivity.getInstance(this);
+
     }
 
     private void setToolbarInjection() {
@@ -371,6 +376,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((SyncActivity)syncActivity).iniciarServicioUbicacion();
                 Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
                 startActivity(i);
             }

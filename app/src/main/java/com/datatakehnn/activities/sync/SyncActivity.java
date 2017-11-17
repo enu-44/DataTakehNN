@@ -1,9 +1,9 @@
 package com.datatakehnn.activities.sync;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.datatakehnn.R;
 import com.datatakehnn.activities.menu.MainMenuActivity;
 import com.datatakehnn.activities.poste.PosteActivity;
+import com.datatakehnn.controllers.FotoController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad;
@@ -74,10 +75,10 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
 
     //Instances
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
-    //Location
-    Location location;
-    CoordsService servicioUbicacion;
+    public CoordsService coordsService;
 
+    private static Context ourcontext;
+    private static SyncActivity _instance;
 
     //Item Menu
     Menu menuGlobal;
@@ -94,12 +95,27 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
 
     }
 
+    public SyncActivity() {
+        _instance = this;
+    }
+
+    public static SyncActivity getInstance(Context c) {
+        if (_instance == null) {
+            ourcontext = c;
+            _instance = new SyncActivity();
+        }
+        return _instance;
+    }
+
     //region SET INJECTION
 
     private void setupInjection() {
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
-        //Llama la instancia del servicio
-        this.servicioUbicacion = new CoordsService(this);
+        iniciarServicioUbicacion();
+    }
+
+    public void iniciarServicioUbicacion() {
+        this.coordsService= new CoordsService(this);
     }
 
     private void setToolbarInjection() {
@@ -131,6 +147,7 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
         int id = item.getItemId();
         if (id == R.id.action_done) {
             if (sync == true) {
+
                 Intent i = new Intent(this, MainMenuActivity.class);
                 startActivity(i);
             } else {
@@ -184,7 +201,6 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
 
     // Sincronizar Informacion
     public void getInformationSync() {
-
         if(checkConnection()){
             //Obtener Listas Poste
             List<Detalle_Tipo_Novedad> detalle_tipo_novedadList = Detalle_Tipo_Novedad_List.getListDetalleTipoNovedad();
@@ -200,7 +216,6 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
 
             //Empresas
             List<Empresa> empresaList = Empresa_List.getListEmpresa();
-
             //Tipo Equipos
             List<Tipo_Equipo> tipo_equipos= Tipo_Equipo_List.getListTipoEquipo();
 

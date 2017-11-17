@@ -33,11 +33,12 @@ public class CoordsService extends Service implements LocationListener {
 
     public static Location location;
     boolean gpsActivo;
-    LocationManager locationManager;
+    public LocationManager locationManager;
 
     TextView texto;
 
-    private static CoordsService instanceCoordsService;
+    public static final String ServicioUbicacion="ServicioUbicacion";
+
 
     public CoordsService() {
         super();
@@ -53,6 +54,16 @@ public class CoordsService extends Service implements LocationListener {
     public Location getUbicacion() {
         return location;
     }
+
+    public void closeService() {
+        this.stopSelf();
+        if(locationManager!=null){
+            locationManager.removeUpdates(this);
+        }
+    }
+
+
+
 
     public void setView(View v) {
 
@@ -93,6 +104,10 @@ public class CoordsService extends Service implements LocationListener {
 
                     */
     }
+
+
+
+
 
 
     @Nullable
