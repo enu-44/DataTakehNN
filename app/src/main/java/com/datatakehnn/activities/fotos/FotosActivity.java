@@ -1,6 +1,7 @@
 package com.datatakehnn.activities.fotos;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,6 +63,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,6 +104,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     boolean foto1 = false, foto2 = false, tomoFoto1 = false, tomoFoto2 = false;
     boolean isEstadoFoto1 = false, isEstadoFoto2 = false, isEstadoFoto1Defecto = false, isEstadoFoto2Defecto = false;
     int contador = 0;
+    String random;
 
     //Coordenadas
     public Double Latitud;
@@ -406,7 +410,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     //endregion
 
-
     //region Tomar Foto Novedades
     private void tomarFotoNovedad() {
         try {
@@ -430,36 +433,52 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             }
         }
 
+        random = getRandomString();
+
         return new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_NOVEDAD_" +
+                "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + random + "_NOVEDAD_" +
                 novedad.getDetalle_Tipo_Novedad_Nombre() + ".jpg");
 
 
     }
 
     private void tomarFoto() {
-        if (foto1 == true) {
-            if (isEstadoFoto1 == true) {
-                ivFoto1.setImageURI(null);
-                ivFoto1.setImageResource(R.drawable.boton_foto);
-                isEstadoFoto1Defecto = true;
+        if (warningLowMemory() == false) {
+            if (foto1 == true) {
+                if (isEstadoFoto1 == true) {
+                    ivFoto1.setImageURI(null);
+                    ivFoto1.setImageResource(R.drawable.boton_foto);
+                    isEstadoFoto1Defecto = true;
+                }
+            } else if (foto2 == true) {
+                if (isEstadoFoto2 == true) {
+                    ivFoto2.setImageURI(null);
+                    ivFoto2.setImageResource(R.drawable.boton_foto);
+                    isEstadoFoto2Defecto = true;
+                }
             }
-        } else if (foto2 == true) {
-            if (isEstadoFoto2 == true) {
-                ivFoto2.setImageURI(null);
-                ivFoto2.setImageResource(R.drawable.boton_foto);
-                isEstadoFoto2Defecto = true;
+            try {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                file = Uri.fromFile(getOutputMediaFile());
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+                startActivityForResult(intent, 100);
+            } catch (Exception e) {
+                e.getMessage().toString();
             }
-        }
-        try {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            file = Uri.fromFile(getOutputMediaFile());
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-            startActivityForResult(intent, 100);
-        } catch (Exception e) {
-            e.getMessage().toString();
-        }
+        } else {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(FotosActivity.this);
+            builder.setTitle("ALERTA");
+            builder.setMessage("El dispositivo se ha quedado sin memoria, Por favor habilitar espacio");
+            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     private File getOutputMediaFile() {
@@ -472,13 +491,14 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 return null;
             }
         }
+        random = getRandomString();
         if (foto1 == true) {
             return new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_1" + ".jpg");
+                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + random + "_FOTO_1" + ".jpg");
         }
         if (foto2 == true) {
             return new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_2" + ".jpg");
+                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + random + "_FOTO_2" + ".jpg");
         } else {
             return null;
         }
@@ -586,6 +606,32 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 tomoFoto2 = true;
             }
         }
+    }
+
+
+    public boolean warningLowMemory() {
+        // Before doing something that requires a lot of memory,
+        // check to see whether the device is in a low memory state.
+        ActivityManager.MemoryInfo memoryInfo = getAvailableMemory();
+
+        if (memoryInfo.lowMemory) {
+            //Low Memory Situation
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Get a MemoryInfo object for the device's current memory status.
+    private ActivityManager.MemoryInfo getAvailableMemory() {
+        ActivityManager activityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+        activityManager.getMemoryInfo(memoryInfo);
+        return memoryInfo;
+    }
+
+    public String getRandomString() {
+        return UUID.randomUUID().toString();
     }
 
 
