@@ -142,9 +142,9 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         try{
             mMap = googleMap;
             // Add a marker in Sydney and move the camera
-            LatLng positionInitial = new LatLng(-4.570868, -74.29733299999998);
+            LatLng positionInitial = new LatLng(4.565473550710278, -74.058837890625);
             /// mMap.addMarker(new MarkerOptions().position(positionInitial).title("Ecuador"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positionInitial,7));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positionInitial,6));
             //Configuracion de InfoWindow
             mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
