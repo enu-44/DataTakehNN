@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.datatakehnn.R;
+import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
 import com.datatakehnn.activities.cables_elemento.adapter.AdapterCablesElemento;
 import com.datatakehnn.activities.equipos_elemento.adapter.AdapterEquipo;
 import com.datatakehnn.activities.equipos_elemento.adapter.OnItemClickListenerEquipo;
@@ -74,7 +79,6 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     private boolean Conectado_Red_Electrica = true;
     private boolean Medidor_Red = true;
     private long Empresa_Id;
-    private long Elemento_Id;
     private long Tipo_Equipo_Id;
 
 
@@ -100,6 +104,13 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     //Adapter
     AdapterEquipo adapter;
 
+    //Accion
+    boolean ACCION_ADD;
+    boolean ACCION_UPDATE;
+
+    //Variables
+    long Elemento_Id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,8 +118,8 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
 
         ButterKnife.bind(this);
         swipeRefreshLayout.setOnRefreshListener(this);
-        setToolbarInjection();
         setupInjection();
+        setToolbarInjection();
         initAdapter();
         initRecyclerView();
         showProgresss();
@@ -118,18 +129,26 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
 
     //region SETUP INJECTION
     private void setupInjection() {
+        //Actualizar o Eliminar
+        ACCION_ADD= getIntent().getExtras().getBoolean("ACCION_ADD");
+        ACCION_UPDATE= getIntent().getExtras().getBoolean("ACCION_UPDATE");
+        Elemento_Id=  getIntent().getExtras().getLong("Elemento_Id");
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.equipoController = EquipoController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
-        Elemento elemento = elementoController.getLast();
-        Elemento_Id = elemento.getElemento_Id();
-    }
 
+    }
 
     private void setToolbarInjection() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);//devolver
+
+        if(ACCION_UPDATE){
+            if (getSupportActionBar() != null)// Habilitar Up Button
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }else{
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);//devolver
+        }
         toolbar.setTitle(getString(R.string.title_equipos));
     }
 
@@ -340,27 +359,76 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     //region MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_equipos, menu);
-        return super.onCreateOptionsMenu(menu);
+       /// getMenuInflater().inflate(R.menu.menu_equipos, menu);
+       /// return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_equipos, menu);
+        if (ACCION_UPDATE)
+        {
+            MenuItem item = menu.findItem(R.id.action_done);
+            item.setVisible(false);
+        }else{
+            MenuItem item = menu.findItem(R.id.action_done);
+            item.setVisible(true);
+        }
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_done) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(EquipoActivity.this);
-            builder.setTitle("Notificación");
-            builder.setMessage("¿Confirma todos los datos?");
-            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(getApplicationContext(), FotosActivity.class);
-                    startActivity(i);
-                }
-            });
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId())
+        {
+            case R.id.action_done:
+                final AlertDialog.Builder builder = new AlertDialog.Builder(EquipoActivity.this);
+                builder.setTitle("Notificación");
+                builder.setMessage("¿Confirma todos los datos?");
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(getApplicationContext(), FotosActivity.class);
+                        startActivity(i);
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                break;
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            ///Metodo que permite no recargar la pagina al devolverse
+            case android.R.id.home:
+                // Obtener intent de la actividad padre
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                // Comprobar si DetailActivity no se creó desde CourseActivity
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                        || this.isTaskRoot()) {
+
+                    // Construir de nuevo la tarea para ligar ambas actividades
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        TaskStackBuilder.create(this)
+                                .addNextIntentWithParentStack(upIntent)
+                                .startActivities();
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    this.finishAfterTransition();
+                    return true;
+                }
+
+                //Para versiones anterios a 5.x
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    onBackPressed();
+                    return true;
+                }
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

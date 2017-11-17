@@ -19,5 +19,6 @@ tools:context="com.datatakehnn.activities.poste.lista_postes_usuario.Poste_Usuar
         android:background="@drawable/naranja_superior"
         app:popupTheme="@style/MiTema.PopupOverlay" />
 </android.support.design.widget.AppBarLayout>
+
 <include layout="@layout/content_recycler_view" />
 </android.support.design.widget.CoordinatorLayout>

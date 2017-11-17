@@ -380,6 +380,8 @@ public class PosteActivity extends AppCompatActivity {
     private void setToolbarInjection() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (getSupportActionBar() != null)// Habilitar Up Button
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("Datos Básicos Poste");
     }
 
@@ -506,11 +508,15 @@ public class PosteActivity extends AppCompatActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(PosteActivity.this);
         builder.setTitle("Notificación");
         builder.setMessage("¿Confirma todos los datos?");
+        final long finalElemento_id = elemento_id;
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ((SyncActivity) syncActivity).coordsService.closeService();
                 Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
+                i.putExtra("ACCION_ADD",true);
+                i.putExtra("ACCION_UPDATE",false);
+                i.putExtra("Elemento_Id", finalElemento_id);
                 startActivity(i);
             }
         });
@@ -550,19 +556,9 @@ public class PosteActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
     //endregion
 
-    //region OVERRIDE METHODS
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            moveTaskToBack(true);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
 }
 
 

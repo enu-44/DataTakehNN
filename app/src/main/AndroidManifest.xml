@@ -35,28 +35,31 @@
             android:configChanges="screenSize|orientation"
             android:theme="@style/AppTheme" />
         <activity
-            android:parentActivityName=".activities.poste.lista_postes_usuario.Poste_Usuario_Activity"
+            android:parentActivityName=".activities.menu.MainMenuActivity"
             android:name=".activities.CoordsActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
             android:name=".activities.poste.PosteActivity"
             android:configChanges="screenSize|orientation"
-            android:parentActivityName=".activities.sync.SyncActivity"
+            android:parentActivityName=".activities.menu.MainMenuActivity"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
             android:name=".activities.sync.SyncActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
+            android:parentActivityName=".activities.poste.PosteActivity"
             android:name=".activities.novedad.NovedadActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
+            android:parentActivityName=".activities.CoordsActivity"
             android:name=".activities.cables_elemento.CablesElementoActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />
         <activity
+            android:parentActivityName=".activities.CoordsActivity"
             android:name=".activities.equipos_elemento.EquipoActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />

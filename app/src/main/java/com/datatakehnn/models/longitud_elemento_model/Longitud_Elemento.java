@@ -67,6 +67,6 @@ public class Longitud_Elemento extends BaseModel {
 
     @Override
     public String toString() {
-        return String.valueOf(Valor);
+        return String.format("%.0f", Valor);
     }
 }

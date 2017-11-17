@@ -1,6 +1,9 @@
 package com.datatakehnn.activities.novedad;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -92,6 +95,8 @@ public class NovedadActivity extends AppCompatActivity {
     private void setupToolbarInjection() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (getSupportActionBar() != null)// Habilitar Up Button
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("Registrar Novedad");
     }
 
@@ -143,17 +148,57 @@ public class NovedadActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_done) {
-            if (spinnerNovedad.getText().toString().isEmpty()) {
-                boolean cancel = false;
-                View focusView = null;
-                spinnerNovedad.setError(getString(R.string.error_field_required));
-                focusView = spinnerNovedad;
-                cancel = true;
-            } else {
-                registerNovedad();
-            }
+
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId())
+        {
+            case R.id.action_done:
+                if (spinnerNovedad.getText().toString().isEmpty()) {
+                    boolean cancel = false;
+                    View focusView = null;
+                    spinnerNovedad.setError(getString(R.string.error_field_required));
+                    focusView = spinnerNovedad;
+                    cancel = true;
+                } else {
+                    registerNovedad();
+                }
+                break;
+
+            ///Metodo que permite no recargar la pagina al devolverse
+            case android.R.id.home:
+                // Obtener intent de la actividad padre
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                // Comprobar si DetailActivity no se creó desde CourseActivity
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                        || this.isTaskRoot()) {
+
+                    // Construir de nuevo la tarea para ligar ambas actividades
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        TaskStackBuilder.create(this)
+                                .addNextIntentWithParentStack(upIntent)
+                                .startActivities();
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    this.finishAfterTransition();
+                    return true;
+                }
+
+                //Para versiones anterios a 5.x
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    onBackPressed();
+                    return true;
+                }
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -163,14 +208,7 @@ public class NovedadActivity extends AppCompatActivity {
 
 
     //region OVERRIDES METHODS
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            moveTaskToBack(true);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
 
     //endregion
 }

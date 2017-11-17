@@ -3,6 +3,7 @@ package com.datatakehnn.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -17,6 +18,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,6 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.datatakehnn.R;
+import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
+import com.datatakehnn.activities.equipos_elemento.EquipoActivity;
 import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.services.coords.CoordsService;
 import com.google.android.gms.maps.CameraUpdate;
@@ -91,6 +97,54 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         initMap();
     }
 
+    //region MENU
+
+    /*MENU*/
+    /*-------------------------------------------------------------------------------------------------------*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_coords, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId())
+        {
+            case R.id.menu_cables:
+                Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
+                i.putExtra("ACCION_ADD",false);
+                i.putExtra("ACCION_UPDATE",true);
+                i.putExtra("Elemento_Id", elemento.getElemento_Id());
+                startActivity(i);
+                break;
+            case R.id.menu_equipos:
+                Intent r = new Intent(getApplicationContext(), EquipoActivity.class);
+                r.putExtra("ACCION_ADD",false);
+                r.putExtra("ACCION_UPDATE",true);
+                r.putExtra("Elemento_Id", elemento.getElemento_Id());
+                startActivity(r);
+                break;
+            case R.id.menu_novedades:
+
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+    //endregion
+
+
+
+    //region SETUP INJECTION
     private void setupInjection() {
         textCoordenada.setText(elemento.getLatitud()+","+elemento.getLongitud());
         //Guarda en un location la ubicación
@@ -108,6 +162,8 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("Ubicacion Poste");
     }
+
+    //endregion
 
     //region MAPA
     /*------------------------------------------------------------------------------------------------------------*/
@@ -255,4 +311,6 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         // Adding the circle to the GoogleMap
         return mMap.addMarker(markerOption);
     }
+
+    //endregion
 }

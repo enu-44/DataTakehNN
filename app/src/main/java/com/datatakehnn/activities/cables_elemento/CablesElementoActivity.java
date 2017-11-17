@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -80,7 +84,6 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     private boolean SOBRE_REDES_BT = true;
     private long Detalle_Tipo_Cable_Id;
     private long Empresa_Id;
-    private long Elemento_Id;
 
     public String Nombre_Detalle_Tipo_Cable;
     public String Nombre_Tipo_Cable;
@@ -100,6 +103,13 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     CablesController cablesController;
     ElementoController elementoController;
 
+    //Accion
+    boolean ACCION_ADD;
+    boolean ACCION_UPDATE;
+
+    //Variables
+    long Elemento_Id;
+
     //Adapter
     AdapterCablesElemento adapter;
 
@@ -109,11 +119,10 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         setContentView(R.layout.activity_cables_elemento);
         ButterKnife.bind(this);
         swipeRefreshLayout.setOnRefreshListener(this);
-        setToolbarInjection();
         setupInjection();
+        setToolbarInjection();
         initAdapter();
         initRecyclerView();
-
         showProgresss();
         loadListSpinners();
         loadListCablesElementos();
@@ -124,17 +133,27 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     private void setToolbarInjection() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);//devolver
         toolbar.setTitle(getString(R.string.title_cables));
+        if(ACCION_UPDATE){
+            if (getSupportActionBar() != null)// Habilitar Up Button
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }else{
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);//devolver
+        }
     }
 
     private void setupInjection() {
+        //Actualizar o Eliminar
+        ACCION_ADD= getIntent().getExtras().getBoolean("ACCION_ADD");
+        ACCION_UPDATE= getIntent().getExtras().getBoolean("ACCION_UPDATE");
+        Elemento_Id=  getIntent().getExtras().getLong("Elemento_Id");
+
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.cablesController = CablesController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
 
-        Elemento elemento = elementoController.getLast();
-        Elemento_Id = elemento.getElemento_Id();
+        //Elemento elemento = elementoController.getLast();
+        ///Elemento_Id = elemento.getElemento_Id();
 
     }
 
@@ -143,29 +162,85 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     //region MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_cables, menu);
-        return super.onCreateOptionsMenu(menu);
+       // getMenuInflater().inflate(R.menu.menu_cables, menu);
+        //return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_cables, menu);
+        if (ACCION_UPDATE)
+        {
+            MenuItem item = menu.findItem(R.id.action_done);
+            item.setVisible(false);
+        }else{
+            MenuItem item = menu.findItem(R.id.action_done);
+            item.setVisible(true);
+        }
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_done) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(CablesElementoActivity.this);
-            builder.setTitle("Notificación");
-            builder.setMessage("¿Confirma todos los datos?");
-            builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(getApplicationContext(), EquipoActivity.class);
-                    startActivity(i);
-                }
-            });
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId())
+        {
+            case R.id.action_done:
+                final AlertDialog.Builder builder = new AlertDialog.Builder(CablesElementoActivity.this);
+                builder.setTitle("Notificación");
+                builder.setMessage("¿Confirma todos los datos?");
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(getApplicationContext(), EquipoActivity.class);
+                        i.putExtra("ACCION_ADD",true);
+                        i.putExtra("ACCION_UPDATE",false);
+                        i.putExtra("Elemento_Id", Elemento_Id);
+                        startActivity(i);
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                break;
+
+            ///Metodo que permite no recargar la pagina al devolverse
+            case android.R.id.home:
+                // Obtener intent de la actividad padre
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                // Comprobar si DetailActivity no se creó desde CourseActivity
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                        || this.isTaskRoot()) {
+
+                    // Construir de nuevo la tarea para ligar ambas actividades
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        TaskStackBuilder.create(this)
+                                .addNextIntentWithParentStack(upIntent)
+                                .startActivities();
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    this.finishAfterTransition();
+                    return true;
+                }
+
+                //Para versiones anterios a 5.x
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    onBackPressed();
+                    return true;
+                }
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
+
+
     }
 
     //endregion
@@ -188,7 +263,6 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         //Listas
         empresaList = sincronizacionGetInformacionController.getListEmpresas();
         tipo_cables = sincronizacionGetInformacionController.getListTipo_Cable();
-
 
         //Spinner
         //Empresas Operadoras
