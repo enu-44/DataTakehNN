@@ -409,10 +409,14 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     //region Tomar Foto Novedades
     private void tomarFotoNovedad() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        file = Uri.fromFile(getOutputMediaFileNovedad());
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-        startActivityForResult(intent, 200);
+        try {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            file = Uri.fromFile(getOutputMediaFileNovedad());
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+            startActivityForResult(intent, 200);
+        } catch (Exception e) {
+            e.getMessage().toString();
+        }
     }
 
     private File getOutputMediaFileNovedad() {
