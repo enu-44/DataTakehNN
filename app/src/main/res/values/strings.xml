@@ -85,5 +85,9 @@
 
     <string name="cantidad_global">Cant. %d</string>
 
+    <string name="gps_disabled">Activar GPS</string>
+    <string name="please_enable_gps">Necesitas habilitar el GPS</string>
+    <string name="confirm">Aceptar</string>
+
 
 </resources>

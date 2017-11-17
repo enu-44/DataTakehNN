@@ -3,6 +3,7 @@ package com.datatakehnn.activities.sync;
 import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -37,6 +38,7 @@ import com.datatakehnn.models.tipo_equipo_model.Tipo_Equipo;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
 import com.datatakehnn.services.aplication.DataTakeApp;
 import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
+import com.datatakehnn.services.coords.CoordsService;
 import com.datatakehnn.services.data_arrays.Detalle_Tipo_Cable_List;
 import com.datatakehnn.services.data_arrays.Detalle_Tipo_Novedad_List;
 import com.datatakehnn.services.data_arrays.Empresa_List;
@@ -72,6 +74,10 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
 
     //Instances
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
+    //Location
+    Location location;
+    CoordsService servicioUbicacion;
+
 
     //Item Menu
     Menu menuGlobal;
@@ -92,6 +98,8 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
 
     private void setupInjection() {
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
+        //Llama la instancia del servicio
+        this.servicioUbicacion = new CoordsService(this);
     }
 
     private void setToolbarInjection() {
