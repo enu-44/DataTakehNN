@@ -104,7 +104,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     boolean foto1 = false, foto2 = false, tomoFoto1 = false, tomoFoto2 = false;
     boolean isEstadoFoto1 = false, isEstadoFoto2 = false, isEstadoFoto1Defecto = false, isEstadoFoto2Defecto = false;
     int contador = 0;
-    String random;
+    //String random;
 
     //Coordenadas
     public Double Latitud;
@@ -163,7 +163,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         this.novedadController = novedadController.getInstance(this);
         this.elementoController = elementoController.getInstance(this);
         this.fotoController = fotoController.getInstance(this);
-        this.syncActivity=SyncActivity.getInstance(this);
+        this.syncActivity = SyncActivity.getInstance(this);
 
     }
 
@@ -369,7 +369,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((SyncActivity)syncActivity).iniciarServicioUbicacion();
+                ((SyncActivity) syncActivity).iniciarServicioUbicacion();
                 Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
                 startActivity(i);
             }
@@ -432,10 +432,10 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             }
         }
 
-        random = getRandomString();
+        //random = getRandomString();
 
         return new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + random + "_NOVEDAD_" +
+                "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_NOVEDAD_" +
                 novedad.getDetalle_Tipo_Novedad_Nombre() + ".jpg");
 
 
@@ -490,14 +490,13 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 return null;
             }
         }
-        random = getRandomString();
+        //random = getRandomString();
         if (foto1 == true) {
             return new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + random + "_FOTO_1" + ".jpg");
-        }
-        else if (foto2 == true) {
+                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_1" + ".jpg");
+        } else if (foto2 == true) {
             return new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + random + "_FOTO_2" + ".jpg");
+                    "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_FOTO_2" + ".jpg");
         } else {
             return null;
         }
