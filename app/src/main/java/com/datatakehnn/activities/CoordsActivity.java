@@ -57,9 +57,7 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
 
     //Mapa
     Elemento elemento;
-    //Location
-    Location location;
-    CoordsService servicioUbicacion;
+
 
     @BindView(R.id.ivCoordPoste)
     ImageView ivCoordPoste;
@@ -67,10 +65,9 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     @BindView(R.id.textCoordenada)
     TextView textCoordenada;
 
-
-
-    Unbinder unbinder;
-
+    //Location
+    Location location= new Location("dummyprovider");;
+    CoordsService servicioUbicacion;
     double latitud;
     double longitud;
 
@@ -91,27 +88,15 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         elemento= getIntent().getExtras().getParcelable("Elemento");
         setToolbarInjection();
         setupInjection();
-
         initMap();
-
-        /*
-        if (savedInstanceState == null) {
-            PlaceholderFragment newFragment = new PlaceholderFragment();
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, newFragment)
-                    .commit();
-        }*/
     }
 
     private void setupInjection() {
-
         textCoordenada.setText(elemento.getLatitud()+","+elemento.getLongitud());
-        //Llama la instancia del servicio
-        this.servicioUbicacion = new CoordsService(this);
-        servicioUbicacion.setView(findViewById(R.id.textCoordenada));
         //Guarda en un location la ubicación
         try{
-            location = servicioUbicacion.getUbicacion();
+            location.setLongitude(elemento.getLongitud());
+            location.setLatitude(elemento.getLatitud());
         }catch (Exception ex){
         }
     }
@@ -124,10 +109,8 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         toolbar.setTitle("Ubicacion Poste");
     }
 
-
     //region MAPA
     /*------------------------------------------------------------------------------------------------------------*/
-
     public void initMap() {
         //MapFragment map = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         ///map.getMapAsync(this);
@@ -272,14 +255,4 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         // Adding the circle to the GoogleMap
         return mMap.addMarker(markerOption);
     }
-
-
-    /*@Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            moveTaskToBack(true);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
 }

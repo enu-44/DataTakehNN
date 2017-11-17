@@ -64,7 +64,6 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
     Toolbar toolbar;
     @BindView(R.id.ivSync)
     ImageView ivSync;
-
     @BindView(R.id.container)
     RelativeLayout container;
     @BindView(R.id.progressBar)
@@ -76,7 +75,6 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
     //Instances
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
     public CoordsService coordsService;
-
     private static Context ourcontext;
     private static SyncActivity _instance;
 
@@ -90,11 +88,10 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
         ButterKnife.bind(this);
         setToolbarInjection();
         setupInjection();
-
         animationButton();
-
     }
 
+    //region INSTANCE
     public SyncActivity() {
         _instance = this;
     }
@@ -106,6 +103,7 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
         }
         return _instance;
     }
+    //endregion
 
     //region SET INJECTION
 
@@ -269,7 +267,6 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
     }
 
     //endregion
-
 
     //region CHECK CONNECTION INTERNET
     // Method to manually check connection status
