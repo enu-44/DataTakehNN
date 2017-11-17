@@ -628,9 +628,10 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         return memoryInfo;
     }
 
+    /*
     public String getRandomString() {
         return UUID.randomUUID().toString();
-    }
+    }*/
 
 
     //endregion
