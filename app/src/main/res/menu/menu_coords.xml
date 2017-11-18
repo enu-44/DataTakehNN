@@ -6,7 +6,7 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="Opciones"
-        android:icon="@drawable/ic_action_lateral"
+        android:icon="@drawable/ic_action_more_vert"
         app:showAsAction="always" >
         <menu>
             <item android:id="@+id/menu_cables"
