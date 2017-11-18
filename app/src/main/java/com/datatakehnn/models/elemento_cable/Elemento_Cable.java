@@ -12,24 +12,26 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
  */
 
 @Table(database = DataSource.class)
-public class Elemento_Cable extends BaseModel{
+public class Elemento_Cable extends BaseModel {
 
     //Atributes
     @SerializedName("Id")
     @PrimaryKey(autoincrement = true)
-    public  long Elemento_Cable_Id;
+    public long Elemento_Cable_Id;
     @Column
-    public  long Detalle_Tipo_Cable_Id;
+    public long Detalle_Tipo_Cable_Id;
     @Column
-    public  long Elemento_Id;
+    public long Elemento_Id;
     @Column
-    public  String Codigo;
+    public String Codigo;
     @Column
-    public  long Empresa_Id;
+    public long Empresa_Id;
     @Column
-    public  long Cantidad;
+    public long Cantidad;
     @Column
-    public  boolean Sobre_Rbt;
+    public boolean Sobre_Rbt;
+    @Column
+    public boolean Is_Marquilla;
 
     //Externos
     @Column
@@ -41,7 +43,7 @@ public class Elemento_Cable extends BaseModel{
 
 
     ///Constructor
-  public Elemento_Cable( long detalle_Tipo_Cable_Id, long elemento_Id, String codigo, long empresa_Id, long cantidad, boolean sobre_Rbt, String nombre_Detalle_Tipo_Cable, String nombre_Tipo_Cable, String nombre_Empresa) {
+    public Elemento_Cable(long detalle_Tipo_Cable_Id, long elemento_Id, String codigo, long empresa_Id, long cantidad, boolean sobre_Rbt, String nombre_Detalle_Tipo_Cable, String nombre_Tipo_Cable, String nombre_Empresa, boolean is_Marquilla) {
 
         Detalle_Tipo_Cable_Id = detalle_Tipo_Cable_Id;
         Elemento_Id = elemento_Id;
@@ -52,6 +54,7 @@ public class Elemento_Cable extends BaseModel{
         Nombre_Detalle_Tipo_Cable = nombre_Detalle_Tipo_Cable;
         Nombre_Tipo_Cable = nombre_Tipo_Cable;
         Nombre_Empresa = nombre_Empresa;
+        Is_Marquilla = is_Marquilla;
     }
 
     public Elemento_Cable() {
@@ -142,5 +145,13 @@ public class Elemento_Cable extends BaseModel{
 
     public void setNombre_Empresa(String nombre_Empresa) {
         Nombre_Empresa = nombre_Empresa;
+    }
+
+    public boolean isIs_Marquilla() {
+        return Is_Marquilla;
+    }
+
+    public void setIs_Marquilla(boolean is_Marquilla) {
+        Is_Marquilla = is_Marquilla;
     }
 }

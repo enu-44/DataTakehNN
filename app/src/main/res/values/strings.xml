@@ -65,10 +65,11 @@
     <string name="title_detalle_cable">Detalle</string>
     <string name="title_tipo_cable">Tipo</string>
     <string name="title_empresa">Empresa</string>
+    <string name="pregunta_marquilla">¿Cable cuenta con marquilla?</string>
 
 
     <!--EQUIPOS ELEMENTOS-->
-    <string name="title_conectado_red_electrica">¿Conectado RE?</string>
+    <string name="title_conectado_red_electrica">¿Conectado RED?</string>
     <string name="question_conectado_red_electrica">¿Conectado Red Electrica?</string>
     <string name="title_medidor">¿ Medidor ?</string>
     <string name="title_tipo_equipo">Tipo</string>

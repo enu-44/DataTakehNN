@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -18,6 +19,7 @@
             android:layout_below="@+id/spinnerEstado"
             android:layout_marginTop="1dp"
             android:orientation="horizontal">
+
             <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                 android:id="@+id/spinnerOperador"
                 android:layout_width="match_parent"
@@ -25,11 +27,11 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.5"
-                android:textSize="13dp"
                 android:hint="Operador"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="#CFD8DC"
-                app:met_floatingLabel="normal"/>
+                android:textSize="13dp"
+                app:met_floatingLabel="normal" />
 
             <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                 android:id="@+id/spinnerTipo"
@@ -39,10 +41,11 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.5"
                 android:hint="Tipo"
-                android:textSize="13dp"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="#CFD8DC"
-                app:met_floatingLabel="normal"/>
+                android:textSize="13dp"
+                app:met_floatingLabel="normal" />
+
             <Button
                 android:id="@+id/btnAddCables"
                 android:layout_width="wrap_content"
@@ -70,52 +73,50 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="0.5"
                 android:hint="Detalle"
-                android:textSize="13dp"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="#CFD8DC"
-                app:met_floatingLabel="normal"
-                />
+                android:textSize="13dp"
+                app:met_floatingLabel="normal" />
 
             <android.support.design.widget.TextInputLayout
-                android:layout_weight="0.5"
                 android:id="@+id/textInputLayoutAlturaDisponible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="0.5"
                 android:hint="Cantidad"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
                 <EditText
-                    android:text="1"
                     android:id="@+id/edtCantidad"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#ffffff"
                     android:drawablePadding="16dp"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:text="1" />
             </android.support.design.widget.TextInputLayout>
 
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="4dp"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_weight="0.5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pregunta_cables_rbt"/>
-
+                android:layout_weight="0.5"
+                android:text="@string/pregunta_cables_rbt" />
 
 
             <RadioGroup
-                android:layout_weight="0.5"
                 android:id="@+id/radioGroupRedesBt"
                 android:layout_width="60dp"
                 android:layout_height="30dp"
+                android:layout_weight="0.5"
                 android:background="@drawable/gray_out_line"
                 android:checkedButton="@+id/radioButtonSiRedesBt"
                 android:orientation="horizontal">
@@ -149,13 +150,67 @@
                     android:textColor="@color/white" />
             </RadioGroup>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/pregunta_marquilla" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupMarquilla"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/gray_out_line"
+                android:checkedButton="@+id/radioButtonSiMarquilla"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonNoMarquilla"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/toggle_selector_red"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/no"
+                    android:textColor="@color/white" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonSiMarquilla"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/toggle_selector_green"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/si"
+                    android:textColor="@color/white" />
+            </RadioGroup>
+
 
         </LinearLayout>
+
+
         <View
-            android:layout_marginTop="3dp"
             android:id="@+id/indicator_schedule_status"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="3dp"
             android:background="@color/colorAccent" />
 
         <include layout="@layout/content_recycler_view" />

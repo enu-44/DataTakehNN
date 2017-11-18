@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -12,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.datatakehnn.R;
@@ -37,7 +38,6 @@ import com.datatakehnn.controllers.CablesController;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
-import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.models.elemento_cable.Elemento_Cable;
 import com.datatakehnn.models.empresa_model.Empresa;
 import com.datatakehnn.models.reponse_generic.Response;
@@ -74,14 +74,19 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     MaterialBetterSpinner spinnerDetalle;
     @BindView(R.id.edtCantidad)
     EditText edtCantidad;
+    @BindView(R.id.radioButtonNoMarquilla)
+    RadioButton radioButtonNoMarquilla;
+    @BindView(R.id.radioButtonSiMarquilla)
+    RadioButton radioButtonSiMarquilla;
+
 
     //Declaracion Arrays
     List<Empresa> empresaList = new ArrayList<>();
     List<Tipo_Cable> tipo_cables = new ArrayList<>();
     List<Detalle_Tipo_Cable> detalle_tipo_cables = new ArrayList<>();
-
     //Variables Gloabals
     private boolean SOBRE_REDES_BT = true;
+    private boolean TIENE_MARQUILLA = true;
     private long Detalle_Tipo_Cable_Id;
     private long Empresa_Id;
 
@@ -134,19 +139,19 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle(getString(R.string.title_cables));
-        if(ACCION_UPDATE){
+        if (ACCION_UPDATE) {
             if (getSupportActionBar() != null)// Habilitar Up Button
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }else{
+        } else {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);//devolver
         }
     }
 
     private void setupInjection() {
         //Actualizar o Eliminar
-        ACCION_ADD= getIntent().getExtras().getBoolean("ACCION_ADD");
-        ACCION_UPDATE= getIntent().getExtras().getBoolean("ACCION_UPDATE");
-        Elemento_Id=  getIntent().getExtras().getLong("Elemento_Id");
+        ACCION_ADD = getIntent().getExtras().getBoolean("ACCION_ADD");
+        ACCION_UPDATE = getIntent().getExtras().getBoolean("ACCION_UPDATE");
+        Elemento_Id = getIntent().getExtras().getLong("Elemento_Id");
 
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.cablesController = CablesController.getInstance(this);
@@ -162,15 +167,14 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     //region MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       // getMenuInflater().inflate(R.menu.menu_cables, menu);
+        // getMenuInflater().inflate(R.menu.menu_cables, menu);
         //return super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_cables, menu);
-        if (ACCION_UPDATE)
-        {
+        if (ACCION_UPDATE) {
             MenuItem item = menu.findItem(R.id.action_done);
             item.setVisible(false);
-        }else{
+        } else {
             MenuItem item = menu.findItem(R.id.action_done);
             item.setVisible(true);
         }
@@ -183,8 +187,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.action_done:
                 final AlertDialog.Builder builder = new AlertDialog.Builder(CablesElementoActivity.this);
                 builder.setTitle("Notificación");
@@ -193,8 +196,8 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(getApplicationContext(), EquipoActivity.class);
-                        i.putExtra("ACCION_ADD",true);
-                        i.putExtra("ACCION_UPDATE",false);
+                        i.putExtra("ACCION_ADD", true);
+                        i.putExtra("ACCION_UPDATE", false);
                         i.putExtra("Elemento_Id", Elemento_Id);
                         startActivity(i);
                     }
@@ -376,8 +379,8 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
                 SOBRE_REDES_BT,
                 Nombre_Detalle_Tipo_Cable,
                 Nombre_Tipo_Cable,
-                Nombre_Empresa
-
+                Nombre_Empresa,
+                TIENE_MARQUILLA
         );
         cablesController.register(elementoCable);
 
@@ -522,7 +525,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
 
     //region EVENTS
 
-    @OnClick({R.id.radioButtonSiRedesBt, R.id.radioButtonNoRedesBt, R.id.btnAddCables})
+    @OnClick({R.id.radioButtonSiRedesBt, R.id.radioButtonNoRedesBt, R.id.btnAddCables, R.id.radioButtonNoMarquilla, R.id.radioButtonSiMarquilla})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.radioButtonSiRedesBt:
@@ -530,6 +533,12 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
                 break;
             case R.id.radioButtonNoRedesBt:
                 SOBRE_REDES_BT = false;
+                break;
+            case R.id.radioButtonNoMarquilla:
+                TIENE_MARQUILLA = false;
+                break;
+            case R.id.radioButtonSiMarquilla:
+                TIENE_MARQUILLA = true;
                 break;
             case R.id.btnAddCables:
                 registrarCable();

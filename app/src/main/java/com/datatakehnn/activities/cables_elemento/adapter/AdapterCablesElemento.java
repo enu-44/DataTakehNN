@@ -22,20 +22,17 @@ import butterknife.ButterKnife;
  */
 
 
-
-
-public class AdapterCablesElemento extends RecyclerView.Adapter<AdapterCablesElemento.CableElementViewHolder>
-{
+public class AdapterCablesElemento extends RecyclerView.Adapter<AdapterCablesElemento.CableElementViewHolder> {
 
     public List<Elemento_Cable> dataset;
     public OnItemClickListenerCable onItemClickListener;
     public Context context;
 
 
-    public AdapterCablesElemento(Context context,List<Elemento_Cable> dataset, OnItemClickListenerCable onItemClickListener) {
+    public AdapterCablesElemento(Context context, List<Elemento_Cable> dataset, OnItemClickListenerCable onItemClickListener) {
         this.dataset = dataset;
         this.onItemClickListener = onItemClickListener;
-        this.context= context;
+        this.context = context;
     }
 
     public void setItems(List<Elemento_Cable> newItems) {
@@ -44,7 +41,7 @@ public class AdapterCablesElemento extends RecyclerView.Adapter<AdapterCablesEle
 
     }
 
-    public void clear(){
+    public void clear() {
         dataset.clear();
         notifyDataSetChanged();
     }
@@ -60,20 +57,28 @@ public class AdapterCablesElemento extends RecyclerView.Adapter<AdapterCablesEle
         Elemento_Cable list = dataset.get(position);
         holder.txtOperador.setText(list.getNombre_Empresa());
 
-        String cantidad= String.format(context.getString(R.string.cantidad_global),
+        String cantidad = String.format(context.getString(R.string.cantidad_global),
                 list.getCantidad());
         holder.txtCantidad.setText(cantidad);
         holder.txtDetalleTipo.setText(list.getNombre_Detalle_Tipo_Cable());
         holder.txtTipo.setText(list.getNombre_Tipo_Cable());
-        String sobreBT= "";
-        if(list.isSobre_Rbt()){
-            sobreBT="SI";
-        }else{
-            sobreBT="NO";
+        String sobreBT = "";
+        if (list.isSobre_Rbt()) {
+            sobreBT = "SI";
+        } else {
+            sobreBT = "NO";
         }
         holder.txtSobreRbt.setText(sobreBT);
+
+        String marquilla = "";
+        if (list.isIs_Marquilla()) {
+            marquilla = "SI";
+        } else {
+            marquilla = "NO";
+        }
+        holder.txtMarquilla.setText(marquilla);
         //statusIndicator.setBackgroundResource(R.color.GreenColor);
-        holder.setOnItemClickListener(list,onItemClickListener);
+        holder.setOnItemClickListener(list, onItemClickListener);
     }
 
     @Override
@@ -82,7 +87,7 @@ public class AdapterCablesElemento extends RecyclerView.Adapter<AdapterCablesEle
     }
 
 
-    public  class CableElementViewHolder extends RecyclerView.ViewHolder   {
+    public class CableElementViewHolder extends RecyclerView.ViewHolder {
         //se especifica lo que existe dentro del ViewHolder
         @BindView(R.id.txtOperador)
         TextView txtOperador;
@@ -94,6 +99,8 @@ public class AdapterCablesElemento extends RecyclerView.Adapter<AdapterCablesEle
         TextView txtSobreRbt;
         @BindView(R.id.txtCantidad)
         TextView txtCantidad;
+        @BindView(R.id.txtMarquilla)
+        TextView txtMarquilla;
 
         //@BindView(R.id.btnEditCable)
         ///ImageButton btnEditCable;
@@ -105,12 +112,12 @@ public class AdapterCablesElemento extends RecyclerView.Adapter<AdapterCablesEle
 
         public CableElementViewHolder(View v) {
             super(v);
-            this.view=v;
+            this.view = v;
             ButterKnife.bind(this, v);
         }
 
-        public  void setOnItemClickListener(final Elemento_Cable responseNotify, final OnItemClickListenerCable onItemClickListener){
-            view.setOnClickListener(new View.OnClickListener(){
+        public void setOnItemClickListener(final Elemento_Cable responseNotify, final OnItemClickListenerCable onItemClickListener) {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onItemClickListener.onItemClick(responseNotify);
@@ -124,7 +131,7 @@ public class AdapterCablesElemento extends RecyclerView.Adapter<AdapterCablesEle
                 }
             });*/
 
-            btnDeleteCable.setOnClickListener(new View.OnClickListener(){
+            btnDeleteCable.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onItemClickListener.onClickDelete(responseNotify);

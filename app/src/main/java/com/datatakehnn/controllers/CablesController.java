@@ -28,6 +28,7 @@ public class CablesController {
     public CablesController() {
         _instance = this;
     }
+
     public static CablesController getInstance(Context c) {
         if (_instance == null) {
             ourcontext = c;
@@ -37,12 +38,11 @@ public class CablesController {
     }
 
 
-
     ////Registrar
-    public Response register(Elemento_Cable elemento_cable){
-        Response response= new Response();
-        try{
-            Elemento_Cable elementoCable= new Elemento_Cable();
+    public Response register(Elemento_Cable elemento_cable) {
+        Response response = new Response();
+        try {
+            Elemento_Cable elementoCable = new Elemento_Cable();
             elementoCable.setCantidad(elemento_cable.getCantidad());
             elementoCable.setCodigo(elemento_cable.getCodigo());
             elementoCable.setDetalle_Tipo_Cable_Id(elemento_cable.getDetalle_Tipo_Cable_Id());
@@ -52,36 +52,37 @@ public class CablesController {
             elementoCable.setNombre_Tipo_Cable(elemento_cable.getNombre_Tipo_Cable());
             elementoCable.setNombre_Empresa(elemento_cable.getNombre_Empresa());
             elementoCable.setSobre_Rbt(elemento_cable.isSobre_Rbt());
+            elementoCable.setIs_Marquilla(elemento_cable.isIs_Marquilla());
             elementoCable.save();
 
             response.setMessage("Ok");
             response.setResult(elementoCable);
             response.setSuccess(true);
-            return  response;
+            return response;
 
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setMessage(ex.toString());
             response.setSuccess(false);
-            return  response;
+            return response;
         }
     }
 
     //Cables por elemento y usuario
     public List<Elemento_Cable> getList_Cable_Element(long element_Id) {
-        List<Elemento_Cable> lisFilter= SQLite.select().from(Elemento_Cable.class).where(Elemento_Cable_Table.Elemento_Id.eq(element_Id)).queryList();
-        return  lisFilter;
+        List<Elemento_Cable> lisFilter = SQLite.select().from(Elemento_Cable.class).where(Elemento_Cable_Table.Elemento_Id.eq(element_Id)).queryList();
+        return lisFilter;
     }
 
     public Response DeleteCableByElemento(long elemento_cable_id) {
-        Response response= new Response();
+        Response response = new Response();
 
         ///Elemento_Cable elementoCable= new Elemento_Cable();
 
         SQLite.delete(Elemento_Cable.class).where(Elemento_Cable_Table.Elemento_Cable_Id.eq(elemento_cable_id)).async().execute();
 
 
-        Elemento_Cable listee= new Select().from(Elemento_Cable.class).where(Elemento_Cable_Table.Elemento_Cable_Id.eq(elemento_cable_id)).querySingle();
+        Elemento_Cable listee = new Select().from(Elemento_Cable.class).where(Elemento_Cable_Table.Elemento_Cable_Id.eq(elemento_cable_id)).querySingle();
 
         response.setMessage("Ok");
         response.setSuccess(true);
