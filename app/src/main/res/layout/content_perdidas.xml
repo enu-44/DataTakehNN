@@ -37,7 +37,7 @@
             android:layout_toEndOf="@id/tvLamparaAdicional"
             android:layout_toRightOf="@id/tvLamparaAdicional"
             android:background="@drawable/gray_out_line"
-            android:checkedButton="@+id/radioButtonSiLamparaAdicional"
+            android:checkedButton="@+id/radioButtonNoLamparaAdicional"
             android:orientation="horizontal">
 
             <RadioButton
@@ -78,6 +78,7 @@
             android:layout_marginRight="3dp"
             android:layout_marginTop="10dp"
             android:hint="@string/cantidad_lampara_adicional"
+            android:visibility="gone"
             app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
             <EditText
@@ -114,7 +115,7 @@
             android:layout_toEndOf="@id/tvLamparaEncendidaDia"
             android:layout_toRightOf="@id/tvLamparaEncendidaDia"
             android:background="@drawable/gray_out_line"
-            android:checkedButton="@+id/radioButtonSiLamparaEncendidaDia"
+            android:checkedButton="@+id/radioButtonNoLamparaEncendidaDia"
             android:orientation="horizontal">
 
             <RadioButton
@@ -169,7 +170,7 @@
             android:layout_toEndOf="@id/tvConexionIlicita"
             android:layout_toRightOf="@id/tvConexionIlicita"
             android:background="@drawable/gray_out_line"
-            android:checkedButton="@+id/radioButtonSiConexionIlicita"
+            android:checkedButton="@+id/radioButtonNoConexionIlicita"
             android:orientation="horizontal">
 
             <RadioButton
@@ -225,7 +226,7 @@
             android:layout_toEndOf="@id/tvPoda"
             android:layout_toRightOf="@id/tvPoda"
             android:background="@drawable/gray_out_line"
-            android:checkedButton="@+id/radioButtonSiPoda"
+            android:checkedButton="@+id/radioButtonNoPoda"
             android:orientation="horizontal">
 
             <RadioButton
