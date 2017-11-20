@@ -1,18 +1,19 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.login.LoginActivity">
     <!-- Login progress -->
     <ImageView
         android:id="@+id/imageViewContent"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
         android:src="@drawable/fondo_login"
         tools:ignore="ContentDescription"></ImageView>
+
     <ScrollView
         android:id="@+id/container"
         android:layout_width="fill_parent"
@@ -31,12 +32,22 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
+                <ImageView
+                    android:id="@+id/imageViewIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:src="@drawable/icon_datatake_white"
+                    tools:ignore="ContentDescription">
+
+                </ImageView>
+
+
                 <LinearLayout
-                    android:layout_marginTop="140dp"
                     android:id="@+id/email_login_form"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_marginTop="40dp"
                     android:paddingTop="10dp">
 
                     <android.support.design.widget.TextInputLayout
@@ -48,27 +59,29 @@
                             android:id="@+id/edtUsuario"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_usuario_login"
                             android:drawablePadding="16dp"
                             android:drawableStart="@drawable/ic_usuario_login"
                             android:hint="@string/cedula"
                             android:inputType="number"
-                            android:padding="8dp"
-                            android:drawableLeft="@drawable/ic_usuario_login" />
+                            android:padding="8dp" />
                     </android.support.design.widget.TextInputLayout>
+
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+
                         <EditText
                             android:id="@+id/edtContraseña"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_usuario_password"
                             android:drawablePadding="16dp"
                             android:drawableStart="@drawable/ic_usuario_password"
                             android:hint="@string/contraseña"
                             android:inputType="textPassword"
-                            android:padding="8dp"
-                            android:drawableLeft="@drawable/ic_usuario_password" />
+                            android:padding="8dp" />
                     </android.support.design.widget.TextInputLayout>
                     <!--<android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -101,31 +114,40 @@
                         android:id="@+id/fabLogin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:src="@drawable/icon_login_white"
                         android:theme="@style/MyFloatingButton"
                         app:backgroundTint="@color/colorPrimary"
                         app:fabSize="normal"
-                        android:layout_gravity="center"
                         app:rippleColor="@color/orange" />
 
 
-
                     <ProgressBar
-                        android:visibility="none"
-                        android:id="@+id/progressBarIndeterminate"
+                        android:id="@+id/progressBar"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:indeterminate="true"/>
+                        android:indeterminate="true"
+                        android:visibility="gone" />
 
 
                     <ImageView
-                        android:layout_gravity="center"
                         android:id="@+id/imageView2"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/logo_datatake_reflejo"
-                        android:contentDescription="Logo" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="Logo"
+                        android:layout_marginTop="20dp"
+                        app:srcCompat="@drawable/logo_datatake_reflejo" />
+
+                    <ImageView
+                        android:id="@+id/imageViewInteredes"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="Logo"
+                        app:srcCompat="@drawable/logo_interedes" />
 
                 </LinearLayout>
 

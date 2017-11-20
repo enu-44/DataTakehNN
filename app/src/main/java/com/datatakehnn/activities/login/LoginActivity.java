@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.datatakehnn.R;
@@ -40,7 +41,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     @BindView(R.id.fabLogin)
     FloatingActionButton fabLogin;
     @BindView(R.id.container)
-    RelativeLayout container;
+    ScrollView container;
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
