@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DatatakehNN.iml" filepath="$PROJECT_DIR$/DatatakehNN.iml" />
+      <module fileurl="file://G:\Disco Local (G)\TRABAJO\Interedes\DATATAKE ELECTROHUILA\Android\DatatakehNN\DatatakehNN.iml" filepath="G:\Disco Local (G)\TRABAJO\Interedes\DATATAKE ELECTROHUILA\Android\DatatakehNN\DatatakehNN.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://G:\Disco Local (G)\TRABAJO\Interedes\DATATAKE ELECTROHUILA\Android\DatatakehNN\app\app.iml" filepath="G:\Disco Local (G)\TRABAJO\Interedes\DATATAKE ELECTROHUILA\Android\DatatakehNN\app\app.iml" />
     </modules>
   </component>
 </project>

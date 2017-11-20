@@ -1,98 +1,138 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:background="@drawable/fondo_login"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
     tools:context=".activities.login.LoginActivity">
-
-    <RelativeLayout
+    <!-- Login progress -->
+    <ImageView
+        android:id="@+id/imageViewContent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/fondo_login"
+        tools:ignore="ContentDescription"></ImageView>
+    <ScrollView
         android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:layout_gravity="center"
-        android:focusableInTouchMode="true">
-
-
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
         <LinearLayout
-            android:layout_marginTop="140dp"
-            android:orientation="vertical"
-            android:id="@+id/cardView"
-            android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_margin="20dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-                <android.support.design.widget.TextInputLayout
+                <LinearLayout
+                    android:layout_marginTop="140dp"
+                    android:id="@+id/email_login_form"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+                    android:orientation="vertical"
+                    android:paddingTop="10dp">
 
-                    <EditText
-                        android:id="@+id/edtUsuario"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="16dp"
-                        android:drawableStart="@drawable/ic_usuario_login"
-                        android:hint="@string/cedula"
-                        android:inputType="number"
-                        android:padding="8dp"
-                        android:drawableLeft="@drawable/nombres" />
-                </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
-                    <EditText
-                        android:id="@+id/edtContraseña"
+                        app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/edtUsuario"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="16dp"
+                            android:drawableStart="@drawable/ic_usuario_login"
+                            android:hint="@string/cedula"
+                            android:inputType="number"
+                            android:padding="8dp"
+                            android:drawableLeft="@drawable/ic_usuario_login" />
+                    </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="16dp"
-                        android:drawableStart="@drawable/ic_usuario_password"
-                        android:hint="@string/contraseña"
-                        android:inputType="textPassword"
-                        android:padding="8dp"
-                        android:drawableLeft="@drawable/contrasena" />
-                </android.support.design.widget.TextInputLayout>
+                        app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+                        <EditText
+                            android:id="@+id/edtContraseña"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="16dp"
+                            android:drawableStart="@drawable/ic_usuario_password"
+                            android:hint="@string/contraseña"
+                            android:inputType="textPassword"
+                            android:padding="8dp"
+                            android:drawableLeft="@drawable/ic_usuario_password" />
+                    </android.support.design.widget.TextInputLayout>
+                    <!--<android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:id="@+id/etNumeroCedula"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/WhiteColor"
+                            android:drawableLeft="@drawable/ic_person_login"
+                            android:drawablePadding="16dp"
+                            android:hint="Identificacion"
+                            android:inputType="textEmailAddress"
+                            android:padding="8dp" />
+                    </android.support.design.widget.TextInputLayout>-->
+
+                    <!--
+                    <Button
+                        android:id="@+id/email_sign_in_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/action_sign_in"
+                        android:textStyle="bold" />
+    -->
+
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_login_white"
+                        android:theme="@style/MyFloatingButton"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:fabSize="normal"
+                        android:layout_gravity="center"
+                        app:rippleColor="@color/orange" />
+
+
+
+                    <ProgressBar
+                        android:visibility="none"
+                        android:id="@+id/progressBarIndeterminate"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"/>
+
+
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:id="@+id/imageView2"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/logo_datatake_reflejo"
+                        android:contentDescription="Logo" />
+
+                </LinearLayout>
 
             </LinearLayout>
-            <ProgressBar
-                android:visibility="gone"
-                android:id="@+id/progressBar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indeterminate="false"/>
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabLogin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_login_white"
-                android:theme="@style/MyFloatingButton"
-                app:backgroundTint="@color/colorPrimary"
-                app:fabSize="normal"
-                android:layout_gravity="center"
-                app:rippleColor="@color/orange" />
-
-            <ImageView
-                android:id="@+id/ivLogo"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/logo_datatake_reflejo" />
         </LinearLayout>
 
 
-
-    </RelativeLayout>
-</ScrollView>
+    </ScrollView>
+</FrameLayout>
