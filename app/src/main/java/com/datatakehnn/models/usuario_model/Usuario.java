@@ -54,11 +54,16 @@ public class Usuario extends BaseModel {
     @Column
     public boolean IsRemembered;
 
+    //Ciudad
+    @Column
+    public long Ciudad_Id;
+
+    @Column
+    public long Departamento_Id;
 
 
     ///Contructor
-
-    public Usuario(long usuario_Id, String nombre, String apellido, String cedula, String telefono, String direccion, String correo_Electronico, String password, long empresa_Id, boolean isRemembered) {
+    public Usuario(long usuario_Id, String nombre, String apellido, String cedula, String telefono, String direccion, String correo_Electronico, String password, long empresa_Id, boolean isRemembered, long ciudad_Id, long departamento_Id) {
         Usuario_Id = usuario_Id;
         Nombre = nombre;
         Apellido = apellido;
@@ -69,6 +74,8 @@ public class Usuario extends BaseModel {
         Password = password;
         Empresa_Id = empresa_Id;
         IsRemembered = isRemembered;
+        Ciudad_Id = ciudad_Id;
+        Departamento_Id = departamento_Id;
     }
 
     public Usuario() {

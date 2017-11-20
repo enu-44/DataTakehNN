@@ -9,7 +9,6 @@ public class Response {
     public Object Result;
     public  boolean IsSuccess;
 
-
     public String getMessage() {
         return Message;
     }

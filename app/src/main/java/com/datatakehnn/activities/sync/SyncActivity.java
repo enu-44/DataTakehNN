@@ -25,8 +25,9 @@ import android.widget.TextView;
 import com.datatakehnn.R;
 import com.datatakehnn.activities.menu.MainMenuActivity;
 import com.datatakehnn.activities.poste.PosteActivity;
-import com.datatakehnn.controllers.FotoController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
+import com.datatakehnn.models.ciudades_model.Ciudad;
+import com.datatakehnn.models.departmentos_model.Departamento;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad;
 import com.datatakehnn.models.empresa_model.Empresa;
@@ -34,9 +35,12 @@ import com.datatakehnn.models.estado_model.Estado;
 import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento;
 import com.datatakehnn.models.material_model.Material;
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento;
+import com.datatakehnn.models.reponse_generic.data_async.Response_Request_Data_Sync;
 import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.tipo_equipo_model.Tipo_Equipo;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
+import com.datatakehnn.services.api_services.DataAsyncService.DataSyncApiService;
+import com.datatakehnn.services.api_services.DataAsyncService.IDataAsync;
 import com.datatakehnn.services.aplication.DataTakeApp;
 import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 import com.datatakehnn.services.coords.CoordsService;
@@ -51,13 +55,14 @@ import com.datatakehnn.services.data_arrays.Tipo_Cable_List;
 import com.datatakehnn.services.data_arrays.Tipo_Equipo_List;
 import com.datatakehnn.services.data_arrays.Tipo_Novedad_List;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SyncActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
+public class SyncActivity extends AppCompatActivity implements IDataAsync, ConnectivityReceiver.ConnectivityReceiverListener {
 
     //UI Elements
     @BindView(R.id.toolbar)
@@ -72,11 +77,12 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
     //Variables Globales
     private boolean sync = false;
 
-    //Instances
+    // Instances
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
     public CoordsService coordsService;
     private static Context ourcontext;
     private static SyncActivity _instance;
+    DataSyncApiService dataSyncApiService;
 
     //Item Menu
     Menu menuGlobal;
@@ -90,6 +96,71 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
         setupInjection();
         animationButton();
     }
+
+    //region API SERIVICE
+
+    private void loadDataAsync(){
+        dataSyncApiService.loadDataAsync(this);
+    }
+
+    public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
+        if(response.isSuccess()){
+
+            //Departamentos y Ciudades
+            List<Departamento> departamentoList= response.getResult().getDepartamento();
+            List<Ciudad> ciudadList = new ArrayList<>();
+            for (Departamento departamento:departamentoList){
+                ciudadList.addAll(departamento.getCiudades());
+            }
+
+
+            //Obtener Listas Poste
+            List<Detalle_Tipo_Novedad> detalle_tipo_novedadList = Detalle_Tipo_Novedad_List.getListDetalleTipoNovedad();
+            List<Estado> estado_lists = Estado_List.getListEstado();
+            List<Longitud_Elemento> longitud_elementos = Longitud_Elemento_List.getListLongitudElemento();
+            List<Material> materiales = Material_List.getListMaterial();
+            List<Nivel_Tension_Elemento> nivel_tension_elementos = Nivel_Tension_Elemento_List.getListNivelTension();
+            List<Tipo_Novedad> tipo_novedades = Tipo_Novedad_List.getListTipoNovedad();
+
+            ///Lista Cables
+            List<Tipo_Cable> tipo_cables = Tipo_Cable_List.getListTipo_Cable();
+            List<Detalle_Tipo_Cable> detalle_tipo_cables = Detalle_Tipo_Cable_List.getListDetalle_Tipo_Cable();
+
+            //Empresas
+            List<Empresa> empresaList = Empresa_List.getListEmpresa();
+            //Tipo Equipos
+            List<Tipo_Equipo> tipo_equipos= Tipo_Equipo_List.getListTipoEquipo();
+
+
+            sincronizacionGetInformacionController.deleteInformacionMaster();
+            sincronizacionGetInformacionController.registerDataGetInformacion(estado_lists,
+                    detalle_tipo_novedadList,
+                    longitud_elementos,
+                    materiales,
+                    nivel_tension_elementos,
+                    tipo_novedades,
+                    tipo_cables,
+                    detalle_tipo_cables,
+                    empresaList,
+                    tipo_equipos,
+                    departamentoList,
+                    ciudadList);
+
+
+
+            showSnakBar(R.color.colorAccent,  getString(R.string.message_information_sync));
+            MenuItem item = menuGlobal.findItem(R.id.action_done);
+            item.setVisible(true);
+            sync = true;
+            progressBar.setVisibility(View.GONE);
+        }else{
+            showSnakBar(R.color.colorAccent,  response.getMessage());
+            sync = false;
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    //endregion
 
     //region INSTANCE
     public SyncActivity() {
@@ -106,14 +177,15 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
     //endregion
 
     //region SET INJECTION
-
     private void setupInjection() {
+        this.dataSyncApiService= DataSyncApiService.getInstance(this);
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         iniciarServicioUbicacion();
     }
 
     public void iniciarServicioUbicacion() {
         this.coordsService= new CoordsService(this);
+
     }
 
     private void setToolbarInjection() {
@@ -145,7 +217,6 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
         int id = item.getItemId();
         if (id == R.id.action_done) {
             if (sync == true) {
-
                 Intent i = new Intent(this, MainMenuActivity.class);
                 startActivity(i);
             } else {
@@ -200,44 +271,9 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
     // Sincronizar Informacion
     public void getInformationSync() {
         if(checkConnection()){
-            //Obtener Listas Poste
-            List<Detalle_Tipo_Novedad> detalle_tipo_novedadList = Detalle_Tipo_Novedad_List.getListDetalleTipoNovedad();
-            List<Estado> estado_lists = Estado_List.getListEstado();
-            List<Longitud_Elemento> longitud_elementos = Longitud_Elemento_List.getListLongitudElemento();
-            List<Material> materiales = Material_List.getListMaterial();
-            List<Nivel_Tension_Elemento> nivel_tension_elementos = Nivel_Tension_Elemento_List.getListNivelTension();
-            List<Tipo_Novedad> tipo_novedades = Tipo_Novedad_List.getListTipoNovedad();
-
-            ///Lista Cables
-            List<Tipo_Cable> tipo_cables = Tipo_Cable_List.getListTipo_Cable();
-            List<Detalle_Tipo_Cable> detalle_tipo_cables = Detalle_Tipo_Cable_List.getListDetalle_Tipo_Cable();
-
-            //Empresas
-            List<Empresa> empresaList = Empresa_List.getListEmpresa();
-            //Tipo Equipos
-            List<Tipo_Equipo> tipo_equipos= Tipo_Equipo_List.getListTipoEquipo();
-
-
-            sincronizacionGetInformacionController.deleteInformacionMaster();
-            sincronizacionGetInformacionController.registerDataGetInformacion(estado_lists,
-                    detalle_tipo_novedadList,
-                    longitud_elementos,
-                    materiales,
-                    nivel_tension_elementos,
-                    tipo_novedades,
-                    tipo_cables,
-                    detalle_tipo_cables,
-                    empresaList,
-                    tipo_equipos);
-
-            showSnakBar(R.color.colorAccent,  getString(R.string.message_information_sync));
-            MenuItem item = menuGlobal.findItem(R.id.action_done);
-            item.setVisible(true);
-            sync = true;
-            progressBar.setVisibility(View.GONE);
+            loadDataAsync();
 
         }else{
-
             //Verificar si existe informacion sincronizada(si no hay conexion a internet, se validad la sincronizacion de datos)
             Longitud_Elemento longitud_elemento= sincronizacionGetInformacionController.getFirstLongitudElemento();
             if(longitud_elemento!=null){
@@ -313,8 +349,6 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
                     .setListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
-
-
                         }
                         @Override
                         public void onAnimationEnd(Animator animation) {
@@ -335,5 +369,7 @@ public class SyncActivity extends AppCompatActivity implements ConnectivityRecei
                     });
         }
     }
+
+
     //endregion
 }

@@ -2,6 +2,8 @@ package com.datatakehnn.controllers;
 
 import android.content.Context;
 
+import com.datatakehnn.models.ciudades_model.Ciudad;
+import com.datatakehnn.models.departmentos_model.Departamento;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable_Table;
 import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad;
@@ -70,7 +72,9 @@ public class SincronizacionGetInformacionController {
                                                List<Tipo_Cable> tipo_cables,
                                                List<Detalle_Tipo_Cable> detalle_tipo_cables,
                                                List<Empresa> empresaList,
-                                               List<Tipo_Equipo> tipo_equipos) {
+                                               List<Tipo_Equipo> tipo_equipos,
+                                               List<Departamento> departamentos,
+                                               List<Ciudad> ciudades) {
 
         Response response= new Response();
         try{
@@ -171,6 +175,27 @@ public class SincronizacionGetInformacionController {
                 tipo_equipo.setNombre(items.getNombre());
                 tipo_equipo.save();
             }
+
+
+            //DEPARTAMENTOS
+            for(Departamento items: departamentos){
+                Departamento departamento= new Departamento();
+                departamento.setDepartamento_Id(items.getDepartamento_Id());
+                departamento.setCodigo_Dpto(items.getCodigo_Dpto());
+                departamento.setNombre(items.getNombre());
+                departamento.save();
+            }
+
+            //CIUDADES
+            for(Ciudad items: ciudades){
+                Ciudad ciudad= new Ciudad();
+                ciudad.setCiudad_Id(items.getCiudad_Id());
+                ciudad.setDepartamnento_Id(items.getDepartamnento_Id());
+                ciudad.setNombre(items.getNombre());
+                ciudad.save();
+            }
+
+
 
             response.setMessage("Informacion registrada");
             response.setSuccess(true);
