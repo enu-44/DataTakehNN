@@ -447,7 +447,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     }
 
-    private void    tomarFoto() {
+    private void tomarFoto() {
         if (warningLowMemory() == false) {
             if (foto1 == true) {
                 if (isEstadoFoto1 == true) {

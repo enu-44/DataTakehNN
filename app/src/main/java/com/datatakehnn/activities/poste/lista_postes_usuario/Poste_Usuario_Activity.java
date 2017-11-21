@@ -2,7 +2,10 @@ package com.datatakehnn.activities.poste.lista_postes_usuario;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,7 +22,9 @@ import android.widget.Toast;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.CoordsActivity;
+import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
 import com.datatakehnn.activities.cables_elemento.adapter.AdapterCablesElemento;
+import com.datatakehnn.activities.equipos_elemento.EquipoActivity;
 import com.datatakehnn.activities.poste.lista_postes_usuario.adapter.AdapterElemento;
 import com.datatakehnn.activities.poste.lista_postes_usuario.adapter.OnItemClickListenerElemento;
 import com.datatakehnn.controllers.ElementoController;
@@ -46,6 +52,10 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     TextView txtResults;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+
+
+
+
 
     //Instances
     UsuarioController usuarioController;
@@ -180,5 +190,53 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         Toast.makeText(this, "Poste: "+elemento.getCodigo_Apoyo(), Toast.LENGTH_SHORT).show();
         startActivity(i);
     }
+    //endregion
+
+    //region MENU
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId())
+        {
+
+            ///Metodo que permite no recargar la pagina al devolverse
+            case android.R.id.home:
+                // Obtener intent de la actividad padre
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                // Comprobar si DetailActivity no se creó desde CourseActivity
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                        || this.isTaskRoot()) {
+
+                    // Construir de nuevo la tarea para ligar ambas actividades
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        TaskStackBuilder.create(this)
+                                .addNextIntentWithParentStack(upIntent)
+                                .startActivities();
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    this.finishAfterTransition();
+                    return true;
+                }
+
+                //Para versiones anterios a 5.x
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    onBackPressed();
+                    return true;
+                }
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+
     //endregion
 }

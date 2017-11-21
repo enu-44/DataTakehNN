@@ -10,9 +10,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +31,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.CoordsActivity;
@@ -42,6 +47,7 @@ import com.datatakehnn.controllers.UsuarioController;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.models.estado_model.Estado;
+import com.datatakehnn.models.localizcion_model.Localizacion;
 import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento;
 import com.datatakehnn.models.material_model.Material;
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento;
@@ -124,8 +130,16 @@ public class PosteActivity extends AppCompatActivity {
     @BindView(R.id.edtReferencia)
     EditText edtReferencia;
 
+    @BindView(R.id.tvCoords)
+    TextView tvCoords;
+
+    @BindView(R.id.edtAlturaDisponible)
+    EditText edtAlturaDisponible;
+    @BindView(R.id.ibCalcularAltura)
+    ImageButton ibCalcularAltura;
+
     //Location
-    Location location;
+    Location location=new Location("Localizacion");
 
     //Medidor de diatancias
     private String PACKAGE_NAME = "com.nfa.distancemeter";
@@ -150,8 +164,6 @@ public class PosteActivity extends AppCompatActivity {
     Date dateFecha;
     String hora;
     Double Altura_Disponible;
-    double latitud;
-    double longitud;
 
     //Direccion
 
@@ -166,10 +178,8 @@ public class PosteActivity extends AppCompatActivity {
     ElementoController elementoController;
     UsuarioController usuarioController;
     SyncActivity syncActivity;
-    @BindView(R.id.edtAlturaDisponible)
-    EditText edtAlturaDisponible;
-    @BindView(R.id.ibCalcularAltura)
-    ImageButton ibCalcularAltura;
+    public CoordsService coordsService;
+
 
 
     @Override
@@ -374,6 +384,64 @@ public class PosteActivity extends AppCompatActivity {
     }
 
 
+    //Register
+    public void registerElemento() {
+        //TODO Registrar el poste
+        Elemento elemento = new Elemento();
+        long elemento_id = 0;
+        elemento = elementoController.getLast();
+        if (elemento == null) {
+            elemento = new Elemento();
+            elemento_id = 1;
+        } else {
+            elemento_id = elemento.getElemento_Id() + 1;
+        }
+        Altura_Disponible = Double.parseDouble(edtAlturaDisponible.getText().toString());
+        Usuario usuario = new Usuario();
+        usuario = usuarioController.getLoggedUser();
+        long id_usuario = usuario.getUsuario_Id();
+        elemento.setElemento_Id(elemento_id);
+        elemento.setUsuario_Id(id_usuario);
+        elemento.setFecha_Levantamiento(fecha);
+        elemento.setHora_Inicio(hora);
+        elemento.setCodigo_Apoyo(edtCodigoApoyo.getText().toString());
+        elemento.setMaterial_Id(Material_Id);
+        elemento.setLongitud_Elemento_Id(Longitud_Elemento_Id);
+        elemento.setResistencia_Mecanica(edtResistenciaMecanica.getText().toString());
+        elemento.setEstado_Id(Estado_Id);
+        elemento.setRetenidas(Cantidad_Retenidas);
+        elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
+        elemento.setAltura_Disponible(Altura_Disponible);
+        elemento.setIs_Sync(false);
+        elemento.setDireccion(Nombre_Tipo_Direccion + " " + edtTipoDireccion.getText().toString() + " " + Nombre_Detalle_Tipo_Direccion + " " + edtDetalleTipoDireccion.getText().toString());
+        elemento.setReferencia_Localizacion(edtReferencia.getText().toString());
+        elemento.setLongitud(location.getLongitude());
+        elemento.setLatitud(location.getLatitude());
+        elementoController.register(elemento);
+        //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(PosteActivity.this);
+        builder.setTitle("Notificación");
+        builder.setMessage("¿Confirma todos los datos?");
+        final long finalElemento_id = elemento_id;
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //((SyncActivity) syncActivity).coordsService.closeService();
+                Intent i = new Intent(getApplicationContext(), PerdidaActivity.class);
+                i.putExtra("ACCION_ADD", true);
+                i.putExtra("ACCION_UPDATE", false);
+                i.putExtra("Elemento_Id", finalElemento_id);
+                startActivity(i);
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+
+
     //endregion
 
     //region SET INJECTION
@@ -393,17 +461,28 @@ public class PosteActivity extends AppCompatActivity {
         this.intentIntegrator = new IntentIntegrator(this, PACKAGE_NAME);
         //Guarda en un location la ubicación
         //location = servicioUbicacion.getUbicacion();
+        /*
         if(((SyncActivity) syncActivity).coordsService.getUbicacion() != null){
             location = ((SyncActivity) syncActivity).coordsService.getUbicacion();
         }else{
             ((SyncActivity) syncActivity).iniciarServicioUbicacion();
             location = ((SyncActivity) syncActivity).coordsService.getUbicacion();
+        }*/
+
+        //Si el servicio de ubicacion se ha detenido se arranca nuevamente
+        if(((SyncActivity) syncActivity).coordsService == null){
+            this.coordsService= new CoordsService(this);
+            Toast.makeText(this,"Iniciando Servicio de Ubicacion",Toast.LENGTH_LONG).show();
         }
+
+        /*
         try {
             latitud = location.getLatitude();
             longitud = location.getLongitude();
         } catch (Exception ex) {
         }
+
+        */
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.novedadController = NovedadController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
@@ -476,61 +555,7 @@ public class PosteActivity extends AppCompatActivity {
     //endregion
 
 
-    //region METHODS
-    public void registerElemento() {
-        //TODO Registrar el poste
-        Elemento elemento = new Elemento();
-        long elemento_id = 0;
-        elemento = elementoController.getLast();
-        if (elemento == null) {
-            elemento = new Elemento();
-            elemento_id = 1;
-        } else {
-            elemento_id = elemento.getElemento_Id() + 1;
-        }
-        Altura_Disponible = Double.parseDouble(edtAlturaDisponible.getText().toString());
-        Usuario usuario = new Usuario();
-        usuario = usuarioController.getLoggedUser();
-        long id_usuario = usuario.getUsuario_Id();
-        elemento.setElemento_Id(elemento_id);
-        elemento.setUsuario_Id(id_usuario);
-        elemento.setFecha_Levantamiento(fecha);
-        elemento.setHora_Inicio(hora);
-        elemento.setCodigo_Apoyo(edtCodigoApoyo.getText().toString());
-        elemento.setMaterial_Id(Material_Id);
-        elemento.setLongitud_Elemento_Id(Longitud_Elemento_Id);
-        elemento.setResistencia_Mecanica(edtResistenciaMecanica.getText().toString());
-        elemento.setEstado_Id(Estado_Id);
-        elemento.setRetenidas(Cantidad_Retenidas);
-        elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
-        elemento.setAltura_Disponible(Altura_Disponible);
-        elemento.setIs_Sync(false);
-        elemento.setDireccion(Nombre_Tipo_Direccion + " " + edtTipoDireccion.getText().toString() + " " + Nombre_Detalle_Tipo_Direccion + " " + edtDetalleTipoDireccion.getText().toString());
-        elemento.setReferencia_Localizacion(edtReferencia.getText().toString());
-        elemento.setLongitud(longitud);
-        elemento.setLatitud(latitud);
-        elementoController.register(elemento);
-        //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
-        final AlertDialog.Builder builder = new AlertDialog.Builder(PosteActivity.this);
-        builder.setTitle("Notificación");
-        builder.setMessage("¿Confirma todos los datos?");
-        final long finalElemento_id = elemento_id;
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //((SyncActivity) syncActivity).coordsService.closeService();
-                Intent i = new Intent(getApplicationContext(), PerdidaActivity.class);
-                i.putExtra("ACCION_ADD", true);
-                i.putExtra("ACCION_UPDATE", false);
-                i.putExtra("Elemento_Id", finalElemento_id);
-                startActivity(i);
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
+    //region OVERRIDES METHODS
 
 
     @Override
@@ -543,6 +568,7 @@ public class PosteActivity extends AppCompatActivity {
     protected void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
+        unregisterReceiver(mNotificationReceiver);
     }
 
     //endregion
@@ -554,17 +580,82 @@ public class PosteActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    //region MENU
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_done) {
-            validacionRegisterElement();
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId())
+        {
+
+            case R.id.action_done:
+                validacionRegisterElement();
+                break;
+
+            ///Metodo que permite no recargar la pagina al devolverse
+            case android.R.id.home:
+                // Obtener intent de la actividad padre
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                // Comprobar si DetailActivity no se creó desde CourseActivity
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                        || this.isTaskRoot()) {
+
+                    // Construir de nuevo la tarea para ligar ambas actividades
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        TaskStackBuilder.create(this)
+                                .addNextIntentWithParentStack(upIntent)
+                                .startActivities();
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    this.finishAfterTransition();
+                    return true;
+                }
+
+                //Para versiones anterios a 5.x
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    onBackPressed();
+                    return true;
+                }
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
+
     }
+
+
+    //endregion
     //endregion
 
+    //region BroadcastReceiver LOCALIZACION
+    ///Escucha Los valores enviados por Serial Port desde Menu Activity
+    private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Localizacion localizacion = intent.getExtras().getParcelable("localizacion");
+            location.setLatitude(localizacion.getLatitud());
+            location.setLongitude(localizacion.getLongitud());
+            tvCoords.setText(String.valueOf(location.getLatitude())+" , "+String.valueOf(location.getLongitude()));
+         ////   Toast.makeText(PosteActivity.this,""+localizacion.getLatitud()+" , "+localizacion.getLongitud(),Toast.LENGTH_LONG).show();
+        }
+    };
+    /*----------------------------------------------------------------------------------------------------------------------*/
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(mNotificationReceiver, new IntentFilter("LOCATION"));
 
+    }
+    /*----------------------------------------------------------------------------------------------------------------------*/
+
+
+    //endregion
 }
 
 

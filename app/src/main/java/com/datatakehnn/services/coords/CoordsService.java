@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.datatakehnn.R;
+import com.datatakehnn.models.localizcion_model.Localizacion;
 
 
 public class CoordsService extends Service implements LocationListener {
@@ -30,6 +31,9 @@ public class CoordsService extends Service implements LocationListener {
 
     public static double latitud;
     public static double longitud;
+    public static Localizacion localizacion = new Localizacion();
+
+
 
     public static Location location;
     boolean gpsActivo;
@@ -61,8 +65,6 @@ public class CoordsService extends Service implements LocationListener {
             locationManager.removeUpdates(this);
         }
     }
-
-
 
 
     public void setView(View v) {
@@ -105,11 +107,6 @@ public class CoordsService extends Service implements LocationListener {
                     */
     }
 
-
-
-
-
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -138,9 +135,16 @@ public class CoordsService extends Service implements LocationListener {
     }
 
     public void setLocation(Location loc) {
+
         location= loc;
         latitud = loc.getLatitude();
         longitud = loc.getLongitude();
+
+        localizacion.setLatitud(loc.getLatitude());
+        localizacion.setLongitud(loc.getLongitude());
+        Intent retIntent = new Intent("LOCATION");
+        retIntent.putExtra("localizacion", localizacion);
+        context.sendBroadcast(retIntent);
      ///   Toast.makeText(context,""+String.valueOf(loc.getLatitude())+" , "+String.valueOf(loc.getLongitude()),Toast.LENGTH_SHORT).show();
         //Obtener la direccion de la calle a partir de la latitud y la longitud
        // texto.setText("Coordenadas: " + loc.getLatitude() + "," + loc.getLongitude());
