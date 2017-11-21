@@ -50,4 +50,7 @@ ext {
 
     //DBFlow
     dbflow_version="3.0.0-beta3"
+
+    //Compress Image
+    compressedImageVersion = '2.1.0'
 }

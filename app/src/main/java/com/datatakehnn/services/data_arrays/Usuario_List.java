@@ -20,7 +20,9 @@ public class Usuario_List {
                     "coordinador@interedes.com.co",
                     "12345",
                     1,
-                    false
+                    false,
+                    1,
+                    1
             )
     };
 

@@ -169,4 +169,10 @@ public class CoordsService extends Service implements LocationListener {
         // Create the AlertDialog object and return it
         return builder.show();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        closeService();
+    }
 }

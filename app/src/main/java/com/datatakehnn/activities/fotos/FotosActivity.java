@@ -53,6 +53,7 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -369,9 +370,14 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((SyncActivity) syncActivity).iniciarServicioUbicacion();
-                Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
-                startActivity(i);
+                /*try {
+                    ((SyncActivity) syncActivity).iniciarServicioUbicacion();
+                } catch (Exception e) {
+                    e.getMessage().toString();
+                }*/
+                startActivity(new Intent(getBaseContext(), MainMenuActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                finish();
             }
         });
 
@@ -441,7 +447,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     }
 
-    private void tomarFoto() {
+    private void    tomarFoto() {
         if (warningLowMemory() == false) {
             if (foto1 == true) {
                 if (isEstadoFoto1 == true) {

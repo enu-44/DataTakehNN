@@ -393,7 +393,12 @@ public class PosteActivity extends AppCompatActivity {
         this.intentIntegrator = new IntentIntegrator(this, PACKAGE_NAME);
         //Guarda en un location la ubicación
         //location = servicioUbicacion.getUbicacion();
-        location = ((SyncActivity) syncActivity).coordsService.getUbicacion();
+        if(((SyncActivity) syncActivity).coordsService.getUbicacion() != null){
+            location = ((SyncActivity) syncActivity).coordsService.getUbicacion();
+        }else{
+            ((SyncActivity) syncActivity).iniciarServicioUbicacion();
+            location = ((SyncActivity) syncActivity).coordsService.getUbicacion();
+        }
         try {
             latitud = location.getLatitude();
             longitud = location.getLongitude();
@@ -513,7 +518,7 @@ public class PosteActivity extends AppCompatActivity {
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((SyncActivity) syncActivity).coordsService.closeService();
+                //((SyncActivity) syncActivity).coordsService.closeService();
                 Intent i = new Intent(getApplicationContext(), PerdidaActivity.class);
                 i.putExtra("ACCION_ADD", true);
                 i.putExtra("ACCION_UPDATE", false);

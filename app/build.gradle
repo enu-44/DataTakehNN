@@ -52,6 +52,9 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit"
     compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit"
 
+    //COMPRESSING IMAGES
+    compile "id.zelory:compressor:$rootProject.ext.compressedImageVersion"
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
