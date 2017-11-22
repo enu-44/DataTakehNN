@@ -18,6 +18,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:layout_marginTop="10dp"
                 android:id="@+id/ivFoto1"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
@@ -27,76 +28,60 @@
                 android:src="@drawable/boton_foto_gris" />
 
             <android.support.design.widget.TextInputLayout
+                android:layout_marginTop="10dp"
                 android:id="@+id/textInputLayoutFotoPoste1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp"
-                android:hint="Descripción Foto Poste 1"
+                android:hint="Descripción Foto 1 Poste"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
                 <EditText
-                    android:id="@+id/edtFotoPoste1"
+                    android:id="@+id/edtDescripcionFoto1"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="#ffffff"
-                    android:drawablePadding="16dp"
+                    android:layout_height="wrap_content"
                     android:inputType="text" />
 
             </android.support.design.widget.TextInputLayout>
 
-            <ImageButton
-                android:id="@+id/ibTomarFoto1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/colorPrimary"
-                android:src="@drawable/ic_camera" />
-
 
             <ImageView
+                android:layout_marginTop="10dp"
                 android:id="@+id/ivFoto2"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp"
                 android:layout_weight="0.5"
                 android:contentDescription="@null"
                 android:src="@drawable/boton_foto_gris" />
 
             <android.support.design.widget.TextInputLayout
+                android:layout_marginTop="10dp"
                 android:id="@+id/textInputLayoutFotoPoste2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp"
-                android:hint="Descripción Foto Poste 2"
+                android:hint="Descripción Foto 2 Poste"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
                 <EditText
-                    android:id="@+id/edtFotoPoste2"
+                    android:id="@+id/edtDescripcionFoto2"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="#ffffff"
-                    android:drawablePadding="16dp"
+                    android:layout_height="wrap_content"
                     android:inputType="text" />
 
             </android.support.design.widget.TextInputLayout>
 
-            <ImageButton
-                android:id="@+id/ibTomarFoto2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/colorPrimary"
-                android:src="@drawable/ic_camera"  />
 
         </LinearLayout>
 
+        <!--
         <View
             style="@style/divider"
-            android:layout_below="@+id/linearLayout" />
-
+            android:layout_below="@+id/linearLayout" /> -->
+<!--
         <TextView
             android:id="@+id/tvNovedades"
             android:layout_width="wrap_content"
@@ -115,7 +100,7 @@
             android:layout_marginTop="10dp"
             android:nestedScrollingEnabled="false">
 
-        </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView> -->
 
     </RelativeLayout>
 
