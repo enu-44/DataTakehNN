@@ -3,6 +3,7 @@ package com.datatakehnn.controllers;
 import android.content.Context;
 
 import com.datatakehnn.models.ciudades_model.Ciudad;
+import com.datatakehnn.models.ciudades_model.Ciudad_Table;
 import com.datatakehnn.models.departmentos_model.Departamento;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable_Table;
@@ -266,6 +267,17 @@ public class SincronizacionGetInformacionController {
     public List<Tipo_Equipo> getListTipoEquipo() {
         List<Tipo_Equipo> lis= SQLite.select().from(Tipo_Equipo.class).queryList();
         return  lis;
+    }
+
+    //CIUDAD
+    public List<Departamento> getDepartamentos() {
+        List<Departamento> lis= SQLite.select().from(Departamento.class).queryList();
+        return  lis;
+    }
+
+    public List<Ciudad> getListCiudadByDepartamento(long departamento_id) {
+        List<Ciudad> lisFilter= new Select().from(Ciudad.class).where(Ciudad_Table.Departamnento_Id.eq(departamento_id)).queryList();
+        return  lisFilter;
     }
 
 

@@ -203,7 +203,6 @@ public class PosteActivity extends AppCompatActivity {
         Date date = new Date();
         fecha = dateFormat.format(date);
 
-
         //Obtener Hora
         Calendar cal = Calendar.getInstance();
         DateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -417,6 +416,10 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setReferencia_Localizacion(edtReferencia.getText().toString());
         elemento.setLongitud(location.getLongitude());
         elemento.setLatitud(location.getLatitude());
+        elemento.setDepartamento_Id(usuario.getDepartamento_Id());
+        elemento.setCiudad_Id(usuario.getCiudad_Id());
+        elemento.setNombre_Ciudad(usuario.getNombre_Ciudad());
+        elemento.setNombre_Departamento(usuario.getNombre_Departamento());
         elementoController.register(elemento);
         //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
         final AlertDialog.Builder builder = new AlertDialog.Builder(PosteActivity.this);

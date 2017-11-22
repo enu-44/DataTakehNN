@@ -59,11 +59,21 @@ public class Usuario extends BaseModel {
     public long Ciudad_Id;
 
     @Column
+    public String Nombre_Ciudad;
+
+    @Column
     public long Departamento_Id;
+
+    @Column
+    public String Nombre_Departamento;
+
+
 
 
     ///Contructor
-    public Usuario(long usuario_Id, String nombre, String apellido, String cedula, String telefono, String direccion, String correo_Electronico, String password, long empresa_Id, boolean isRemembered, long ciudad_Id, long departamento_Id) {
+
+
+    public Usuario(long usuario_Id, String nombre, String apellido, String cedula, String telefono, String direccion, String correo_Electronico, String password, long empresa_Id, boolean isRemembered, long ciudad_Id, String nombre_Ciudad, long departamento_Id, String nombre_Departamento) {
         Usuario_Id = usuario_Id;
         Nombre = nombre;
         Apellido = apellido;
@@ -75,7 +85,9 @@ public class Usuario extends BaseModel {
         Empresa_Id = empresa_Id;
         IsRemembered = isRemembered;
         Ciudad_Id = ciudad_Id;
+        Nombre_Ciudad = nombre_Ciudad;
         Departamento_Id = departamento_Id;
+        Nombre_Departamento = nombre_Departamento;
     }
 
     public Usuario() {
@@ -163,5 +175,39 @@ public class Usuario extends BaseModel {
 
     public void setRemembered(boolean remembered) {
         IsRemembered = remembered;
+    }
+
+    public long getCiudad_Id() {
+        return Ciudad_Id;
+    }
+
+
+    //Methods Ciudad
+    public void setCiudad_Id(long ciudad_Id) {
+        Ciudad_Id = ciudad_Id;
+    }
+
+    public long getDepartamento_Id() {
+        return Departamento_Id;
+    }
+
+    public void setDepartamento_Id(long departamento_Id) {
+        Departamento_Id = departamento_Id;
+    }
+
+    public String getNombre_Ciudad() {
+        return Nombre_Ciudad;
+    }
+
+    public void setNombre_Ciudad(String nombre_Ciudad) {
+        Nombre_Ciudad = nombre_Ciudad;
+    }
+
+    public String getNombre_Departamento() {
+        return Nombre_Departamento;
+    }
+
+    public void setNombre_Departamento(String nombre_Departamento) {
+        Nombre_Departamento = nombre_Departamento;
     }
 }

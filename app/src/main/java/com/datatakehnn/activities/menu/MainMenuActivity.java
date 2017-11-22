@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.CoordsActivity;
+import com.datatakehnn.activities.ciudad.CiudadActivity;
 import com.datatakehnn.activities.fotos.CamaraActivity;
 import com.datatakehnn.activities.login.LoginActivity;
 import com.datatakehnn.activities.novedad.NovedadActivity;
@@ -34,6 +35,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     //Instances
     UsuarioController usuarioController;
+    private Usuario usuarioLogued;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void setupInjection() {
         this.usuarioController= UsuarioController.getInstance(this);
+        usuarioLogued= usuarioController.getLoggedUser();
     }
 
     //region SETUP INJECTION
@@ -60,12 +63,16 @@ public class MainMenuActivity extends AppCompatActivity {
 
 
     //region EVENTS
-    @OnClick({R.id.imgAddElement, R.id.imgListElement, R.id.imgLogout,R.id.btnCamara})
+    @OnClick({R.id.imgAddElement, R.id.imgListElement, R.id.imgLogout,R.id.imgCiudad})
     public void onViewClicked(View view) {
         Intent i = null;
         switch (view.getId()) {
             case R.id.imgAddElement:
-                i = new Intent(this, PosteActivity.class);
+                if(usuarioLogued.getCiudad_Id()>0 && usuarioLogued.getDepartamento_Id()>0){
+                    i = new Intent(this, PosteActivity.class);
+                }else{
+                    i=  new Intent(this, CiudadActivity.class);
+                }
                 break;
             case R.id.imgListElement:
                i= new Intent(this, Poste_Usuario_Activity.class);
@@ -73,10 +80,9 @@ public class MainMenuActivity extends AppCompatActivity {
             case R.id.imgLogout:
                 showExit();
                 break;
-            case R.id.btnCamara:
-                i=  new Intent(this, CamaraActivity.class);
+            case R.id.imgCiudad:
+                i=  new Intent(this, CiudadActivity.class);
                 break;
-
         }
 
         if(i!=null){

@@ -1,0 +1,131 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical">
+    <!-- Login progress -->
+    <ImageView
+        android:id="@+id/imageViewContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/fondo_select_ciudad"
+        tools:ignore="ContentDescription"></ImageView>
+
+    <ScrollView
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:id="@+id/container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <ImageView
+                    android:id="@+id/imageViewIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:src="@drawable/icon_datatake_white"
+                    tools:ignore="ContentDescription">
+
+                </ImageView>
+
+
+                <LinearLayout
+                    android:id="@+id/email_login_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp">
+
+                    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                        android:id="@+id/spinnerDepartament"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="0.5"
+                        android:drawableLeft="@drawable/ic_usuario_password"
+                        android:drawableStart="@drawable/ic_departament_icon"
+                        android:hint="@string/title_departamento"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHint="#CFD8DC"
+                        android:textSize="13dp"
+                        app:met_floatingLabel="normal" />
+
+                    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                        android:id="@+id/spinnerCiudad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="0.5"
+                        android:drawableLeft="@drawable/ic_usuario_password"
+                        android:drawableStart="@drawable/ic_ciudad_icon"
+                        android:hint="@string/title_ciudad"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHint="#CFD8DC"
+                        android:textSize="13dp"
+                        app:met_floatingLabel="normal" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/title_ciudad_selecionada" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:id="@+id/txtCiudadSelected"
+                        android:text=""
+                        android:textStyle="bold" />
+
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:visibility="gone" />
+
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="30dp"
+                        android:contentDescription="Logo"
+                        app:srcCompat="@drawable/logo_datatake_reflejo" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+</FrameLayout>

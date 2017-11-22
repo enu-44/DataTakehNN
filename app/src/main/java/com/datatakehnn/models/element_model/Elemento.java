@@ -73,6 +73,19 @@ public class Elemento extends BaseModel implements Parcelable {
     @Column
     public String Referencia_Localizacion;
 
+    //Ciudad
+    @Column
+    public long Ciudad_Id;
+
+    @Column
+    public String Nombre_Ciudad;
+
+    @Column
+    public long Departamento_Id;
+
+    @Column
+    public String Nombre_Departamento;
+
 
     ///Contructor
 
@@ -262,6 +275,41 @@ public class Elemento extends BaseModel implements Parcelable {
         Referencia_Localizacion = referencia_Localizacion;
     }
 
+
+    public long getCiudad_Id() {
+        return Ciudad_Id;
+    }
+
+    public void setCiudad_Id(long ciudad_Id) {
+        Ciudad_Id = ciudad_Id;
+    }
+
+    public String getNombre_Ciudad() {
+        return Nombre_Ciudad;
+    }
+
+    public void setNombre_Ciudad(String nombre_Ciudad) {
+        Nombre_Ciudad = nombre_Ciudad;
+    }
+
+    public long getDepartamento_Id() {
+        return Departamento_Id;
+    }
+
+    public void setDepartamento_Id(long departamento_Id) {
+        Departamento_Id = departamento_Id;
+    }
+
+    public String getNombre_Departamento() {
+        return Nombre_Departamento;
+    }
+
+    public void setNombre_Departamento(String nombre_Departamento) {
+        Nombre_Departamento = nombre_Departamento;
+    }
+
+
+
     protected Elemento(Parcel in) {
         Elemento_Id = in.readLong();
         Usuario_Id = in.readLong();
@@ -285,6 +333,10 @@ public class Elemento extends BaseModel implements Parcelable {
         Direccion = in.readString();
         Direccion_Aproximada_Gps = in.readString();
         Referencia_Localizacion = in.readString();
+        Ciudad_Id = in.readLong();
+        Nombre_Ciudad = in.readString();
+        Departamento_Id = in.readLong();
+        Nombre_Departamento = in.readString();
     }
 
     @Override
@@ -316,6 +368,10 @@ public class Elemento extends BaseModel implements Parcelable {
         dest.writeString(Direccion);
         dest.writeString(Direccion_Aproximada_Gps);
         dest.writeString(Referencia_Localizacion);
+        dest.writeLong(Ciudad_Id);
+        dest.writeString(Nombre_Ciudad);
+        dest.writeLong(Departamento_Id);
+        dest.writeString(Nombre_Departamento);
     }
 
     @SuppressWarnings("unused")

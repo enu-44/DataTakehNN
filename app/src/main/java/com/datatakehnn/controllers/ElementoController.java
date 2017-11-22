@@ -61,6 +61,10 @@ public class ElementoController {
         elemento.setDireccion(elementoNew.getDireccion());
         elemento.setDireccion_Aproximada_Gps(elementoNew.getDireccion_Aproximada_Gps());
         elemento.setReferencia_Localizacion(elementoNew.getReferencia_Localizacion());
+        elemento.setDepartamento_Id(elementoNew.getDepartamento_Id());
+        elemento.setCiudad_Id(elementoNew.getCiudad_Id());
+        elemento.setNombre_Ciudad(elementoNew.getNombre_Ciudad());
+        elemento.setNombre_Departamento(elementoNew.getNombre_Departamento());
         elemento.save();
         return elemento;
     }
@@ -95,6 +99,10 @@ public class ElementoController {
         elemento.setDireccion(elementoNew.getDireccion());
         elemento.setDireccion_Aproximada_Gps(elementoNew.getDireccion_Aproximada_Gps());
         elemento.setReferencia_Localizacion(elementoNew.getReferencia_Localizacion());
+        elemento.setDepartamento_Id(elementoNew.getDepartamento_Id());
+        elemento.setCiudad_Id(elementoNew.getCiudad_Id());
+        elemento.setNombre_Ciudad(elementoNew.getNombre_Ciudad());
+        elemento.setNombre_Departamento(elementoNew.getNombre_Departamento());
         elemento.save();
         return elemento;
     }

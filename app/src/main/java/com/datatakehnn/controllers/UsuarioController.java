@@ -47,6 +47,10 @@ public class UsuarioController {
         user.setPassword(userNew.getPassword());
         user.setTelefono(userNew.getTelefono());
         user.setRemembered(userNew.isRemembered());
+        user.setDepartamento_Id(userNew.getDepartamento_Id());
+        user.setCiudad_Id(userNew.getCiudad_Id());
+        user.setNombre_Ciudad(userNew.getNombre_Ciudad());
+        user.setNombre_Departamento(userNew.getNombre_Departamento());
         user.save();
         return user;
     }
@@ -57,21 +61,33 @@ public class UsuarioController {
     }
 
     ///Actualizar
-    public Usuario update(Usuario userNew){
-        Usuario user= new Usuario();
-        user.setUsuario_Id(userNew.getUsuario_Id());
-        user.setNombre(userNew.getNombre());
-        user.setApellido(userNew.getApellido());
-        user.setCedula(userNew.getCedula());
-        user.setCorreo_Electronico(userNew.getCorreo_Electronico());
-        user.setDireccion(userNew.getDireccion());
-        user.setEmpresa_Id(userNew.getEmpresa_Id());
-        user.setPassword(userNew.getPassword());
-        user.setTelefono(userNew.getTelefono());
-        user.setRemembered(userNew.isRemembered());
-        user.save();
-        return user;
+    public Usuario update(Usuario userUpdate){
+        SQLite.update(Usuario.class)
+                .set(Usuario_Table.Usuario_Id.eq(userUpdate.getUsuario_Id()),
+                        Usuario_Table.Nombre.eq(userUpdate.getNombre()),
+                        Usuario_Table.Apellido.eq(userUpdate.getApellido()),
+                        Usuario_Table.Cedula.eq(userUpdate.getCedula()),
+                        Usuario_Table.Telefono.eq(userUpdate.getTelefono()),
+                        Usuario_Table.Direccion.eq(userUpdate.getDireccion()),
+                        Usuario_Table.Correo_Electronico.eq(userUpdate.getCorreo_Electronico()),
+                        Usuario_Table.Password.eq(userUpdate.getPassword()),
+                        Usuario_Table.Empresa_Id.eq(userUpdate.getEmpresa_Id()),
+                        Usuario_Table.IsRemembered.eq(userUpdate.isRemembered()),
+                        Usuario_Table.Ciudad_Id.eq(userUpdate.getCiudad_Id()),
+                        Usuario_Table.Nombre_Ciudad.eq(userUpdate.getNombre_Ciudad()),
+                        Usuario_Table.Departamento_Id.eq(userUpdate.getDepartamento_Id()),
+                        Usuario_Table.Nombre_Departamento.eq(userUpdate.getNombre_Departamento())
+                        )
+                .where(Usuario_Table.Usuario_Id.is(userUpdate.getUsuario_Id()))
+                .and(Usuario_Table.IsRemembered.is(true))
+                .async()
+                .execute(); // non-UI blocking
+
+        return  getLoggedUser();
     }
+
+
+
 
 
     ///Cerrar Sesion

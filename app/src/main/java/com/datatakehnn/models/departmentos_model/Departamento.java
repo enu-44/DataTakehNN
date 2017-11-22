@@ -71,4 +71,9 @@ public class Departamento extends BaseModel {
     public void setCiudades(List<Ciudad> ciudades) {
         Ciudades = ciudades;
     }
+
+    @Override
+    public String toString() {
+        return Nombre;
+    }
 }

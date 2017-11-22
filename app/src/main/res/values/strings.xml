@@ -16,6 +16,7 @@
     <string name="title_cables">Cables</string>
     <string name="title_equipos">Equipos</string>
     <string name="title_menu">Menu</string>
+    <string name="title_ubicacion_ciudad">Ubicacion Ciudad</string>
 
 
     <!--Login-->
@@ -80,6 +81,12 @@
     <string name="lampara_encendida_dia">¿Lámpara encendida de día?</string>
     <string name="conexion_ilicita">¿Conexión Ílicita?</string>
     <string name="poda">¿Requiere Poda?</string>
+
+    <!--CIUDAD -->
+    <string name="title_departamento">Departamento</string>
+    <string name="title_ciudad">Ciudad</string>
+    <string name="title_ciudad_selecionada">Ciudad Seleccionada</string>
+
 
     <!--GLOBALS STRING-->
     <string name="results_global_search">Mostrando %d Resultados</string>

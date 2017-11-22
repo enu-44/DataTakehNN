@@ -53,4 +53,9 @@ public class Ciudad extends BaseModel {
     public void setDepartamnento_Id(long departamnento_Id) {
         Departamnento_Id = departamnento_Id;
     }
+
+    @Override
+    public String toString() {
+        return Nombre;
+    }
 }

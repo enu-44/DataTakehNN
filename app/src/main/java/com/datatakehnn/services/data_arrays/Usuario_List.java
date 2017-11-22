@@ -21,8 +21,10 @@ public class Usuario_List {
                     "12345",
                     1,
                     false,
-                    1,
-                    1
+                    0,
+                    "",
+                    0,
+                    ""
             )
     };
 
