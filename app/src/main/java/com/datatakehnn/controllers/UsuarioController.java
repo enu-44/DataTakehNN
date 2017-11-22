@@ -79,11 +79,13 @@ public class UsuarioController {
                         Usuario_Table.Nombre_Departamento.eq(userUpdate.getNombre_Departamento())
                         )
                 .where(Usuario_Table.Usuario_Id.is(userUpdate.getUsuario_Id()))
-                .and(Usuario_Table.IsRemembered.is(true))
+             //   .and(Usuario_Table.IsRemembered.is(true))
                 .async()
                 .execute(); // non-UI blocking
 
-        return  getLoggedUser();
+        Usuario user=  getLoggedUser();
+
+        return user;
     }
 
 

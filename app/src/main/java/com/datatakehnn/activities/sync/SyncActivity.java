@@ -153,6 +153,8 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
             item.setVisible(true);
             sync = true;
             progressBar.setVisibility(View.GONE);
+            ivSync.setImageResource(R.drawable.ic_iconosincronizado);
+
         }else{
             showSnakBar(R.color.colorAccent,  response.getMessage());
             sync = false;
