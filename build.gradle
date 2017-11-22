@@ -31,7 +31,7 @@ task clean(type: Delete) {
 
 ext {
     playServicesMapsVersion = '11.4.2'
-    minSdkVersion = 15
+    minSdkVersion = 16
     targetSdkVersion = 26
     compileSdkVersion = 26
     supportLibraryVersion = '26.1.0'
@@ -53,4 +53,10 @@ ext {
 
     //Compress Image
     compressedImageVersion = '2.1.0'
+
+    //Camara
+    camara='5.0.5'
+
+    //Comprimir Imagenes
+    compresor_image='2.1.0'
 }

@@ -55,6 +55,12 @@ dependencies {
     //COMPRESSING IMAGES
     compile "id.zelory:compressor:$rootProject.ext.compressedImageVersion"
 
+    //CAMARA
+    compile "com.frosquivel:magicalcamera:$rootProject.ext.camara"
+
+    //CAMARA COMPRESOR
+    compile "id.zelory:compressor:$rootProject.ext.compresor_image"
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

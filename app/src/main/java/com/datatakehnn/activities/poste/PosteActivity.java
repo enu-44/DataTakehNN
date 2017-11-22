@@ -470,10 +470,20 @@ public class PosteActivity extends AppCompatActivity {
         }*/
 
         //Si el servicio de ubicacion se ha detenido se arranca nuevamente
-        if(((SyncActivity) syncActivity).coordsService == null){
+
+
+        if(((SyncActivity) syncActivity).coordsService.isServiceLocalizacionRun() == false){
+
+            if(((SyncActivity) syncActivity).coordsService != null){
+                ((SyncActivity) syncActivity).coordsService.closeService();
+                Toast.makeText(this,"Cerrar Servicio",Toast.LENGTH_LONG).show();
+            }
+
+
             this.coordsService= new CoordsService(this);
             Toast.makeText(this,"Iniciando Servicio de Ubicacion",Toast.LENGTH_LONG).show();
         }
+
 
         /*
         try {

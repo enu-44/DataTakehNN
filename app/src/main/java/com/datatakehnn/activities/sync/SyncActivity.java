@@ -180,12 +180,14 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     private void setupInjection() {
         this.dataSyncApiService= DataSyncApiService.getInstance(this);
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
-        iniciarServicioUbicacion(this);
-    }
 
+
+        this.coordsService= new CoordsService(this);
+    }
+    /*
     public void iniciarServicioUbicacion(Context context) {
         this.coordsService= new CoordsService(context);
-    }
+    }*/
 
     private void setToolbarInjection() {
         setSupportActionBar(toolbar);

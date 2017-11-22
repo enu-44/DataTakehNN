@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.CoordsActivity;
+import com.datatakehnn.activities.fotos.CamaraActivity;
 import com.datatakehnn.activities.login.LoginActivity;
 import com.datatakehnn.activities.novedad.NovedadActivity;
 import com.datatakehnn.activities.poste.PosteActivity;
@@ -59,21 +60,27 @@ public class MainMenuActivity extends AppCompatActivity {
 
 
     //region EVENTS
-    @OnClick({R.id.imgAddElement, R.id.imgListElement, R.id.imgLogout,})
+    @OnClick({R.id.imgAddElement, R.id.imgListElement, R.id.imgLogout,R.id.btnCamara})
     public void onViewClicked(View view) {
+        Intent i = null;
         switch (view.getId()) {
             case R.id.imgAddElement:
-                Intent i = new Intent(this, PosteActivity.class);
-                startActivity(i);
+                i = new Intent(this, PosteActivity.class);
                 break;
             case R.id.imgListElement:
-                Intent r= new Intent(this, Poste_Usuario_Activity.class);
-                startActivity(r);
+               i= new Intent(this, Poste_Usuario_Activity.class);
                 break;
             case R.id.imgLogout:
                 showExit();
+                break;
+            case R.id.btnCamara:
+                i=  new Intent(this, CamaraActivity.class);
+                break;
 
+        }
 
+        if(i!=null){
+            startActivity(i);
         }
     }
 

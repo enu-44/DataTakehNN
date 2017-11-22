@@ -53,13 +53,11 @@
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.poste.PosteActivity"
             android:theme="@style/MiTema.NoActionBar" />
-
         <activity
             android:name=".activities.perdida.PerdidaActivity"
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.CoordsActivity"
-            android:theme="@style/MiTema.NoActionBar"></activity>
-
+            android:theme="@style/MiTema.NoActionBar" />
         <activity
             android:name=".activities.cables_elemento.CablesElementoActivity"
             android:configChanges="screenSize|orientation"
@@ -77,13 +75,18 @@
         <activity
             android:name=".activities.menu.MainMenuActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MiTema.NoActionBar"></activity>
-
+            android:theme="@style/MiTema.NoActionBar" />
         <activity
             android:name=".activities.poste.lista_postes_usuario.Poste_Usuario_Activity"
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.menu.MainMenuActivity"
-            android:theme="@style/MiTema.NoActionBar"></activity>
+            android:theme="@style/MiTema.NoActionBar" />
+
+        <activity
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.menu.MainMenuActivity"
+            android:theme="@style/MiTema.NoActionBar"
+            android:name=".activities.fotos.CamaraActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

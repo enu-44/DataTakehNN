@@ -33,6 +33,9 @@ public class CoordsService extends Service implements LocationListener {
     public static double longitud;
     public static Localizacion localizacion = new Localizacion();
 
+    //
+    public static boolean serviceLocalizacionRun=false;
+
 
 
     public static Location location;
@@ -135,7 +138,7 @@ public class CoordsService extends Service implements LocationListener {
     }
 
     public void setLocation(Location loc) {
-
+        serviceLocalizacionRun= true;
         location= loc;
         latitud = loc.getLatitude();
         longitud = loc.getLongitude();
@@ -178,5 +181,15 @@ public class CoordsService extends Service implements LocationListener {
     public void onDestroy() {
         super.onDestroy();
         closeService();
+    }
+
+    //methods
+
+    public static boolean isServiceLocalizacionRun() {
+        return serviceLocalizacionRun;
+    }
+
+    public static void setServiceLocalizacionRun(boolean serviceLocalizacionRun) {
+        CoordsService.serviceLocalizacionRun = serviceLocalizacionRun;
     }
 }
