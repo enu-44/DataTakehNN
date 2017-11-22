@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.CoordsActivity;
@@ -68,6 +69,8 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent i = null;
         switch (view.getId()) {
             case R.id.imgAddElement:
+                usuarioLogued= usuarioController.getLoggedUser();
+                ///Toast.makeText(this,usuarioLogued.getDepartamento_Id()+" - "+usuarioLogued.getCiudad_Id(),Toast.LENGTH_LONG).show();
                 if(usuarioLogued.getCiudad_Id()>0 && usuarioLogued.getDepartamento_Id()>0){
                     i = new Intent(this, PosteActivity.class);
                 }else{
