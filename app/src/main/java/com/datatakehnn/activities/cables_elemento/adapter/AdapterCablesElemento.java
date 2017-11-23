@@ -70,6 +70,7 @@ public class AdapterCablesElemento extends RecyclerView.Adapter<AdapterCablesEle
         }
         holder.txtSobreRbt.setText(sobreBT);
 
+
         String marquilla = "";
         if (list.isIs_Marquilla()) {
             marquilla = "SI";
