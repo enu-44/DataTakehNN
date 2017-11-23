@@ -47,6 +47,8 @@ public class NovedadActivity extends AppCompatActivity {
     long Detalle_Tipo_Novedad_Id;
     //Arrays
     List<Detalle_Tipo_Novedad> listDetalleTipoNovedad = new ArrayList<>();
+    boolean perdida = false;
+
     //Instances
     NovedadController novedadController;
     ElementoController elementoController;
@@ -60,6 +62,9 @@ public class NovedadActivity extends AppCompatActivity {
         setupToolbarInjection();
         setupInjection();
         Tipo_Novedad = getIntent().getExtras().getString("Nombre");
+        if (getIntent().getExtras().getString("perdida") != null) {
+            perdida = true;
+        }
         loadDetailsNovedad();
 
 
@@ -112,6 +117,8 @@ public class NovedadActivity extends AppCompatActivity {
         elemento = elementoController.getLast();
         if (elemento == null) {
             elemento_id = 1;
+        } else if (perdida == true) {
+            elemento_id = elemento.getElemento_Id();
         } else {
             elemento_id = elemento.getElemento_Id() + 1;
         }

@@ -22,7 +22,24 @@ public class Tipo_Novedad_List {
             new Tipo_Novedad(
                     3,
                     "Estado"
+            ),
+            new Tipo_Novedad(
+                    4,
+                    "Lampara Adicional"
+            ),
+            new Tipo_Novedad(
+                    5,
+                    "Lampara Encendida"
+            ),
+            new Tipo_Novedad(
+                    6,
+                    "Conexion Ilicita"
+            ),
+            new Tipo_Novedad(
+                    7,
+                    "Poda"
             )
+
     };
 
     /**

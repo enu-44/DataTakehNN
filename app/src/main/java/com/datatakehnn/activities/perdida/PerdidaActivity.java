@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -20,6 +21,7 @@ import android.widget.RelativeLayout;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
+import com.datatakehnn.activities.novedad.NovedadActivity;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.PerdidaController;
 import com.datatakehnn.models.perdida_model.Perdida;
@@ -36,10 +38,11 @@ public class PerdidaActivity extends AppCompatActivity {
     RadioButton radioButtonNoLamparaAdicional;
     @BindView(R.id.radioButtonSiLamparaAdicional)
     RadioButton radioButtonSiLamparaAdicional;
+    /*
     @BindView(R.id.edtLamparaAdicional)
     EditText edtLamparaAdicional;
     @BindView(R.id.textInputLayoutCantidadLamparaAdicional)
-    TextInputLayout textInputLayoutCantidadLamparaAdicional;
+    TextInputLayout textInputLayoutCantidadLamparaAdicional;*/
     @BindView(R.id.radioButtonNoLamparaEncendidaDia)
     RadioButton radioButtonNoLamparaEncendidaDia;
     @BindView(R.id.radioButtonSiLamparaEncendidaDia)
@@ -65,7 +68,7 @@ public class PerdidaActivity extends AppCompatActivity {
 
     //Variables globales
     long Elemento_Id;
-    long cantidad_lampara_adicional = 0;
+    //long cantidad_lampara_adicional = 0;
     boolean estado_lampara_adicional = false;
     boolean lampara_encendida_dia = false;
     boolean conexion_ilicita = false;
@@ -85,36 +88,65 @@ public class PerdidaActivity extends AppCompatActivity {
     @OnClick({R.id.radioButtonNoLamparaAdicional, R.id.radioButtonSiLamparaAdicional, R.id.radioButtonNoLamparaEncendidaDia, R.id.radioButtonSiLamparaEncendidaDia, R.id.radioButtonNoConexionIlicita, R.id.radioButtonSiConexionIlicita, R.id.radioButtonNoPoda, R.id.radioButtonSiPoda})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+
             case R.id.radioButtonNoLamparaAdicional:
                 estado_lampara_adicional = false;
                 //cantidad_lampara_adicional = 0;
-                textInputLayoutCantidadLamparaAdicional.setVisibility(View.GONE);
+                //textInputLayoutCantidadLamparaAdicional.setVisibility(View.GONE);
                 break;
             case R.id.radioButtonSiLamparaAdicional:
                 estado_lampara_adicional = true;
                 //cantidad_lampara_adicional = Long.parseLong(edtLamparaAdicional.getText().toString());
-                textInputLayoutCantidadLamparaAdicional.setVisibility(View.VISIBLE);
+                //textInputLayoutCantidadLamparaAdicional.setVisibility(View.VISIBLE);
+                Intent h = new Intent(this, NovedadActivity.class);
+                h.putExtra("Nombre", "Lampara Adicional");
+                h.putExtra("perdida", "1");
+                startActivityForResult(h, 100);
                 break;
             case R.id.radioButtonNoLamparaEncendidaDia:
                 lampara_encendida_dia = false;
                 break;
             case R.id.radioButtonSiLamparaEncendidaDia:
                 lampara_encendida_dia = true;
+                Intent i = new Intent(this, NovedadActivity.class);
+                i.putExtra("Nombre", "Lampara Encendida");
+                i.putExtra("perdida", "1");
+                startActivityForResult(i, 100);
                 break;
             case R.id.radioButtonNoConexionIlicita:
                 conexion_ilicita = false;
                 break;
             case R.id.radioButtonSiConexionIlicita:
                 conexion_ilicita = true;
+                Intent j = new Intent(this, NovedadActivity.class);
+                j.putExtra("Nombre", "Conexion Ilicita");
+                j.putExtra("perdida", "1");
+                startActivityForResult(j, 100);
                 break;
             case R.id.radioButtonNoPoda:
                 poda = false;
                 break;
             case R.id.radioButtonSiPoda:
                 poda = true;
+                Intent k = new Intent(this, NovedadActivity.class);
+                k.putExtra("Nombre", "Poda");
+                k.putExtra("perdida", "1");
+                startActivityForResult(k, 100);
                 break;
         }
     }
+
+
+    //endregion
+
+    //region ON ACTIVITY RESULT
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == 100) && (resultCode == RESULT_OK)) {
+            Snackbar.make(container, getString(R.string.message_novedad), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
 
     //endregion
 
@@ -200,26 +232,27 @@ public class PerdidaActivity extends AppCompatActivity {
 
     //region VALIDACIÓN DE CAMPOS y REGISTRO DE PÉRDIDA
     public void validarCampos() {
-        boolean cancel = false;
+       /* boolean cancel = false;
         View focusView = null;
         if (estado_lampara_adicional == true && edtLamparaAdicional.getText().toString().isEmpty()) {
             //cantidad_lampara_adicional = Long.parseLong(edtLamparaAdicional.getText().toString());
             edtLamparaAdicional.setError(getString(R.string.error_field_required));
             focusView = edtLamparaAdicional;
             cancel = true;
-        } else {
-            registrarPerdida();
-        }
+        } else {*/
+        registrarPerdida();
+        //}
     }
 
     private void registrarPerdida() {
+        /*
         if (estado_lampara_adicional == true) {
             cantidad_lampara_adicional = Long.parseLong(edtLamparaAdicional.getText().toString());
-        }
+        }*/
         Perdida perdida = new Perdida();
         perdida.setElemento_Id(Elemento_Id);
         perdida.setIs_Lampara_Adicional(estado_lampara_adicional);
-        perdida.setCantidad_Lampara_Adicional(cantidad_lampara_adicional);
+        //perdida.setCantidad_Lampara_Adicional(cantidad_lampara_adicional);
         perdida.setIs_Lampara_Encendida_Dia(lampara_encendida_dia);
         perdida.setIs_Conexion_Ilicita(conexion_ilicita);
         perdida.setIs_Poda(poda);

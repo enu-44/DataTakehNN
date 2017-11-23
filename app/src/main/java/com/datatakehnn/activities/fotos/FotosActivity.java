@@ -108,11 +108,10 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     NovedadController novedadController;
 
 
-
     //Dataset
-    List<Novedad> novedades;
+    List<Novedad> novedades = new ArrayList<>();
     Novedad novedad = new Novedad();
-    public  String Nombre_Novedad;
+    public String Nombre_Novedad;
     public String Nombre_Tipo_Novedad;
 
     //contador de fotos
@@ -127,7 +126,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fotos);
         ButterKnife.bind(this);
-
         checkPermissionCamera();
         setToolbarInjection();
         setupInjection();
@@ -146,9 +144,9 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     private void setupInjection() {
         this.elementoController = ElementoController.getInstance(this);
         this.fotoController = FotoController.getInstance(this);
-        this.novedadController= NovedadController.getInstance(this);
+        this.novedadController = NovedadController.getInstance(this);
         elemento_id = elementoController.getLast().getElemento_Id();
-        novedades = novedadController.getListNovedadesByElementoId(elemento_id);
+        //novedades = novedadController.getListNovedadesByElementoId(elemento_id);
         Elemento elemento = elementoController.getLast();
         Latitud = elemento.getLatitud();
         Longitud = elemento.getLongitud();
@@ -248,14 +246,14 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 ivFoto1.setImageBitmap(magicalCamera.getPhoto());
                 //if you need save your bitmap in device use this method and return the path if you need this
                 //You need to send, the bitmap picture, the photo name, the directory name, the picture type, and autoincrement photo name if           //you need this send true, else you have the posibility or realize your standard name for your pictures.
-                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" +edtDescripcionFoto1.getText().toString(), "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
+                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString(), "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
             } else if (tomarFoto2 == true) {
                 ivFoto2.setImageBitmap(magicalCamera.getPhoto());
                 //if you need save your bitmap in device use this method and return the path if you need this
                 //You need to send, the bitmap picture, the photo name, the directory name, the picture type, and autoincrement photo name if           //you need this send true, else you have the posibility or realize your standard name for your pictures.
-                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_"+ edtDescripcionFoto2.getText().toString(), "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
-            }else if(tomarFotoNovedad== true){
-                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_NOVEDAD_" + "Lat:" + latitud + "_Lng:" + longitud + novedad.getNovedad_Id()+Nombre_Novedad, "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
+                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto2.getText().toString(), "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
+            } else if (tomarFotoNovedad == true) {
+                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_NOVEDAD_" + "Lat:" + latitud + "_Lng:" + longitud + novedad.getNovedad_Id() + Nombre_Novedad, "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
             }
 
             File file = saveBitmap(bitmap, ruta);
@@ -269,21 +267,21 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             }
 
             if (tomarFoto1 == true) {
-                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_foto1", "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
+                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString(), "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
                 registerFoto1();
 
 
             } else if (tomarFoto2 == true) {
-                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_foto2", "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
+                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto2.getText().toString(), "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
                 registerFoto2();
-            }else if(tomarFotoNovedad== true){
+            } else if (tomarFotoNovedad == true) {
 
-                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + Nombre_Novedad, "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
+                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_NOVEDAD_" + "Lat:" + latitud + "_Lng:" + longitud + novedad.getNovedad_Id() + Nombre_Novedad, "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
                 updateFotoNovedad();
             }
 
             if (path != null) {
-              //  Toast.makeText(this, "La foto se guardó en la siguiente ruta: " + path, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(this, "La foto se guardó en la siguiente ruta: " + path, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Sorry your photo dont write in devide", Toast.LENGTH_SHORT).show();
             }
@@ -359,12 +357,12 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     private void validarCampos() {
         if (yaTomoFoto1 == false) {
-            onMessageError(R.color.colorPrimary,"Debe tomar Foto 1");
+            onMessageError(R.color.colorPrimary, "Debe tomar Foto 1");
         } else if (yaTomoFoto2 == false) {
-            onMessageError(R.color.colorPrimary,"Debe tomar Foto 2");
+            onMessageError(R.color.colorPrimary, "Debe tomar Foto 2");
         } else if (contador < novedades.size()) {
-            onMessageError(R.color.colorPrimary,"Debe registrar todas las fotos de novedades");
-        }else {
+            onMessageError(R.color.colorPrimary, "Debe registrar todas las fotos de novedades");
+        } else {
             actualizarPoste();
         }
     }
@@ -468,9 +466,9 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         tomarFoto2 = false;
         tomarFoto1 = false;
         tomarFotoNovedad = true;
-        Nombre_Novedad= item.getDetalle_Tipo_Novedad_Nombre();
+        Nombre_Novedad = item.getDetalle_Tipo_Novedad_Nombre();
         Nombre_Tipo_Novedad = novedadController.getTipoNovedadById(item.getTipo_Novedad_Id()).getNombre();
-        novedad= item;
+        novedad = item;
         if (item.getImage_Novedad() == null) {
             contador = contador + 1;
         }

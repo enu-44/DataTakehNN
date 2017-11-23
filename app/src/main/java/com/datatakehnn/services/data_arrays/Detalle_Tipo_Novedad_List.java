@@ -70,6 +70,54 @@ public class Detalle_Tipo_Novedad_List {
                     "",
                     3
             ),
+            new Detalle_Tipo_Novedad(
+                    10,
+                    "1",
+                    "",
+                    4
+            ),
+            new Detalle_Tipo_Novedad(
+                    11,
+                    "2",
+                    "",
+                    4
+            ),
+            new Detalle_Tipo_Novedad(
+                    12,
+                    "3",
+                    "",
+                    4
+            ),
+            new Detalle_Tipo_Novedad(
+                    13,
+                    "4",
+                    "",
+                    4
+            ),
+            new Detalle_Tipo_Novedad(
+                    14,
+                    "5",
+                    "",
+                    4
+            ),
+            new Detalle_Tipo_Novedad(
+                    15,
+                    "Lampara Encendida",
+                    "",
+                    5
+            ),
+            new Detalle_Tipo_Novedad(
+                    16,
+                    "Conexion Ilicita",
+                    "",
+                    6
+            ),
+            new Detalle_Tipo_Novedad(
+                    17,
+                    "Poda",
+                    "",
+                    7
+            )
     };
 
     /**
