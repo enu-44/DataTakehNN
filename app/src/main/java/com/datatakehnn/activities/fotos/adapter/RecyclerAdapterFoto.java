@@ -25,7 +25,6 @@ import butterknife.ButterKnife;
 
 public class RecyclerAdapterFoto extends RecyclerView.Adapter<RecyclerAdapterFoto.ViewHolder> {
 
-
     Context context;
     public List<Novedad> novedades;
     public OnItemClickListenerFoto mOnItemClickListenerFoto;
@@ -39,7 +38,6 @@ public class RecyclerAdapterFoto extends RecyclerView.Adapter<RecyclerAdapterFot
     public void setItems(List<Novedad> newItems) {
         novedades.addAll(newItems);
         notifyDataSetChanged();
-
     }
 
     public void clear() {
@@ -58,14 +56,13 @@ public class RecyclerAdapterFoto extends RecyclerView.Adapter<RecyclerAdapterFot
     public void onBindViewHolder(RecyclerAdapterFoto.ViewHolder holder, final int position) {
         Novedad list = novedades.get(position);
         holder.tvDescripcionFoto.setText(list.getDetalle_Tipo_Novedad_Nombre());
+        holder.tvTipoFoto.setText(list.getNombre_Tipo_Novedad());
         if (list.getImage_Novedad() != null) {
             byte[] foto = list.getImage_Novedad().getBlob();
             Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
             holder.ivFotoRecycler.setImageBitmap(bitmap);
         }
-
         holder.hacerClickListener(list, mOnItemClickListenerFoto);
-
     }
 
     @Override
@@ -79,8 +76,10 @@ public class RecyclerAdapterFoto extends RecyclerView.Adapter<RecyclerAdapterFot
         ImageView ivFotoRecycler;
         @BindView(R.id.tvDescripcionFoto)
         TextView tvDescripcionFoto;
-        @BindView(R.id.ibTomarFotoRecycler)
-        ImageButton ibTomarFotoRecycler;
+        @BindView(R.id.tvTipoFoto)
+        TextView tvTipoFoto;
+        //@BindView(R.id.ibTomarFotoRecycler)
+        //ImageButton ibTomarFotoRecycler;
 
         private View view;
 
@@ -98,12 +97,12 @@ public class RecyclerAdapterFoto extends RecyclerView.Adapter<RecyclerAdapterFot
                 }
             });
 
-            ibTomarFotoRecycler.setOnClickListener(new View.OnClickListener() {
+            /*ibTomarFotoRecycler.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mOnItemClickListenerFoto.onItemClick(respuestaNovedad);
                 }
-            });
+            });*/
 
 
         }

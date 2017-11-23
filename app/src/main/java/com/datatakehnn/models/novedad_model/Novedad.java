@@ -28,6 +28,10 @@ public class Novedad extends BaseModel {
     @Column
     public String Detalle_Tipo_Novedad_Nombre;
 
+    @SerializedName("Nombre_Tipo_Novedad")
+    @Column
+    public String Nombre_Tipo_Novedad;
+
     @SerializedName("Elemento_Id")
     @Column
     public long Elemento_Id;
@@ -48,10 +52,11 @@ public class Novedad extends BaseModel {
     public Novedad() {
     }
 
-    public Novedad(long novedad_Id, long detalle_Tipo_Novedad_Id, String detalle_Tipo_Novedad_Nombre, long elemento_Id, String descripcion, Blob image_Novedad, long tipo_Novedad_Id) {
+    public Novedad(long novedad_Id, long detalle_Tipo_Novedad_Id, String detalle_Tipo_Novedad_Nombre, String nombre_Tipo_Novedad, long elemento_Id, String descripcion, Blob image_Novedad, long tipo_Novedad_Id) {
         Novedad_Id = novedad_Id;
         Detalle_Tipo_Novedad_Id = detalle_Tipo_Novedad_Id;
         Detalle_Tipo_Novedad_Nombre = detalle_Tipo_Novedad_Nombre;
+        Nombre_Tipo_Novedad = nombre_Tipo_Novedad;
         Elemento_Id = elemento_Id;
         Descripcion = descripcion;
         Image_Novedad = image_Novedad;
@@ -73,6 +78,14 @@ public class Novedad extends BaseModel {
 
     public void setDetalle_Tipo_Novedad_Id(long detalle_Tipo_Novedad_Id) {
         Detalle_Tipo_Novedad_Id = detalle_Tipo_Novedad_Id;
+    }
+
+    public String getNombre_Tipo_Novedad() {
+        return Nombre_Tipo_Novedad;
+    }
+
+    public void setNombre_Tipo_Novedad(String nombre_Tipo_Novedad) {
+        Nombre_Tipo_Novedad = nombre_Tipo_Novedad;
     }
 
     public long getElemento_Id() {

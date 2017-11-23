@@ -21,6 +21,14 @@
             android:src="@drawable/boton_foto_gris" />
 
         <TextView
+            android:id="@+id/tvTipoFoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Hello World"
+            android:textStyle="bold"
+            android:textColor="@color/orange_dark" />
+        <TextView
             android:id="@+id/tvDescripcionFoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,13 +36,6 @@
             android:text="Hello World"
             android:textColor="@color/black" />
 
-        <ImageButton
-            android:id="@+id/ibTomarFotoRecycler"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:backgroundTint="@color/colorPrimary"
-            android:src="@drawable/ic_camera" />
 
     </LinearLayout>
 

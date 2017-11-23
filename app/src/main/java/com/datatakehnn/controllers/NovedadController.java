@@ -46,6 +46,7 @@ public class NovedadController {
         novedad.setElemento_Id(novedadNew.getElemento_Id());
         novedad.setDescripcion(novedadNew.getDescripcion());
         novedad.setDetalle_Tipo_Novedad_Nombre(novedadNew.getDetalle_Tipo_Novedad_Nombre());
+        novedad.setNombre_Tipo_Novedad(novedadNew.getNombre_Tipo_Novedad());
         novedad.setTipo_Novedad_Id(novedadNew.getTipo_Novedad_Id());
         novedad.save();
         return novedad;
@@ -65,6 +66,7 @@ public class NovedadController {
         novedad.setDescripcion(novedadNew.getDescripcion());
         novedad.setDetalle_Tipo_Novedad_Nombre(novedadNew.getDetalle_Tipo_Novedad_Nombre());
         novedad.setTipo_Novedad_Id(novedadNew.getTipo_Novedad_Id());
+        novedad.setNombre_Tipo_Novedad(novedadNew.getNombre_Tipo_Novedad());
         novedad.save();
         return novedad;
     }
@@ -76,6 +78,7 @@ public class NovedadController {
         novedad.setElemento_Id(novedadNew.getElemento_Id());
         novedad.setDescripcion(novedadNew.getDescripcion());
         novedad.setDetalle_Tipo_Novedad_Nombre(novedadNew.getDetalle_Tipo_Novedad_Nombre());
+        novedad.setNombre_Tipo_Novedad(novedadNew.getNombre_Tipo_Novedad());
         novedad.setTipo_Novedad_Id(novedadNew.getTipo_Novedad_Id());
         novedad.setImage_Novedad(novedadNew.getImage_Novedad());
         novedad.save();
@@ -97,13 +100,13 @@ public class NovedadController {
     }
 
 
-/*
-    public Tipo_Novedad getTipoNovedadIdByNombre(String nombre_tipo_novedad) {
-        Tipo_Novedad tipo_novedad = SQLite.select().from(Tipo_Novedad.class).where(Tipo_Novedad_Table.Nombre.eq(nombre_tipo_novedad))
+
+    public Tipo_Novedad getTipoNovedadById(long tipo_novedad_id) {
+        Tipo_Novedad tipo_novedad = SQLite.select().from(Tipo_Novedad.class).where(Tipo_Novedad_Table.Tipo_Novedad_Id.eq(tipo_novedad_id))
                 .querySingle();
         return tipo_novedad;
     }
-    */
+
 
     //Devuelve un Listado de Novedades por Id del Poste
     public List<Novedad> getListNovedadesByElementoId(long elemento_id) {

@@ -40,6 +40,7 @@ import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.models.elemento_cable.Elemento_Cable;
 import com.datatakehnn.models.foto_model.Foto;
 import com.datatakehnn.models.novedad_model.Novedad;
+import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
 import com.frosquivel.magicalcamera.MagicalCamera;
 import com.frosquivel.magicalcamera.MagicalPermissions;
 import com.raizlabs.android.dbflow.data.Blob;
@@ -112,15 +113,13 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     List<Novedad> novedades;
     Novedad novedad = new Novedad();
     public  String Nombre_Novedad;
-
+    public String Nombre_Tipo_Novedad;
 
     //contador de fotos
     int contador = 0;
 
     //Adapter
     RecyclerAdapterFoto adapter;
-
-
 
 
     @Override
@@ -230,7 +229,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         } catch (Exception e) {
             e.getMessage().toString();
         }
-
         //select picture
         ///magicalCamera.selectedPicture("my_header_name");
     }
@@ -250,21 +248,17 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 ivFoto1.setImageBitmap(magicalCamera.getPhoto());
                 //if you need save your bitmap in device use this method and return the path if you need this
                 //You need to send, the bitmap picture, the photo name, the directory name, the picture type, and autoincrement photo name if           //you need this send true, else you have the posibility or realize your standard name for your pictures.
-                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_foto1", "DataTakeCamara", MagicalCamera.JPEG, false);
+                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" +edtDescripcionFoto1.getText().toString(), "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
             } else if (tomarFoto2 == true) {
                 ivFoto2.setImageBitmap(magicalCamera.getPhoto());
                 //if you need save your bitmap in device use this method and return the path if you need this
                 //You need to send, the bitmap picture, the photo name, the directory name, the picture type, and autoincrement photo name if           //you need this send true, else you have the posibility or realize your standard name for your pictures.
-                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_foto2", "DataTakeCamara", MagicalCamera.JPEG, false);
+                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_"+ edtDescripcionFoto2.getText().toString(), "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
             }else if(tomarFotoNovedad== true){
-                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + Nombre_Novedad, "DataTakeCamara", MagicalCamera.JPEG, false);
+                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_NOVEDAD_" + "Lat:" + latitud + "_Lng:" + longitud + novedad.getNovedad_Id()+Nombre_Novedad, "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
             }
 
-
-
-
             File file = saveBitmap(bitmap, ruta);
-
             try {
                 compressedImage = new Compressor(this)
                         .setMaxHeight(400)
@@ -275,24 +269,21 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             }
 
             if (tomarFoto1 == true) {
-                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_foto1", "DataTakeCamara", MagicalCamera.JPEG, false);
+                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_foto1", "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
                 registerFoto1();
 
 
             } else if (tomarFoto2 == true) {
-                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_foto2", "DataTakeCamara", MagicalCamera.JPEG, false);
+                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_foto2", "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
                 registerFoto2();
             }else if(tomarFotoNovedad== true){
 
-                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + Nombre_Novedad, "DataTakeCamara", MagicalCamera.JPEG, false);
+                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + Nombre_Novedad, "DataTakeCamara/"+elemento_id, MagicalCamera.JPEG, false);
                 updateFotoNovedad();
             }
 
-
-
-
             if (path != null) {
-                Toast.makeText(this, "La foto se guardó en la siguiente ruta: " + path, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "La foto se guardó en la siguiente ruta: " + path, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Sorry your photo dont write in devide", Toast.LENGTH_SHORT).show();
             }
@@ -357,8 +348,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         }
     }
 
-
-
     //Convertir bitmap to File
     private File saveBitmap(Bitmap bitmap, String path) {
         File file = null;
@@ -370,11 +359,11 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     private void validarCampos() {
         if (yaTomoFoto1 == false) {
-            Snackbar.make(container, "Debe tomar Foto 1", Snackbar.LENGTH_SHORT).show();
+            onMessageError(R.color.colorPrimary,"Debe tomar Foto 1");
         } else if (yaTomoFoto2 == false) {
-            Snackbar.make(container, "Debe tomar Foto 2", Snackbar.LENGTH_SHORT).show();
+            onMessageError(R.color.colorPrimary,"Debe tomar Foto 2");
         } else if (contador < novedades.size()) {
-            Snackbar.make(container, "Debe registrar todas las fotos de novedades", Snackbar.LENGTH_SHORT).show();
+            onMessageError(R.color.colorPrimary,"Debe registrar todas las fotos de novedades");
         }else {
             actualizarPoste();
         }
@@ -431,8 +420,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         return super.onKeyDown(keyCode, event);
     }
 
-
-
     private void initAdapter() {
         if (adapter == null) {
             adapter = new RecyclerAdapterFoto(this, new ArrayList<Novedad>(), this);
@@ -443,7 +430,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
-
 
     private void loadNovedades() {
         adapter.clear();
@@ -470,12 +456,9 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         int id = item.getItemId();
         if (id == R.id.action_done) {
             validarCampos();
-
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
     //endregion
 
@@ -486,11 +469,11 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         tomarFoto1 = false;
         tomarFotoNovedad = true;
         Nombre_Novedad= item.getDetalle_Tipo_Novedad_Nombre();
+        Nombre_Tipo_Novedad = novedadController.getTipoNovedadById(item.getTipo_Novedad_Id()).getNombre();
         novedad= item;
         if (item.getImage_Novedad() == null) {
             contador = contador + 1;
         }
-
         iniciarCamara();
     }
 
@@ -539,8 +522,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     public void setContent(List<Novedad> items) {
         adapter.setItems(items);
     }
-
-
     //endregion
 
 }

@@ -117,6 +117,7 @@ public class NovedadActivity extends AppCompatActivity {
         }
         Detalle_Tipo_Novedad detalle_tipo_novedad = novedadController.getDetalleById(Detalle_Tipo_Novedad_Id);
         long tipo_novedad_id = detalle_tipo_novedad.getTipo_Novedad_Id();
+        String Nombre_Tipo_Novedad = novedadController.getTipoNovedadById(tipo_novedad_id).getNombre();
 
         Novedad hayNovedad = novedadController.getNovedadByTipoAndElementoId(tipo_novedad_id, elemento_id);
         if (hayNovedad == null) {
@@ -125,11 +126,13 @@ public class NovedadActivity extends AppCompatActivity {
             novedad.setDescripcion(edtNovedad.getText().toString());
             novedad.setDetalle_Tipo_Novedad_Nombre(Detalle_Tipo_Novedad_Nombre);
             novedad.setTipo_Novedad_Id(tipo_novedad_id);
+            novedad.setNombre_Tipo_Novedad(Nombre_Tipo_Novedad);
             novedadController.register(novedad);
         } else {
             hayNovedad.setDetalle_Tipo_Novedad_Id(Detalle_Tipo_Novedad_Id);
             hayNovedad.setDescripcion(edtNovedad.getText().toString());
             hayNovedad.setDetalle_Tipo_Novedad_Nombre(Detalle_Tipo_Novedad_Nombre);
+            hayNovedad.setNombre_Tipo_Novedad(Nombre_Tipo_Novedad);
             novedadController.update(hayNovedad);
         }
         setResult(RESULT_OK);
@@ -152,8 +155,7 @@ public class NovedadActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.action_done:
                 if (spinnerNovedad.getText().toString().isEmpty()) {
                     boolean cancel = false;
