@@ -3,6 +3,8 @@ package com.datatakehnn.controllers;
 import android.content.Context;
 
 import com.datatakehnn.models.perdida_model.Perdida;
+import com.datatakehnn.models.perdida_model.Perdida_Table;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 public class PerdidaController {
 
@@ -25,7 +27,7 @@ public class PerdidaController {
     }
 
     //Registro
-    public Perdida register(Perdida perdidaNew) {
+    public Perdida registerUpdate(Perdida perdidaNew) {
         Perdida perdida = new Perdida();
         perdida.setPerdida_Id(perdidaNew.getPerdida_Id());
         perdida.setElemento_Id(perdidaNew.getElemento_Id());
@@ -51,4 +53,12 @@ public class PerdidaController {
         perdida.save();
         return perdida;
     }
+
+    public Perdida getPerdidaByElementId(long Elemento_Id) {
+        Perdida perdida= new Select().from(Perdida.class).where(Perdida_Table.Elemento_Id.eq(Elemento_Id)).querySingle();
+        return perdida;
+    }
+
+
+
 }

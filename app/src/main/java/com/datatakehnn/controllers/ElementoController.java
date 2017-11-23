@@ -122,6 +122,15 @@ public class ElementoController {
         return elemento;
     }
 
+    public Elemento getElementoById(long Elemento_Id) {
+
+        //  List<Elemento> elementos = new Select().from(Elemento.class).queryList();
+
+        Elemento elemento = new Select().from(Elemento.class).where(Elemento_Table.Elemento_Id.eq(Elemento_Id)).querySingle();
+        return elemento;
+    }
+
+
 
     public List<Elemento> getListElementsByUserLogued(long Usuario_Id) {
         //  List<Elemento> elementos = new Select().from(Elemento.class).queryList();

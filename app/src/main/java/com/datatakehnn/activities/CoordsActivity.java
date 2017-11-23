@@ -36,6 +36,8 @@ import android.widget.Toast;
 import com.datatakehnn.R;
 import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
 import com.datatakehnn.activities.equipos_elemento.EquipoActivity;
+import com.datatakehnn.activities.fotos.FotosActivity;
+import com.datatakehnn.activities.perdida.PerdidaActivity;
 import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.services.coords.CoordsService;
 import com.google.android.gms.maps.CameraUpdate;
@@ -75,6 +77,12 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @BindView(R.id.textCoordenada)
     TextView textCoordenada;
+
+    @BindView(R.id.txtDireccionAproximada)
+    TextView txtDireccionAproximada;
+
+
+
 
     //Location
     Location location= new Location("dummyprovider");;
@@ -134,7 +142,19 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
                 startActivity(r);
                 break;
             case R.id.menu_novedades:
+                Intent t = new Intent(getApplicationContext(), FotosActivity.class);
+                t.putExtra("ACCION_ADD",false);
+                t.putExtra("ACCION_UPDATE",true);
+                t.putExtra("Elemento_Id", elemento.getElemento_Id());
+                startActivity(t);
+                break;
 
+            case R.id.menu_perdfidas:
+                Intent b = new Intent(getApplicationContext(), PerdidaActivity.class);
+                b.putExtra("ACCION_ADD",false);
+                b.putExtra("ACCION_UPDATE",true);
+                b.putExtra("Elemento_Id", elemento.getElemento_Id());
+                startActivity(b);
                 break;
 
             ///Metodo que permite no recargar la pagina al devolverse
@@ -277,7 +297,8 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
                     Address DirCalle = list.get(0);
                     /// mensaje2.setText("Mi direccion es: \n"
                     //      + DirCalle.getAddressLine(0));
-                    Toast.makeText(getApplicationContext(),"Direccion GPS es:"+ DirCalle.getAddressLine(0),Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getApplicationContext(),"Direccion GPS es:"+ DirCalle.getAddressLine(0),Toast.LENGTH_LONG).show();
+                    txtDireccionAproximada.setText(DirCalle.getAddressLine(0));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

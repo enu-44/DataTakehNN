@@ -389,6 +389,9 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(getApplicationContext(), FotosActivity.class);
+                        i.putExtra("ACCION_ADD", true);
+                        i.putExtra("ACCION_UPDATE", false);
+                        i.putExtra("Elemento_Id", Elemento_Id);
                         startActivity(i);
                     }
                 });

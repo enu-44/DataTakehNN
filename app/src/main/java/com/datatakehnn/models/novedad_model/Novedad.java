@@ -48,11 +48,16 @@ public class Novedad extends BaseModel {
     @Column
     public long Tipo_Novedad_Id;
 
+    @SerializedName("Ruta_Foto")
+    @Column
+    public String Ruta_Foto;
+
+
 
     public Novedad() {
     }
 
-    public Novedad(long novedad_Id, long detalle_Tipo_Novedad_Id, String detalle_Tipo_Novedad_Nombre, String nombre_Tipo_Novedad, long elemento_Id, String descripcion, Blob image_Novedad, long tipo_Novedad_Id) {
+    public Novedad(long novedad_Id, long detalle_Tipo_Novedad_Id, String detalle_Tipo_Novedad_Nombre, String nombre_Tipo_Novedad, long elemento_Id, String descripcion, Blob image_Novedad, long tipo_Novedad_Id, String ruta_Foto) {
         Novedad_Id = novedad_Id;
         Detalle_Tipo_Novedad_Id = detalle_Tipo_Novedad_Id;
         Detalle_Tipo_Novedad_Nombre = detalle_Tipo_Novedad_Nombre;
@@ -61,6 +66,7 @@ public class Novedad extends BaseModel {
         Descripcion = descripcion;
         Image_Novedad = image_Novedad;
         Tipo_Novedad_Id = tipo_Novedad_Id;
+        Ruta_Foto = ruta_Foto;
     }
 
     //Methods
@@ -126,5 +132,13 @@ public class Novedad extends BaseModel {
 
     public void setTipo_Novedad_Id(long tipo_Novedad_Id) {
         Tipo_Novedad_Id = tipo_Novedad_Id;
+    }
+
+    public String getRuta_Foto() {
+        return Ruta_Foto;
+    }
+
+    public void setRuta_Foto(String ruta_Foto) {
+        Ruta_Foto = ruta_Foto;
     }
 }

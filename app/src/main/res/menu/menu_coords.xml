@@ -20,7 +20,12 @@
 
             <item android:id="@+id/menu_novedades"
                 android:icon="@drawable/ic_action_novedad"
-                android:title="Novedades">
+                android:title="Novedades-Fotos">
+            </item>
+
+            <item android:id="@+id/menu_perdfidas"
+                android:icon="@drawable/ic_action_cables"
+                android:title="Perdidas">
 
             </item>
         </menu>

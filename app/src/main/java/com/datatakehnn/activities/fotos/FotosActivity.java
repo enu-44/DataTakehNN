@@ -4,9 +4,13 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +34,7 @@ import android.widget.Toast;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.cables_elemento.adapter.AdapterCablesElemento;
+import com.datatakehnn.activities.fotos.adapter.AdapterFotos;
 import com.datatakehnn.activities.fotos.adapter.OnItemClickListenerFoto;
 import com.datatakehnn.activities.fotos.adapter.RecyclerAdapterFoto;
 import com.datatakehnn.activities.menu.MainMenuActivity;
@@ -60,7 +65,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import id.zelory.compressor.Compressor;
 
-public class FotosActivity extends AppCompatActivity implements OnItemClickListenerFoto, FotosMainView {
+public class FotosActivity extends AppCompatActivity implements OnItemClickListenerFoto, FotosMainView, SwipeRefreshLayout.OnRefreshListener {
 
     //UI Elemenets
     @BindView(R.id.container)
@@ -83,6 +88,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     RecyclerView recyclerView;
     @BindView(R.id.txtResults)
     TextView txtResults;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     //PERMISSION CAMARA
     private MagicalPermissions magicalPermissions;
@@ -90,17 +97,16 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     MagicalCamera magicalCamera;
 
     //Variables globales
-    long elemento_id;
     boolean tomarFoto1 = false;
     boolean tomarFoto2 = false;
     boolean tomarFotoNovedad = false;
     boolean yaTomoFoto1 = false;
     boolean yaTomoFoto2 = false;
-    String ruta, path;
+    //String ruta, path;
     Double Latitud, Longitud;
     String latitud, longitud;
-    byte[] image;
-    Bitmap compressedImage = null;
+    //byte[] image;
+    //Bitmap compressedImage = null;
 
     //Instancias
     ElementoController elementoController;
@@ -118,7 +124,14 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     int contador = 0;
 
     //Adapter
-    RecyclerAdapterFoto adapter;
+    AdapterFotos adapter;
+
+    //Accion
+    boolean ACCION_ADD;
+    boolean ACCION_UPDATE;
+
+    //Variables
+    long Elemento_Id;
 
 
     @Override
@@ -126,32 +139,88 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fotos);
         ButterKnife.bind(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
         checkPermissionCamera();
-        setToolbarInjection();
         setupInjection();
+        setToolbarInjection();
         initAdapter();
         initRecyclerView();
         loadNovedades();
+        verificateDataAction();
     }
+
 
     //region SETUP INJECTION
     private void setToolbarInjection() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitle("Fotos");
+        if (ACCION_UPDATE) {
+            if (getSupportActionBar() != null)// Habilitar Up Button
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);//devolver
+        }
+        toolbar.setTitle(getString(R.string.title_fotos));
     }
 
     private void setupInjection() {
+        //Actualizar o Eliminar
+        ACCION_ADD = getIntent().getExtras().getBoolean("ACCION_ADD");
+        ACCION_UPDATE = getIntent().getExtras().getBoolean("ACCION_UPDATE");
+        Elemento_Id = getIntent().getExtras().getLong("Elemento_Id");
+
         this.elementoController = ElementoController.getInstance(this);
         this.fotoController = FotoController.getInstance(this);
         this.novedadController = NovedadController.getInstance(this);
-        elemento_id = elementoController.getLast().getElemento_Id();
         //novedades = novedadController.getListNovedadesByElementoId(elemento_id);
-        Elemento elemento = elementoController.getLast();
+        Elemento elemento = elementoController.getElementoById(Elemento_Id);
         Latitud = elemento.getLatitud();
         Longitud = elemento.getLongitud();
         latitud = String.valueOf(Latitud);
         longitud = String.valueOf(Longitud);
+    }
+
+    private void verificateDataAction() {
+        if (ACCION_UPDATE) {
+            contador = novedades.size();
+            List<Foto> listFotoByElemento = fotoController.getListFotoByElemento(Elemento_Id);
+            int i = 0;
+            for (Foto item : listFotoByElemento) {
+                i = i + 1;
+                ///Asignar foto 1
+                if (i == 1) {
+                    try {
+                        if (item.getImage() != null) {
+                            byte[] foto = item.getImage().getBlob();
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
+                            ivFoto1.setImageBitmap(bitmap);
+                            edtDescripcionFoto1.setText(item.getDescripcion());
+                        }
+                    } catch (Exception ex) {
+
+                        String error = ex.toString();
+                    }
+
+                    ///Asignar foto 2
+                } else {
+                    try {
+                        if (item.getImage() != null) {
+                            byte[] foto = item.getImage().getBlob();
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
+                            ivFoto2.setImageBitmap(bitmap);
+                            edtDescripcionFoto2.setText(item.getDescripcion());
+                        }
+                    } catch (Exception ex) {
+
+                        String error = ex.toString();
+                    }
+                }
+
+            }
+        } else {
+            contador = 0;
+        }
+
     }
 
     //endregion
@@ -242,49 +311,54 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             //this is for rotate picture in this method
             //magicalCamera.resultPhoto(requestCode, resultCode, data, MagicalCamera.ORIENTATION_ROTATE_180);
             //with this form you obtain the bitmap (in this example set this bitmap in image view)
+            String ruta = "";
+            String path = "";
             if (tomarFoto1 == true) {
                 ivFoto1.setImageBitmap(magicalCamera.getPhoto());
                 //if you need save your bitmap in device use this method and return the path if you need this
                 //You need to send, the bitmap picture, the photo name, the directory name, the picture type, and autoincrement photo name if           //you need this send true, else you have the posibility or realize your standard name for your pictures.
-                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString(), "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
+                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString(), "DataTakeCamara/" + Elemento_Id, MagicalCamera.JPEG, false);
             } else if (tomarFoto2 == true) {
                 ivFoto2.setImageBitmap(magicalCamera.getPhoto());
                 //if you need save your bitmap in device use this method and return the path if you need this
                 //You need to send, the bitmap picture, the photo name, the directory name, the picture type, and autoincrement photo name if           //you need this send true, else you have the posibility or realize your standard name for your pictures.
-                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto2.getText().toString(), "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
+                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto2.getText().toString(), "DataTakeCamara/" + Elemento_Id, MagicalCamera.JPEG, false);
             } else if (tomarFotoNovedad == true) {
-                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_NOVEDAD_" + "Lat:" + latitud + "_Lng:" + longitud + novedad.getNovedad_Id() + Nombre_Novedad, "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
+                ruta = magicalCamera.savePhotoInMemoryDevice(magicalCamera.getPhoto(), "IMG_NOVEDAD_" + "Lat:" + latitud + "_Lng:" + longitud + novedad.getNovedad_Id() + Nombre_Novedad, "DataTakeCamara/" + Elemento_Id, MagicalCamera.JPEG, false);
             }
 
             File file = saveBitmap(bitmap, ruta);
             try {
-                compressedImage = new Compressor(this)
+                Bitmap compressedImage = new Compressor(this)
                         .setMaxHeight(400)
                         .setQuality(100)
                         .compressToBitmap(file);
+
+                if (tomarFoto1 == true) {
+                    path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString(), "DataTakeCamara/" + Elemento_Id, MagicalCamera.JPEG, false);
+                    registerFoto1(compressedImage, path);
+
+
+                } else if (tomarFoto2 == true) {
+                    path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto2.getText().toString(), "DataTakeCamara/" + Elemento_Id, MagicalCamera.JPEG, false);
+                    registerFoto2(compressedImage, path);
+                } else if (tomarFotoNovedad == true) {
+
+                    path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_NOVEDAD_" + "Lat:" + latitud + "_Lng:" + longitud + novedad.getNovedad_Id() + Nombre_Novedad, "DataTakeCamara/" + Elemento_Id, MagicalCamera.JPEG, false);
+                    updateFotoNovedad(compressedImage, path);
+                }
+
+                if (path != null) {
+                    //  Toast.makeText(this, "La foto se guardó en la siguiente ruta: " + path, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Sorry your photo dont write in device", Toast.LENGTH_SHORT).show();
+                }
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            if (tomarFoto1 == true) {
-                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString(), "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
-                registerFoto1();
-
-
-            } else if (tomarFoto2 == true) {
-                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto2.getText().toString(), "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
-                registerFoto2();
-            } else if (tomarFotoNovedad == true) {
-
-                path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_NOVEDAD_" + "Lat:" + latitud + "_Lng:" + longitud + novedad.getNovedad_Id() + Nombre_Novedad, "DataTakeCamara/" + elemento_id, MagicalCamera.JPEG, false);
-                updateFotoNovedad();
-            }
-
-            if (path != null) {
-                //  Toast.makeText(this, "La foto se guardó en la siguiente ruta: " + path, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Sorry your photo dont write in devide", Toast.LENGTH_SHORT).show();
-            }
 
         } else {
             Snackbar.make(container, "No pudo tomar la foto", Snackbar.LENGTH_SHORT).show();
@@ -292,29 +366,30 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     }
 
-    private void updateFotoNovedad() {
-        image = convertBitmapToByte(compressedImage);
+    private void updateFotoNovedad(Bitmap compressedImage, String path) {
+        byte[] image = convertBitmapToByte(compressedImage);
         Blob imagenBlob = new Blob(image);
+        novedad.setRuta_Foto(path);
         novedad.setImage_Novedad(imagenBlob);
         novedadController.updateWithFoto(novedad);
         loadNovedades();
     }
 
-    private void registerFoto1() {
+    private void registerFoto1(Bitmap compressedImage, String path) {
         String ruta_foto = path;
-        Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto, elemento_id);
+        Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto, Elemento_Id);
         if (hayFoto != null) {
             hayFoto.setDescripcion(edtDescripcionFoto1.getText().toString());
-            image = convertBitmapToByte(compressedImage);
+            byte[] image = convertBitmapToByte(compressedImage);
             Blob imagenBlob = new Blob(image);
             hayFoto.setImage(imagenBlob);
             fotoController.update(hayFoto);
             yaTomoFoto1 = true;
         } else {
             Foto foto = new Foto();
-            foto.setElemento_Id(elemento_id);
+            foto.setElemento_Id(Elemento_Id);
             foto.setDescripcion(edtDescripcionFoto1.getText().toString());
-            image = convertBitmapToByte(compressedImage);
+            byte[] image = convertBitmapToByte(compressedImage);
             Blob imagenBlob = new Blob(image);
             foto.setImage(imagenBlob);
             foto.setRuta_Foto(ruta_foto);
@@ -323,21 +398,21 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         }
     }
 
-    private void registerFoto2() {
+    private void registerFoto2(Bitmap compressedImage, String path) {
         String ruta_foto = path;
-        Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto, elemento_id);
+        Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto, Elemento_Id);
         if (hayFoto != null) {
             hayFoto.setDescripcion(edtDescripcionFoto2.getText().toString());
-            image = convertBitmapToByte(compressedImage);
+            byte[] image = convertBitmapToByte(compressedImage);
             Blob imagenBlob = new Blob(image);
             hayFoto.setImage(imagenBlob);
             fotoController.update(hayFoto);
             yaTomoFoto2 = true;
         } else {
             Foto foto = new Foto();
-            foto.setElemento_Id(elemento_id);
+            foto.setElemento_Id(Elemento_Id);
             foto.setDescripcion(edtDescripcionFoto2.getText().toString());
-            image = convertBitmapToByte(compressedImage);
+            byte[] image = convertBitmapToByte(compressedImage);
             Blob imagenBlob = new Blob(image);
             foto.setImage(imagenBlob);
             foto.setRuta_Foto(ruta_foto);
@@ -420,7 +495,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     private void initAdapter() {
         if (adapter == null) {
-            adapter = new RecyclerAdapterFoto(this, new ArrayList<Novedad>(), this);
+            adapter = new AdapterFotos(this, new ArrayList<Novedad>(), this);
         }
     }
 
@@ -431,11 +506,14 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
     private void loadNovedades() {
         adapter.clear();
-        novedades.clear();
-        novedades = novedadController.getListNovedadesByElementoId(elemento_id);
+        //novedades.clear();
+        novedades = new ArrayList<>();
+        novedades = novedadController.getListNovedadesByElementoId(Elemento_Id);
         setContent(novedades);
         resultsList(novedades);
         hideProgress();
+
+
     }
 
     //endregion
@@ -446,16 +524,62 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_foto, menu);
+        if (ACCION_UPDATE) {
+            MenuItem item = menu.findItem(R.id.action_done);
+            item.setVisible(false);
+        } else {
+            MenuItem item = menu.findItem(R.id.action_done);
+            item.setVisible(true);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_done) {
-            validarCampos();
+
+        switch (item.getItemId()) {
+            case R.id.action_done:
+                validarCampos();
+                break;
+
+            ///Metodo que permite no recargar la pagina al devolverse
+            case android.R.id.home:
+                // Obtener intent de la actividad padre
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                // Comprobar si DetailActivity no se creó desde CourseActivity
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                        || this.isTaskRoot()) {
+
+                    // Construir de nuevo la tarea para ligar ambas actividades
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        TaskStackBuilder.create(this)
+                                .addNextIntentWithParentStack(upIntent)
+                                .startActivities();
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    this.finishAfterTransition();
+                    return true;
+                }
+
+                //Para versiones anterios a 5.x
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    onBackPressed();
+                    return true;
+                }
+
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
+
+
     }
 
     //endregion
@@ -482,13 +606,15 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     @Override
     public void showProgresss() {
         progressBar.setVisibility(View.VISIBLE);
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideProgress() {
         progressBar.setVisibility(View.GONE);
+        swipeRefreshLayout.setRefreshing(false);
     }
+
 
     @Override
     public void onMessageOk(int colorPrimary, String message) {
@@ -520,6 +646,16 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     public void setContent(List<Novedad> items) {
         adapter.setItems(items);
     }
+    //endregion
+
+
+    //region METHODS OVERRIDES
+    @Override
+    public void onRefresh() {
+        showProgresss();
+        loadNovedades();
+    }
+
     //endregion
 
 }

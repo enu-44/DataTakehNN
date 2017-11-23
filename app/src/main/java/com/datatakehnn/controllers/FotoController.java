@@ -7,6 +7,8 @@ import com.datatakehnn.models.foto_model.Foto_Table;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.util.List;
+
 /**
  * Created by TECNOLOGIA on 13/11/2017.
  */
@@ -42,7 +44,7 @@ public class FotoController {
         foto.setNovedad_Id(fotoNew.getNovedad_Id());
         foto.setDescripcion(fotoNew.getDescripcion());
         foto.setRuta_Foto(fotoNew.getRuta_Foto());
-        //foto.setImage(fotoNew.getImage());
+        foto.setImage(fotoNew.getImage());
         foto.save();
         return foto;
     }
@@ -60,7 +62,7 @@ public class FotoController {
         foto.setNovedad_Id(fotoNew.getNovedad_Id());
         foto.setDescripcion(fotoNew.getDescripcion());
         foto.setRuta_Foto(fotoNew.getRuta_Foto());
-        // foto.setImage(fotoNew.getImage());
+        foto.setImage(fotoNew.getImage());
         foto.save();
         return foto;
     }
@@ -69,6 +71,12 @@ public class FotoController {
         Foto foto = SQLite.select().from(Foto.class).where(Foto_Table.Ruta_Foto.eq(ruta_foto))
                 .and(Foto_Table.Elemento_Id.eq(elemento_id)).querySingle();
         return foto;
+    }
+
+    public List<Foto> getListFotoByElemento(long elemento_id){
+
+        List<Foto> fotoList= SQLite.select().from(Foto.class).where(Foto_Table.Elemento_Id.eq(elemento_id)).queryList();
+        return  fotoList;
     }
 
 }

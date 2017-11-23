@@ -6,4 +6,10 @@
         android:icon="@drawable/ic_done"
         android:title="Ok"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_update"
+        android:icon="@drawable/ic_done"
+        android:title="Ok"
+        app:showAsAction="always" />
 </menu>
