@@ -24,7 +24,19 @@ public class Empresa_List {
                     "23432434-3"
             ),
             new Empresa(3,
-                    "Alfasur" ,
+                    "Alpavision" ,
+                    "Calle 6 # 3-23",
+                    "123123123",
+                    "23432434-3"
+            ),
+            new Empresa(4,
+                    "ETB" ,
+                    "Calle 6 # 3-23",
+                    "123123123",
+                    "23432434-3"
+            ),
+            new Empresa(5,
+                    "Azteca" ,
                     "Calle 6 # 3-23",
                     "123123123",
                     "23432434-3"

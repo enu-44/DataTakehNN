@@ -53,6 +53,8 @@ public class NovedadActivity extends AppCompatActivity {
     NovedadController novedadController;
     ElementoController elementoController;
 
+    long Elemento_Id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +96,7 @@ public class NovedadActivity extends AppCompatActivity {
     private void setupInjection() {
         this.novedadController = NovedadController.getInstance(this);
         this.elementoController = elementoController.getInstance(this);
+        Elemento_Id = getIntent().getExtras().getLong("Elemento_Id");
 
     }
 
@@ -118,7 +121,7 @@ public class NovedadActivity extends AppCompatActivity {
         if (elemento == null) {
             elemento_id = 1;
         } else if (perdida == true) {
-            elemento_id = elemento.getElemento_Id();
+            elemento_id = Elemento_Id;
         } else {
             elemento_id = elemento.getElemento_Id() + 1;
         }

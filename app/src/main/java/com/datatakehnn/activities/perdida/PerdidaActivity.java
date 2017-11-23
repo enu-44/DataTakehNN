@@ -80,10 +80,10 @@ public class PerdidaActivity extends AppCompatActivity {
     //Variables globales
     long Elemento_Id;
     //long cantidad_lampara_adicional = 0;
-    boolean estado_lampara_adicional = false;
-    boolean lampara_encendida_dia = false;
-    boolean conexion_ilicita = false;
-    boolean poda = false;
+    static  boolean estado_lampara_adicional = false;
+    static boolean lampara_encendida_dia = false;
+    static boolean conexion_ilicita = false;
+    static boolean poda = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +114,7 @@ public class PerdidaActivity extends AppCompatActivity {
                 Intent h = new Intent(this, NovedadActivity.class);
                 h.putExtra("Nombre", "Lampara Adicional");
                 h.putExtra("perdida", "1");
+                h.putExtra("Elemento_Id", Elemento_Id);
                 startActivityForResult(h, 100);
                 break;
             case R.id.radioButtonNoLamparaEncendidaDia:
@@ -124,6 +125,7 @@ public class PerdidaActivity extends AppCompatActivity {
                 Intent i = new Intent(this, NovedadActivity.class);
                 i.putExtra("Nombre", "Lampara Encendida");
                 i.putExtra("perdida", "1");
+                i.putExtra("Elemento_Id", Elemento_Id);
                 startActivityForResult(i, 100);
                 break;
             case R.id.radioButtonNoConexionIlicita:
@@ -134,6 +136,7 @@ public class PerdidaActivity extends AppCompatActivity {
                 Intent j = new Intent(this, NovedadActivity.class);
                 j.putExtra("Nombre", "Conexion Ilicita");
                 j.putExtra("perdida", "1");
+                j.putExtra("Elemento_Id", Elemento_Id);
                 startActivityForResult(j, 100);
                 break;
             case R.id.radioButtonNoPoda:
@@ -144,6 +147,7 @@ public class PerdidaActivity extends AppCompatActivity {
                 Intent k = new Intent(this, NovedadActivity.class);
                 k.putExtra("Nombre", "Poda");
                 k.putExtra("perdida", "1");
+                k.putExtra("Elemento_Id", Elemento_Id);
                 startActivityForResult(k, 100);
                 break;
         }

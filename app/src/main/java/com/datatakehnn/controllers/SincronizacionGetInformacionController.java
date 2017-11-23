@@ -10,10 +10,12 @@ import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable_Table;
 import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad;
 import com.datatakehnn.models.empresa_model.Empresa;
 import com.datatakehnn.models.estado_model.Estado;
+import com.datatakehnn.models.estado_model.Estado_Table;
 import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento;
 import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento_Adapter;
 import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento_Table;
 import com.datatakehnn.models.material_model.Material;
+import com.datatakehnn.models.material_model.Material_Table;
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento;
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento_Table;
 import com.datatakehnn.models.reponse_generic.Response;
@@ -291,5 +293,19 @@ public class SincronizacionGetInformacionController {
         Nivel_Tension_Elemento nivel_tension_elemento = SQLite.select().from(Nivel_Tension_Elemento.class).where(Nivel_Tension_Elemento_Table.Nivel_Tension_Elemento_Id.eq(Nivel_Tension_Elemento_Id)).querySingle();
         return nivel_tension_elemento;
     }
+
+    public Material getMaterialById(long Material_Id){
+        Material material = SQLite.select().from(Material.class).where(Material_Table.Material_Id.eq(Material_Id)).querySingle();
+        return material;
+    }
+
+    public Estado getEstadoById(long Estadol_Id){
+        Estado estado = SQLite.select().from(Estado.class).where(Estado_Table.Estado_Id.eq(Estadol_Id)).querySingle();
+        return estado;
+    }
+
+
+
+
 
 }

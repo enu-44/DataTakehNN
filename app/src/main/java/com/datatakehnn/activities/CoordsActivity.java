@@ -14,9 +14,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,7 +40,10 @@ import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
 import com.datatakehnn.activities.equipos_elemento.EquipoActivity;
 import com.datatakehnn.activities.fotos.FotosActivity;
 import com.datatakehnn.activities.perdida.PerdidaActivity;
+import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.models.element_model.Elemento;
+import com.datatakehnn.services.aplication.DataTakeApp;
+import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 import com.datatakehnn.services.coords.CoordsService;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -62,7 +67,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallback, ConnectivityReceiver.ConnectivityReceiverListener {
 
 
     @BindView(R.id.toolbar)
@@ -97,6 +102,16 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     Marker marcador;
     Circle circle;
 
+    //Instances
+    SincronizacionGetInformacionController sincronizacionGetInformacionController;
+
+
+    //Variables Globals
+    String Nombre_Material;
+    String Nombre_Estado;
+    String Nivel_Tension;
+    String Longitud;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +123,35 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         setToolbarInjection();
         setupInjection();
         initMap();
+        setupData();
     }
+
+    private void setupData() {
+        Nombre_Material=sincronizacionGetInformacionController.getMaterialById(elemento.getMaterial_Id()).getNombre();
+        Nombre_Estado=sincronizacionGetInformacionController.getEstadoById(elemento.getEstado_Id()).getNombre();
+        Nivel_Tension=sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id()).getNombre();
+        Longitud= String.valueOf(sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.Longitud_Elemento_Id).getValor());
+    }
+
+
+    //region METHODS
+    //Mostrar Mensage Snackbar
+    /*--------------------------------------------------------------------------------------------------------*/
+    private void showSnakBar(int colorPrimary, String message) {
+        int color = Color.WHITE;
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.container), message, Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(this, colorPrimary));
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        //textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_home_bar, 0, 0, 0);
+        // textView.setCompoundDrawablePadding(getResources().getDimensionPixelOffset(R.dimen.activity_horizontal_margin));
+        textView.setTextColor(color);
+        snackbar.show();
+
+    }
+
+    //endregion
 
     //region MENU
 
@@ -204,6 +247,7 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     //region SETUP INJECTION
     private void setupInjection() {
         textCoordenada.setText(elemento.getLatitud()+","+elemento.getLongitud());
+        this.sincronizacionGetInformacionController=SincronizacionGetInformacionController.getInstance(this);
         //Guarda en un location la ubicación
         try{
             location.setLongitude(elemento.getLongitud());
@@ -289,6 +333,15 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         //Obtener la direccion de la calle a partir de la latitud y la longitud
         if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
             updateLocation(loc);
+            setAddress(loc);
+        }
+    }
+
+
+    public void setAddress(Location loc) {
+        //Obtener la direccion de la calle a partir de la latitud y la longitud
+        if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
+
             try {
                 Geocoder geocoder = new Geocoder(this, Locale.getDefault());
                 List<Address> list = geocoder.getFromLocation(
@@ -297,7 +350,7 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
                     Address DirCalle = list.get(0);
                     /// mensaje2.setText("Mi direccion es: \n"
                     //      + DirCalle.getAddressLine(0));
-                  //  Toast.makeText(getApplicationContext(),"Direccion GPS es:"+ DirCalle.getAddressLine(0),Toast.LENGTH_LONG).show();
+                    //  Toast.makeText(getApplicationContext(),"Direccion GPS es:"+ DirCalle.getAddressLine(0),Toast.LENGTH_LONG).show();
                     txtDireccionAproximada.setText(DirCalle.getAddressLine(0));
                 }
             } catch (IOException e) {
@@ -323,10 +376,20 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         CameraUpdate myposition = CameraUpdateFactory.newLatLngZoom(coordenadas, zoom);
         if(marcador != null) marcador.remove();
         //Define color del marker
-        BitmapDescriptor bitmapMarker= BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+        BitmapDescriptor bitmapMarker= BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
 
-        String Descripcion_Taller = "Codigo Poste: " + elemento.getCodigo_Apoyo();
-        marcador = drawMarker(coordenadas,"Ubicacion",Descripcion_Taller,bitmapMarker);
+
+
+        String Descripcion_Elemento = "Codigo Poste: " + elemento.getCodigo_Apoyo() +
+                "\n\n" + "Direccion: " + elemento.getDireccion() +
+                "\n\n" + "Material: " + Nombre_Material +
+                "\n\n" + "Estado: " + Nombre_Estado +
+                "\n\n" + "Retenidas: " + String.valueOf(elemento.getRetenidas()) +
+                "\n\n" + "Nivel de Tension: " + Nivel_Tension +
+                "\n\n" + "Altura: " + String.valueOf(elemento.getAltura_Disponible()) +
+                "\n\n" + "Longitud: " + Longitud;
+
+        marcador = drawMarker(coordenadas,"Ubicacion",Descripcion_Elemento,bitmapMarker);
         if (circle != null) circle.remove();
         circle = drawCircle(coordenadas);
 
@@ -368,6 +431,41 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
 
         // Adding the circle to the GoogleMap
         return mMap.addMarker(markerOption);
+    }
+
+    //endregion
+
+
+
+
+
+    //region CHECK CONNECTION INTERNET
+    // Method to manually check connection status
+    private boolean checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        return isConnected;
+        //showSnack(isConnected);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        DataTakeApp.getInstance().setConnectivityListener(this);
+    }
+
+    /**
+     * Callback will be triggered when there is change in
+     * network connection
+     */
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected) {
+            setAddress(location);
+            showSnakBar(R.color.orange,  getString(R.string.message_connection));
+        } else {
+            showSnakBar(R.color.orange,  getString(R.string.message_not_connection));
+        }
     }
 
     //endregion

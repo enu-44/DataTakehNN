@@ -13,6 +13,8 @@ import java.util.List;
 public class Cantidad_Retenidas_List {
 
     private static Cantidad_Retenidas[] list_cantidad_retenidas = {
+            new Cantidad_Retenidas(0
+            ),
             new Cantidad_Retenidas(1
             ),
             new Cantidad_Retenidas(2

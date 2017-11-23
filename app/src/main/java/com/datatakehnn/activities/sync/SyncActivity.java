@@ -337,6 +337,11 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
 
 
 
+
+
+
+    //endregion
+
     private void animationButton() {
         ivSync.setScaleX(0);
         ivSync.setScaleY(0);
@@ -372,7 +377,4 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
                     });
         }
     }
-
-
-    //endregion
 }

@@ -34,25 +34,49 @@ public class Detalle_Tipo_Cable_List {
             ),
             new Detalle_Tipo_Cable(
                     4,
+                    1,
+                    "Cobre Aislado",
+                    "CUA"
+            ),
+            new Detalle_Tipo_Cable(
+                    5,
+                    1,
+                    "Cobre Desnudo",
+                    "CUD"
+            ),
+            new Detalle_Tipo_Cable(
+                    6,
                     2,
                     ".500",
                     ".500"
             ),
             new Detalle_Tipo_Cable(
-                    5,
+                    7,
                     2,
                     "RG6",
                     "RG6"
             ),
+            new Detalle_Tipo_Cable(
+                    8,
+                    2,
+                    "RG11",
+                    "RG11"
+            ),
+            new Detalle_Tipo_Cable(
+                    9,
+                    2,
+                    "Fibra Optica",
+                    "FO"
+            ),
 
             new Detalle_Tipo_Cable(
-                    6,
+                    10,
                     3,
                     "Fibra Optica",
                     "Fibra Optica"
             ),
             new Detalle_Tipo_Cable(
-                    7,
+                    11,
                     3,
                     ".500",
                     ".500"
