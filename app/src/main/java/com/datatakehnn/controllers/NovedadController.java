@@ -101,6 +101,18 @@ public class NovedadController {
         return novedad;
     }
 
+    public Novedad getNovedadByTipoNombreAndElementoId(String nombre_tipo_novedad, long elemento_id) {
+        Novedad novedad = SQLite.select().from(Novedad.class).where(Novedad_Table.Nombre_Tipo_Novedad.eq(nombre_tipo_novedad))
+                .and(Novedad_Table.Elemento_Id.eq(elemento_id)).querySingle();
+        return novedad;
+    }
+
+    public void deleteNovedad(long idDeletedNovedad) {
+        Novedad borrarNovedad = SQLite.select().from(Novedad.class).where(Novedad_Table.Novedad_Id.eq(idDeletedNovedad)).querySingle();
+        if (borrarNovedad != null) {
+            borrarNovedad.delete();
+        }
+    }
 
 
     public Tipo_Novedad getTipoNovedadById(long tipo_novedad_id) {

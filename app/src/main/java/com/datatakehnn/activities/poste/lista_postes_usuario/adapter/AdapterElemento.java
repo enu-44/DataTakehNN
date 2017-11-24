@@ -27,8 +27,7 @@ import butterknife.ButterKnife;
  * Created by user on 16/11/2017.
  */
 
-public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.ElementViewHolder>
-{
+public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.ElementViewHolder> {
 
     public List<Elemento> dataset;
     public OnItemClickListenerElemento onItemClickListener;
@@ -37,13 +36,12 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
     public SincronizacionGetInformacionController sincronizacionGetInformacionController;
 
 
-
     public AdapterElemento(Context context, List<Elemento> dataset, OnItemClickListenerElemento onItemClickListener) {
         this.dataset = dataset;
         this.onItemClickListener = onItemClickListener;
-        this.context= context;
-        this.novedadController= NovedadController.getInstance(context);
-        this.sincronizacionGetInformacionController= SincronizacionGetInformacionController.getInstance(context);
+        this.context = context;
+        this.novedadController = NovedadController.getInstance(context);
+        this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(context);
     }
 
     public void setItems(List<Elemento> newItems) {
@@ -52,7 +50,7 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
 
     }
 
-    public void clear(){
+    public void clear() {
         dataset.clear();
         notifyDataSetChanged();
     }
@@ -67,26 +65,27 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
     public void onBindViewHolder(AdapterElemento.ElementViewHolder holder, final int position) {
         Elemento elemento = dataset.get(position);
 
-        if(elemento.getCodigo_Apoyo().equals("")){
-            Novedad novedadElemento=novedadController.getNovedadByElementoId(elemento.getElemento_Id());
-            if(novedadElemento!=null){
+        if (elemento.getCodigo_Apoyo().equals("")) {
+            Novedad novedadElemento = novedadController.getNovedadByElementoId(elemento.getElemento_Id());
+            if (novedadElemento != null) {
                 holder.txtCodigoApoyo.setText(novedadElemento.getDetalle_Tipo_Novedad_Nombre());
             }
-        }else{
+        } else {
             holder.txtCodigoApoyo.setText(elemento.getCodigo_Apoyo());
         }
 
         holder.txtDireccion.setText(elemento.getDireccion());
+        holder.txtArchivo.setText("Almacenamiento Interno/Pictures/DatatakeCamera/" + elemento.getElemento_Id());
 
         try {
 
-            if(elemento.getHora_Inicio()!=null && elemento.getHora_Fin()!=null){
+            if (elemento.getHora_Inicio() != null && elemento.getHora_Fin() != null) {
                 SimpleDateFormat sdfStart = new SimpleDateFormat("H:mm");
                 Date dateObjStart = sdfStart.parse(elemento.getHora_Inicio());
                 ///System.out.println(dateObjStart);
                 SimpleDateFormat sdfEnd = new SimpleDateFormat("H:mm");
                 Date dateObjEnd = sdfEnd.parse(elemento.getHora_Fin());
-                holder.txtHoraInicioFin.setText(new SimpleDateFormat("KK:mm a").format(dateObjStart)+" - "+new SimpleDateFormat("KK:mm a").format(dateObjEnd));
+                holder.txtHoraInicioFin.setText(new SimpleDateFormat("KK:mm a").format(dateObjStart) + " - " + new SimpleDateFormat("KK:mm a").format(dateObjEnd));
 
 
                 long diff = dateObjEnd.getTime() - dateObjStart.getTime();
@@ -95,22 +94,21 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
                 long horas = minutos / 60;
                 long dias = horas / 24;
 
-                holder.txtTiempo.setText(String.format(context.getString(R.string.tiempo_global),minutos));
+                holder.txtTiempo.setText(String.format(context.getString(R.string.tiempo_global), minutos));
 
             }
-
 
 
         } catch (final ParseException e) {
             e.printStackTrace();
         }
 
-        Longitud_Elemento longitud_elemento= sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.getLongitud_Elemento_Id());
-        Nivel_Tension_Elemento nivel_tension_elemento= sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id());
-        if(longitud_elemento!=null){
-            holder.txtLongitud.setText(String.valueOf(longitud_elemento.getValor())+" "+ longitud_elemento.getUnidad_Medida());
+        Longitud_Elemento longitud_elemento = sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.getLongitud_Elemento_Id());
+        Nivel_Tension_Elemento nivel_tension_elemento = sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id());
+        if (longitud_elemento != null) {
+            holder.txtLongitud.setText(String.valueOf(longitud_elemento.getValor()) + " " + longitud_elemento.getUnidad_Medida());
         }
-        if(longitud_elemento!=null){
+        if (longitud_elemento != null) {
             holder.txtNivelTension.setText(nivel_tension_elemento.getSigla());
         }
 
@@ -131,7 +129,7 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         holder.txtSobreRbt.setText(sobreBT);
         //statusIndicator.setBackgroundResource(R.color.GreenColor);
         */
-        holder.setOnItemClickListener(elemento,onItemClickListener);
+        holder.setOnItemClickListener(elemento, onItemClickListener);
     }
 
     @Override
@@ -140,7 +138,7 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
     }
 
 
-    public  class ElementViewHolder extends RecyclerView.ViewHolder   {
+    public class ElementViewHolder extends RecyclerView.ViewHolder {
         //se especifica lo que existe dentro del ViewHolder
         @BindView(R.id.txtCodigoApoyo)
         TextView txtCodigoApoyo;
@@ -154,23 +152,25 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         TextView txtTiempo;
         @BindView(R.id.txtNivelTension)
         TextView txtNivelTension;
-
+        @BindView(R.id.txtArchivo)
+        TextView txtArchivo;
 
 
         //@BindView(R.id.btnEditCable)
         ///ImageButton btnEditCable;
-       // @BindView(R.id.btnDeleteCable)
-      //  ImageButton btnDeleteCable;
+        // @BindView(R.id.btnDeleteCable)
+        //  ImageButton btnDeleteCable;
 
         private View view;
+
         public ElementViewHolder(View v) {
             super(v);
-            this.view=v;
+            this.view = v;
             ButterKnife.bind(this, v);
         }
 
-        public  void setOnItemClickListener(final Elemento responseNotify, final OnItemClickListenerElemento onItemClickListener){
-            view.setOnClickListener(new View.OnClickListener(){
+        public void setOnItemClickListener(final Elemento responseNotify, final OnItemClickListenerElemento onItemClickListener) {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onItemClickListener.onItemClick(responseNotify);

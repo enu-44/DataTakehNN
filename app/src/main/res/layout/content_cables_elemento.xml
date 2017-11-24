@@ -118,7 +118,7 @@
                 android:layout_height="30dp"
                 android:layout_weight="0.5"
                 android:background="@drawable/gray_out_line"
-                android:checkedButton="@+id/radioButtonSiRedesBt"
+                android:checkedButton="@+id/radioButtonNoRedesBt"
                 android:orientation="horizontal">
 
                 <RadioButton

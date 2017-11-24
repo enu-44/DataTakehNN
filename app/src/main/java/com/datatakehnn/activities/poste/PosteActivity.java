@@ -139,7 +139,7 @@ public class PosteActivity extends AppCompatActivity {
     ImageButton ibCalcularAltura;
 
     //Location
-    Location location=new Location("Localizacion");
+    Location location = new Location("Localizacion");
 
     //Medidor de diatancias
     private String PACKAGE_NAME = "com.nfa.distancemeter";
@@ -156,6 +156,7 @@ public class PosteActivity extends AppCompatActivity {
 
     //Variables Globals
     long Material_Id;
+    long Elemento_Id;
     long Nivel_Tension_Elemento_Id;
     long Longitud_Elemento_Id;
     long Cantidad_Retenidas;
@@ -181,7 +182,6 @@ public class PosteActivity extends AppCompatActivity {
     public CoordsService coordsService;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,6 +196,22 @@ public class PosteActivity extends AppCompatActivity {
 
     //region METHODS
 
+    private void getElementoId() {
+        Elemento elemento = elementoController.getLast();
+        if (elemento == null) {
+            Elemento_Id = 1;
+        } else {
+            Elemento_Id = elemento.getElemento_Id() + 1;
+        }
+    }
+
+    private void borrarNovedad(Novedad hayNovedad) {
+        final long idHayNovedad = hayNovedad.getNovedad_Id();
+        if (hayNovedad != null) {
+            novedadController.deleteNovedad(idHayNovedad);
+            Snackbar.make(container, "Novedad Borrada", Snackbar.LENGTH_SHORT).show();
+        }
+    }
 
     private void obtenerFechayHora() {
         //Obtener Fecha
@@ -237,8 +253,13 @@ public class PosteActivity extends AppCompatActivity {
                 if (nombre.equals("Malo")) {
                     Intent i = new Intent(PosteActivity.this, NovedadActivity.class);
                     i.putExtra("Nombre", "Estado");
-                    //TODO pasar parámetro de que es novedad de código de Apoyo.
                     startActivityForResult(i, 300);
+                } else if (nombre.equals("Bueno")) {
+                    getElementoId();
+                    Novedad hayNovedadPlaca = novedadController.getNovedadByTipoNombreAndElementoId("Estado", Elemento_Id);
+                    if (hayNovedadPlaca != null) {
+                        borrarNovedad(hayNovedadPlaca);
+                    }
                 }
             }
         });
@@ -444,7 +465,6 @@ public class PosteActivity extends AppCompatActivity {
     }
 
 
-
     //endregion
 
     //region SET INJECTION
@@ -475,16 +495,16 @@ public class PosteActivity extends AppCompatActivity {
         //Si el servicio de ubicacion se ha detenido se arranca nuevamente
 
 
-        if(((SyncActivity) syncActivity).coordsService.isServiceLocalizacionRun() == false){
+        if (((SyncActivity) syncActivity).coordsService.isServiceLocalizacionRun() == false) {
 
-            if(((SyncActivity) syncActivity).coordsService != null){
+            if (((SyncActivity) syncActivity).coordsService != null) {
                 ((SyncActivity) syncActivity).coordsService.closeService();
-                Toast.makeText(this,"Cerrar Servicio",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Cerrar Servicio", Toast.LENGTH_LONG).show();
             }
 
 
-            this.coordsService= new CoordsService(this);
-            Toast.makeText(this,"Iniciando Servicio de Ubicacion",Toast.LENGTH_LONG).show();
+            this.coordsService = new CoordsService(this);
+            Toast.makeText(this, "Iniciando Servicio de Ubicacion", Toast.LENGTH_LONG).show();
         }
 
 
@@ -517,6 +537,11 @@ public class PosteActivity extends AppCompatActivity {
             case R.id.radioButtonSiCodigoApoyo:
                 edtCodigoApoyo.setEnabled(true);
                 textInputLayoutCodigoApoyo.setVisibility(View.VISIBLE);
+                getElementoId();
+                Novedad hayNovedadCodigoApoyo = novedadController.getNovedadByTipoNombreAndElementoId("Codigo Apoyo", Elemento_Id);
+                if (hayNovedadCodigoApoyo != null) {
+                    borrarNovedad(hayNovedadCodigoApoyo);
+                }
                 /*
                 Tipo_Novedad tipo_novedad = novedadController.getTipoNovedadIdByNombre("Codigo Apoyo");
                 long id_tipo_novedad = tipo_novedad.getTipo_Novedad_Id();
@@ -532,6 +557,11 @@ public class PosteActivity extends AppCompatActivity {
             case R.id.radioButtonSiPlaca:
                 textInputLayoutResistenciaMecanica.setVisibility(View.VISIBLE);
                 edtResistenciaMecanica.setEnabled(true);
+                getElementoId();
+                Novedad hayNovedadPlaca = novedadController.getNovedadByTipoNombreAndElementoId("Resistencia Mecanica", Elemento_Id);
+                if (hayNovedadPlaca != null) {
+                    borrarNovedad(hayNovedadPlaca);
+                }
                 break;
             case R.id.ibCalcularAltura:
                 String packageName = PACKAGE_NAME;
@@ -597,8 +627,7 @@ public class PosteActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
 
             case R.id.action_done:
                 validacionRegisterElement();
@@ -654,10 +683,11 @@ public class PosteActivity extends AppCompatActivity {
             Localizacion localizacion = intent.getExtras().getParcelable("localizacion");
             location.setLatitude(localizacion.getLatitud());
             location.setLongitude(localizacion.getLongitud());
-            tvCoords.setText(String.valueOf(location.getLatitude())+" , "+String.valueOf(location.getLongitude()));
-         ////   Toast.makeText(PosteActivity.this,""+localizacion.getLatitud()+" , "+localizacion.getLongitud(),Toast.LENGTH_LONG).show();
+            tvCoords.setText(String.valueOf(location.getLatitude()) + " , " + String.valueOf(location.getLongitude()));
+            ////   Toast.makeText(PosteActivity.this,""+localizacion.getLatitud()+" , "+localizacion.getLongitud(),Toast.LENGTH_LONG).show();
         }
     };
+
     /*----------------------------------------------------------------------------------------------------------------------*/
     @Override
     public void onResume() {

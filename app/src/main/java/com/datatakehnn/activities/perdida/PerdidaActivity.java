@@ -23,7 +23,9 @@ import com.datatakehnn.R;
 import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
 import com.datatakehnn.activities.novedad.NovedadActivity;
 import com.datatakehnn.controllers.ElementoController;
+import com.datatakehnn.controllers.NovedadController;
 import com.datatakehnn.controllers.PerdidaController;
+import com.datatakehnn.models.novedad_model.Novedad;
 import com.datatakehnn.models.perdida_model.Perdida;
 
 import butterknife.BindView;
@@ -70,6 +72,7 @@ public class PerdidaActivity extends AppCompatActivity {
     //Instancias
     ElementoController elementoController;
     PerdidaController perdidaController;
+    NovedadController novedadController;
 
     //Accion
     boolean ACCION_ADD;
@@ -80,10 +83,11 @@ public class PerdidaActivity extends AppCompatActivity {
     //Variables globales
     long Elemento_Id;
     //long cantidad_lampara_adicional = 0;
-    static  boolean estado_lampara_adicional = false;
+    static boolean estado_lampara_adicional = false;
     static boolean lampara_encendida_dia = false;
     static boolean conexion_ilicita = false;
     static boolean poda = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,16 +100,16 @@ public class PerdidaActivity extends AppCompatActivity {
     }
 
 
-
     //region CLICKS EN ITEMS
     @OnClick({R.id.radioButtonNoLamparaAdicional, R.id.radioButtonSiLamparaAdicional, R.id.radioButtonNoLamparaEncendidaDia, R.id.radioButtonSiLamparaEncendidaDia, R.id.radioButtonNoConexionIlicita, R.id.radioButtonSiConexionIlicita, R.id.radioButtonNoPoda, R.id.radioButtonSiPoda})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-
             case R.id.radioButtonNoLamparaAdicional:
                 estado_lampara_adicional = false;
-                //cantidad_lampara_adicional = 0;
-                //textInputLayoutCantidadLamparaAdicional.setVisibility(View.GONE);
+                Novedad hayNovedadLamparaAdicional = novedadController.getNovedadByTipoNombreAndElementoId("Lampara Adicional", Elemento_Id);
+                if (hayNovedadLamparaAdicional != null) {
+                    borrarNovedad(hayNovedadLamparaAdicional);
+                }
                 break;
             case R.id.radioButtonSiLamparaAdicional:
                 estado_lampara_adicional = true;
@@ -119,6 +123,10 @@ public class PerdidaActivity extends AppCompatActivity {
                 break;
             case R.id.radioButtonNoLamparaEncendidaDia:
                 lampara_encendida_dia = false;
+                Novedad hayNovedadLamparaEncendida = novedadController.getNovedadByTipoNombreAndElementoId("Lampara Encendida", Elemento_Id);
+                if (hayNovedadLamparaEncendida != null) {
+                    borrarNovedad(hayNovedadLamparaEncendida);
+                }
                 break;
             case R.id.radioButtonSiLamparaEncendidaDia:
                 lampara_encendida_dia = true;
@@ -130,6 +138,10 @@ public class PerdidaActivity extends AppCompatActivity {
                 break;
             case R.id.radioButtonNoConexionIlicita:
                 conexion_ilicita = false;
+                Novedad hayNovedadConexionIlicita = novedadController.getNovedadByTipoNombreAndElementoId("Conexion Ilicita", Elemento_Id);
+                if (hayNovedadConexionIlicita != null) {
+                    borrarNovedad(hayNovedadConexionIlicita);
+                }
                 break;
             case R.id.radioButtonSiConexionIlicita:
                 conexion_ilicita = true;
@@ -141,6 +153,10 @@ public class PerdidaActivity extends AppCompatActivity {
                 break;
             case R.id.radioButtonNoPoda:
                 poda = false;
+                Novedad hayNovedadPoda = novedadController.getNovedadByTipoNombreAndElementoId("Poda", Elemento_Id);
+                if (hayNovedadPoda != null) {
+                    borrarNovedad(hayNovedadPoda);
+                }
                 break;
             case R.id.radioButtonSiPoda:
                 poda = true;
@@ -167,6 +183,16 @@ public class PerdidaActivity extends AppCompatActivity {
 
     //endregion
 
+    //region METHODS
+    private void borrarNovedad(Novedad hayNovedad) {
+        final long idHayNovedad = hayNovedad.getNovedad_Id();
+        if (hayNovedad != null) {
+            novedadController.deleteNovedad(idHayNovedad);
+            Snackbar.make(container, "Novedad Borrada", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+    //endregion
+
     //region SETUP INJECTION
     private void setupInjection() {
         ACCION_ADD = getIntent().getExtras().getBoolean("ACCION_ADD");
@@ -175,6 +201,7 @@ public class PerdidaActivity extends AppCompatActivity {
 
         this.elementoController = elementoController.getInstance(this);
         this.perdidaController = perdidaController.getInstance(this);
+        this.novedadController = novedadController.getInstance(this);
     }
 
     private void setToolbarInjection() {
@@ -190,46 +217,45 @@ public class PerdidaActivity extends AppCompatActivity {
     }
 
     private void verificateDataAction() {
-        if(ACCION_UPDATE){
-            Perdida perdidaUpdate= perdidaController.getPerdidaByElementId(Elemento_Id);
-
+        if (ACCION_UPDATE) {
+            Perdida perdidaUpdate = perdidaController.getPerdidaByElementId(Elemento_Id);
             perdida.setPerdida_Id(perdidaUpdate.getPerdida_Id());
-            if(perdidaUpdate.Is_Conexion_Ilicita){
+            if (perdidaUpdate.Is_Conexion_Ilicita) {
                 radioGroupConexionIlicita.check(R.id.radioButtonSiConexionIlicita);
-                conexion_ilicita=true;
+                conexion_ilicita = true;
 
-            }else{
+            } else {
                 radioGroupConexionIlicita.check(R.id.radioButtonNoConexionIlicita);
-                conexion_ilicita=false;
+                conexion_ilicita = false;
             }
 
-            if(perdidaUpdate.Is_Lampara_Adicional){
+            if (perdidaUpdate.Is_Lampara_Adicional) {
                 radioGroupLamparaAdicional.check(R.id.radioButtonSiLamparaAdicional);
-                estado_lampara_adicional=true;
+                estado_lampara_adicional = true;
 
-            }else{
+            } else {
                 radioGroupLamparaAdicional.check(R.id.radioButtonNoLamparaAdicional);
-                estado_lampara_adicional=false;
+                estado_lampara_adicional = false;
             }
 
-            if(perdidaUpdate.Is_Poda){
+            if (perdidaUpdate.Is_Poda) {
                 radioGroupPoda.check(R.id.radioButtonSiPoda);
-                poda=true;
+                poda = true;
 
-            }else{
+            } else {
                 radioGroupPoda.check(R.id.radioButtonNoPoda);
-                poda=false;
+                poda = false;
             }
 
-            if(perdidaUpdate.Is_Lampara_Encendida_Dia){
+            if (perdidaUpdate.Is_Lampara_Encendida_Dia) {
                 radioGroupLamparaEncendidaDia.check(R.id.radioButtonSiLamparaEncendidaDia);
-                lampara_encendida_dia=true;
-            }else{
+                lampara_encendida_dia = true;
+            } else {
                 radioGroupLamparaEncendidaDia.check(R.id.radioButtonNoLamparaEncendidaDia);
-                lampara_encendida_dia=false;
+                lampara_encendida_dia = false;
             }
 
-        }else{
+        } else {
 
         }
     }
@@ -264,10 +290,9 @@ public class PerdidaActivity extends AppCompatActivity {
         if (id == R.id.action_done) {
             validarCampos();
             ///Metodo que permite no recargar la pagina al devolverse
-        } else if(id == R.id.action_update){
+        } else if (id == R.id.action_update) {
             validarCampos();
-        }else if (id == android.R.id.home) {
-            // Obtener intent de la actividad padre
+        } else if (id == android.R.id.home) {
             // Obtener intent de la actividad padre
             Intent upIntent = NavUtils.getParentActivityIntent(this);
             upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -361,16 +386,15 @@ public class PerdidaActivity extends AppCompatActivity {
         perdidaController.registerUpdate(perdida);
 
 
-
         final AlertDialog.Builder builder = new AlertDialog.Builder(PerdidaActivity.this);
         builder.setTitle("Notificación");
         builder.setMessage("¿Confirma todos los datos?");
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(ACCION_UPDATE){
+                if (ACCION_UPDATE) {
                     onReturnActivity();
-                }else{
+                } else {
                     Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
                     i.putExtra("ACCION_ADD", true);
                     i.putExtra("ACCION_UPDATE", false);

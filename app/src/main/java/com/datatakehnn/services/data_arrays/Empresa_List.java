@@ -12,34 +12,46 @@ import java.util.List;
 public class Empresa_List {
     private static Empresa[] list_empresas = {
             new Empresa(1,
-                    "Claro" ,
+                    "Claro",
                     "Carrera 6 # 3-23",
                     "123123123",
                     "23432434-3"
             ),
             new Empresa(2,
-                    "Movistar" ,
+                    "Movistar",
                     "Transversal 5 # 3-23",
                     "123123123",
                     "23432434-3"
             ),
             new Empresa(3,
-                    "Alpavision" ,
+                    "Alpavision",
                     "Calle 6 # 3-23",
                     "123123123",
                     "23432434-3"
             ),
             new Empresa(4,
-                    "ETB" ,
+                    "ETB",
                     "Calle 6 # 3-23",
                     "123123123",
                     "23432434-3"
             ),
             new Empresa(5,
-                    "Azteca" ,
+                    "Azteca",
                     "Calle 6 # 3-23",
                     "123123123",
                     "23432434-3"
+            ),
+            new Empresa(6,
+                    "Media Commerce",
+                    "Calle 6 # 3-23",
+                    "123123123",
+                    "23432434-3"
+            ),
+            new Empresa(7,
+                    "No Identificado",
+                    "",
+                    "",
+                    ""
             )
     };
 
