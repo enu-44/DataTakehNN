@@ -10,4 +10,5 @@ import com.datatakehnn.models.novedad_model.Novedad;
 
 public interface OnItemClickListenerFoto {
     void onItemClick(Novedad novedad);
+    void onItemClickVisor(Novedad novedad);
 }

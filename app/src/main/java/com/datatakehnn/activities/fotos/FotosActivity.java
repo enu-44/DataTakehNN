@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -26,6 +27,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -80,7 +82,10 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     ImageView ivFoto2;
     @BindView(R.id.edtDescripcionFoto2)
     EditText edtDescripcionFoto2;
-
+    @BindView(R.id.ibVerFoto1)
+    ImageButton ibVerFoto1;
+    @BindView(R.id.ibVerFoto2)
+    ImageButton ibVerFoto2;
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
@@ -105,6 +110,9 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     //String ruta, path;
     Double Latitud, Longitud;
     String latitud, longitud;
+    String ruta_foto_1;
+    String ruta_foto_2;
+    String ruta_foto_novedad;
     //byte[] image;
     //Bitmap compressedImage = null;
 
@@ -195,6 +203,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                             Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
                             ivFoto1.setImageBitmap(bitmap);
                             edtDescripcionFoto1.setText(item.getDescripcion());
+                            ruta_foto_1 = item.getRuta_Foto();
                         }
                     } catch (Exception ex) {
 
@@ -209,6 +218,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                             Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
                             ivFoto2.setImageBitmap(bitmap);
                             edtDescripcionFoto2.setText(item.getDescripcion());
+                            ruta_foto_2 = item.getRuta_Foto();
                         }
                     } catch (Exception ex) {
 
@@ -252,7 +262,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     //endregion
 
     //region EVENTS
-    @OnClick({R.id.ivFoto1, R.id.ivFoto2})
+    @OnClick({R.id.ivFoto1, R.id.ivFoto2, R.id.ibVerFoto1, R.id.ibVerFoto2})
     public void onViewClicked(View view) {
 
         boolean cancel_ = false;
@@ -282,12 +292,45 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                     iniciarCamara();
                 }
                 break;
+            case R.id.ibVerFoto1:
+                if (ACCION_ADD == true) {
+                    if (yaTomoFoto1 == true) {
+                        //String ruta_foto = "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString();
+                        verFoto1();
+                    }
+                } else if (ACCION_UPDATE == true) {
+                    verFoto1();
+                }
+
+                break;
+            case R.id.ibVerFoto2:
+                if (yaTomoFoto2 == true) {
+                    //String ruta_foto = "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString();
+                    Foto verFoto2 = fotoController.getByRutaFotoAndElementoId(ruta_foto_2, Elemento_Id);
+                    if (verFoto2 != null) {
+                        String rutaFoto2 = verFoto2.getRuta_Foto();
+                        File fileFoto2 = new File(rutaFoto2);
+                        Uri uriFoto2 = Uri.fromFile(fileFoto2);
+                        Intent viewFoto2 = new Intent(android.content.Intent.ACTION_VIEW, uriFoto2);
+                        viewFoto2.setDataAndType(uriFoto2, "image/*");
+                        startActivity(viewFoto2);
+                    } else {
+                        Snackbar.make(container, "No hay foto Registrada", Snackbar.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Snackbar.make(container, "No ha tomado Foto", Snackbar.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
     //endregion
 
     //region Methods
+    private void verFoto1(){
+        
+    }
+
     private void iniciarCamara() {
         magicalCamera = new MagicalCamera(this, RESIZE_PHOTO_PIXELS_PERCENTAGE, magicalPermissions);
         //take photo
@@ -369,15 +412,16 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     private void updateFotoNovedad(Bitmap compressedImage, String path) {
         byte[] image = convertBitmapToByte(compressedImage);
         Blob imagenBlob = new Blob(image);
-        novedad.setRuta_Foto(path);
+        ruta_foto_novedad = path;
+        novedad.setRuta_Foto(ruta_foto_novedad);
         novedad.setImage_Novedad(imagenBlob);
         novedadController.updateWithFoto(novedad);
         loadNovedades();
     }
 
     private void registerFoto1(Bitmap compressedImage, String path) {
-        String ruta_foto = path;
-        Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto, Elemento_Id);
+        ruta_foto_1 = path;
+        Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto_1, Elemento_Id);
         if (hayFoto != null) {
             hayFoto.setDescripcion(edtDescripcionFoto1.getText().toString());
             byte[] image = convertBitmapToByte(compressedImage);
@@ -392,15 +436,15 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             byte[] image = convertBitmapToByte(compressedImage);
             Blob imagenBlob = new Blob(image);
             foto.setImage(imagenBlob);
-            foto.setRuta_Foto(ruta_foto);
+            foto.setRuta_Foto(ruta_foto_1);
             fotoController.register(foto);
             yaTomoFoto1 = true;
         }
     }
 
     private void registerFoto2(Bitmap compressedImage, String path) {
-        String ruta_foto = path;
-        Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto, Elemento_Id);
+        ruta_foto_2 = path;
+        Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto_2, Elemento_Id);
         if (hayFoto != null) {
             hayFoto.setDescripcion(edtDescripcionFoto2.getText().toString());
             byte[] image = convertBitmapToByte(compressedImage);
@@ -415,7 +459,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             byte[] image = convertBitmapToByte(compressedImage);
             Blob imagenBlob = new Blob(image);
             foto.setImage(imagenBlob);
-            foto.setRuta_Foto(ruta_foto);
+            foto.setRuta_Foto(ruta_foto_2);
             fotoController.register(foto);
             yaTomoFoto2 = true;
         }
@@ -599,6 +643,21 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         iniciarCamara();
     }
 
+    @Override
+    public void onItemClickVisor(Novedad item) {
+        novedad = item;
+        String rutaFotoNovedad = novedad.getRuta_Foto();
+        if (rutaFotoNovedad != null) {
+            File fileFotoNovedad = new File(rutaFotoNovedad);
+            Uri uriFotoNovedad = Uri.fromFile(fileFotoNovedad);
+            Intent viewFotoNovedad = new Intent(android.content.Intent.ACTION_VIEW, uriFotoNovedad);
+            viewFotoNovedad.setDataAndType(uriFotoNovedad, "image/*");
+            startActivity(viewFotoNovedad);
+        } else {
+            Snackbar.make(container, "No hay Foto registrada", Snackbar.LENGTH_SHORT).show();
+        }
+
+    }
 
     //endregion
 

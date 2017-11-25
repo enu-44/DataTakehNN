@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,9 +70,9 @@ public class AdapterFotos extends RecyclerView.Adapter<AdapterFotos.FotosViewHol
         holder.tvDescripcionFoto.setText(list.getDetalle_Tipo_Novedad_Nombre());
         holder.tvTipoFoto.setText(list.getNombre_Tipo_Novedad());
         //holder.tvRutaFoto.setText(list.getRuta_Foto());
-        try{
+        try {
 
-            if(list.getImage_Novedad()!=null){
+            if (list.getImage_Novedad() != null) {
                 byte[] foto = list.getImage_Novedad().getBlob();
                 Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
                 holder.ivFotoRecycler.setImageBitmap(bitmap);
@@ -82,14 +83,12 @@ public class AdapterFotos extends RecyclerView.Adapter<AdapterFotos.FotosViewHol
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     holder.ivFotoRecycler.setImageBitmap(myBitmap);
                 }*/
-            }else{
+            } else {
                 holder.ivFotoRecycler.setImageResource(R.drawable.boton_foto_gris);
             }
 
 
-
-
-        }catch (Exception ex){
+        } catch (Exception ex) {
 
             String error = ex.toString();
         }
@@ -114,6 +113,8 @@ public class AdapterFotos extends RecyclerView.Adapter<AdapterFotos.FotosViewHol
         TextView tvDescripcionFoto;
         @BindView(R.id.tvTipoFoto)
         TextView tvTipoFoto;
+        @BindView(R.id.ibVerFoto)
+        ImageButton ibVerFoto;
        /* @BindView(R.id.tvRutaFoto)
         TextView tvRutaFoto;*/
 
@@ -131,6 +132,13 @@ public class AdapterFotos extends RecyclerView.Adapter<AdapterFotos.FotosViewHol
                 public void onClick(View view) {
 
                     mOnItemClickListenerFoto.onItemClick(respuestaNovedad);
+                }
+            });
+            ibVerFoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mOnItemClickListenerFoto.onItemClickVisor(respuestaNovedad);
                 }
             });
 

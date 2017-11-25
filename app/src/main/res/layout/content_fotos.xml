@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/container"
@@ -19,22 +18,22 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_marginTop="10dp"
                 android:id="@+id/ivFoto1"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:layout_weight="0.5"
                 android:contentDescription="@null"
                 android:src="@drawable/boton_foto_gris" />
 
             <android.support.design.widget.TextInputLayout
-                android:layout_marginTop="10dp"
                 android:id="@+id/textInputLayoutFotoPoste1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp"
+                android:layout_marginTop="10dp"
                 android:hint="Descripción Foto 1 Poste"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
@@ -46,24 +45,32 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <ImageButton
+                android:id="@+id/ibVerFoto1"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@color/colorPrimary"
+                android:padding="5dp"
+                android:src="@drawable/ic_ver_foto" />
 
             <ImageView
-                android:layout_marginTop="10dp"
                 android:id="@+id/ivFoto2"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:layout_weight="0.5"
                 android:contentDescription="@null"
                 android:src="@drawable/boton_foto_gris" />
 
             <android.support.design.widget.TextInputLayout
-                android:layout_marginTop="10dp"
                 android:id="@+id/textInputLayoutFotoPoste2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp"
+                android:layout_marginTop="10dp"
                 android:hint="Descripción Foto 2 Poste"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
@@ -75,6 +82,15 @@
 
             </android.support.design.widget.TextInputLayout>
 
+
+            <ImageButton
+                android:id="@+id/ibVerFoto2"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@color/colorPrimary"
+                android:padding="5dp"
+                android:src="@drawable/ic_ver_foto" />
 
         </LinearLayout>
 
@@ -94,10 +110,11 @@
             android:textSize="22sp" />
 
         <RelativeLayout
-            android:layout_below="@+id/tvNovedades"
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout">
+            android:layout_below="@+id/tvNovedades">
+
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyle"
@@ -109,15 +126,15 @@
                 android:id="@+id/txtResults"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="13dp"
+                android:layout_marginStart="13dp"
+                android:layout_toEndOf="@+id/progressBar"
+                android:layout_toRightOf="@+id/progressBar"
                 android:paddingEnd="16dp"
                 android:paddingRight="16dp"
                 android:text="@string/results_global_search"
-                android:textColor="@color/black"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/progressBar"
-                android:layout_toEndOf="@+id/progressBar"
-                android:layout_marginLeft="13dp"
-                android:layout_marginStart="13dp" />
+                android:textColor="@color/black" />
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -129,7 +146,6 @@
             android:nestedScrollingEnabled="false">
 
         </android.support.v7.widget.RecyclerView>
-
 
 
     </RelativeLayout>
