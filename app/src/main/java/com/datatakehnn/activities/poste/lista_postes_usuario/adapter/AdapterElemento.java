@@ -108,7 +108,7 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         if (longitud_elemento != null) {
             holder.txtLongitud.setText(String.valueOf(longitud_elemento.getValor()) + " " + longitud_elemento.getUnidad_Medida());
         }
-        if (longitud_elemento != null) {
+        if (nivel_tension_elemento   != null) {
             holder.txtNivelTension.setText(nivel_tension_elemento.getSigla());
         }
 
