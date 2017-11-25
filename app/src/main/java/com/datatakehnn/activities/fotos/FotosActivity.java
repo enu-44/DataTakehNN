@@ -297,6 +297,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                     if (yaTomoFoto1 == true) {
                         //String ruta_foto = "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString();
                         verFoto1();
+                    } else {
+                        Snackbar.make(container, "No ha tomado Foto", Snackbar.LENGTH_SHORT).show();
                     }
                 } else if (ACCION_UPDATE == true) {
                     verFoto1();
@@ -304,21 +306,15 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
                 break;
             case R.id.ibVerFoto2:
-                if (yaTomoFoto2 == true) {
-                    //String ruta_foto = "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString();
-                    Foto verFoto2 = fotoController.getByRutaFotoAndElementoId(ruta_foto_2, Elemento_Id);
-                    if (verFoto2 != null) {
-                        String rutaFoto2 = verFoto2.getRuta_Foto();
-                        File fileFoto2 = new File(rutaFoto2);
-                        Uri uriFoto2 = Uri.fromFile(fileFoto2);
-                        Intent viewFoto2 = new Intent(android.content.Intent.ACTION_VIEW, uriFoto2);
-                        viewFoto2.setDataAndType(uriFoto2, "image/*");
-                        startActivity(viewFoto2);
+                if (ACCION_ADD == true) {
+                    if (yaTomoFoto2 == true) {
+                        //String ruta_foto = "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString();
+                        verFoto2();
                     } else {
-                        Snackbar.make(container, "No hay foto Registrada", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(container, "No ha tomado Foto", Snackbar.LENGTH_SHORT).show();
                     }
-                } else {
-                    Snackbar.make(container, "No ha tomado Foto", Snackbar.LENGTH_SHORT).show();
+                } else if (ACCION_UPDATE == true) {
+                    verFoto2();
                 }
                 break;
         }
@@ -327,9 +323,34 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     //endregion
 
     //region Methods
-    private void verFoto1(){
-        
+    private void verFoto1() {
+        Foto verFoto1 = fotoController.getByRutaFotoAndElementoId(ruta_foto_1, Elemento_Id);
+        if (verFoto1 != null) {
+            String rutaFoto1 = verFoto1.getRuta_Foto();
+            File fileFoto1 = new File(rutaFoto1);
+            Uri uriFoto1 = Uri.fromFile(fileFoto1);
+            Intent viewFoto1 = new Intent(android.content.Intent.ACTION_VIEW, uriFoto1);
+            viewFoto1.setDataAndType(uriFoto1, "image/*");
+            startActivity(viewFoto1);
+        } else {
+            Snackbar.make(container, "No hay foto Registrada", Snackbar.LENGTH_SHORT).show();
+        }
     }
+
+    private void verFoto2() {
+        Foto verFoto2 = fotoController.getByRutaFotoAndElementoId(ruta_foto_2, Elemento_Id);
+        if (verFoto2 != null) {
+            String rutaFoto2 = verFoto2.getRuta_Foto();
+            File fileFoto2 = new File(rutaFoto2);
+            Uri uriFoto2 = Uri.fromFile(fileFoto2);
+            Intent viewFoto2 = new Intent(android.content.Intent.ACTION_VIEW, uriFoto2);
+            viewFoto2.setDataAndType(uriFoto2, "image/*");
+            startActivity(viewFoto2);
+        } else {
+            Snackbar.make(container, "No hay foto Registrada", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void iniciarCamara() {
         magicalCamera = new MagicalCamera(this, RESIZE_PHOTO_PIXELS_PERCENTAGE, magicalPermissions);
