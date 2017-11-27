@@ -52,12 +52,19 @@ public class Novedad extends BaseModel {
     @Column
     public String Ruta_Foto;
 
+    @SerializedName("FechaCreacion")
+    @Column
+    public String Fecha_Creacion;
+
+    @SerializedName("Hora")
+    @Column
+    public String Hora;
 
 
     public Novedad() {
     }
 
-    public Novedad(long novedad_Id, long detalle_Tipo_Novedad_Id, String detalle_Tipo_Novedad_Nombre, String nombre_Tipo_Novedad, long elemento_Id, String descripcion, Blob image_Novedad, long tipo_Novedad_Id, String ruta_Foto) {
+    public Novedad(long novedad_Id, long detalle_Tipo_Novedad_Id, String detalle_Tipo_Novedad_Nombre, String nombre_Tipo_Novedad, long elemento_Id, String descripcion, Blob image_Novedad, long tipo_Novedad_Id, String ruta_Foto, String fecha_Creacion, String hora) {
         Novedad_Id = novedad_Id;
         Detalle_Tipo_Novedad_Id = detalle_Tipo_Novedad_Id;
         Detalle_Tipo_Novedad_Nombre = detalle_Tipo_Novedad_Nombre;
@@ -67,6 +74,8 @@ public class Novedad extends BaseModel {
         Image_Novedad = image_Novedad;
         Tipo_Novedad_Id = tipo_Novedad_Id;
         Ruta_Foto = ruta_Foto;
+        Fecha_Creacion = fecha_Creacion;
+        Hora = hora;
     }
 
     //Methods
@@ -140,5 +149,21 @@ public class Novedad extends BaseModel {
 
     public void setRuta_Foto(String ruta_Foto) {
         Ruta_Foto = ruta_Foto;
+    }
+
+    public String getFecha_Creacion() {
+        return Fecha_Creacion;
+    }
+
+    public void setFecha_Creacion(String fecha_Creacion) {
+        Fecha_Creacion = fecha_Creacion;
+    }
+
+    public String getHora() {
+        return Hora;
+    }
+
+    public void setHora(String hora) {
+        Hora = hora;
     }
 }

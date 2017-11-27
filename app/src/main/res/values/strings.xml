@@ -82,6 +82,10 @@
     <string name="lampara_encendida_dia">¿Lámpara encendida de día?</string>
     <string name="conexion_ilicita">¿Conexión Ílicita?</string>
     <string name="poda">¿Requiere Poda?</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="descripcion">Descripción(Opcional)</string>
+    <string name="title_perdidas">Pérdidas</string>
+    <string name="title_tipo_perdida">Tipo Pérdida</string>
 
     <!--CIUDAD -->
     <string name="title_departamento">Departamento</string>

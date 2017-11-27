@@ -1,92 +1,102 @@
 package com.datatakehnn.activities.perdida;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
-import com.datatakehnn.activities.novedad.NovedadActivity;
+import com.datatakehnn.activities.perdida.adapter.AdapterPerdida;
+import com.datatakehnn.activities.perdida.adapter.OnItemClickListenerPerdida;
 import com.datatakehnn.controllers.ElementoController;
-import com.datatakehnn.controllers.NovedadController;
 import com.datatakehnn.controllers.PerdidaController;
-import com.datatakehnn.models.novedad_model.Novedad;
+import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.models.perdida_model.Perdida;
+import com.datatakehnn.models.reponse_generic.Response;
+import com.datatakehnn.models.tipo_perdida_model.Tipo_Perdida;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PerdidaActivity extends AppCompatActivity {
+public class PerdidaActivity extends AppCompatActivity implements MainViewPerdida, SwipeRefreshLayout.OnRefreshListener, OnItemClickListenerPerdida {
+
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.radioButtonNoLamparaAdicional)
-    RadioButton radioButtonNoLamparaAdicional;
-    @BindView(R.id.radioButtonSiLamparaAdicional)
-    RadioButton radioButtonSiLamparaAdicional;
-    /*
-    @BindView(R.id.edtLamparaAdicional)
-    EditText edtLamparaAdicional;
-    @BindView(R.id.textInputLayoutCantidadLamparaAdicional)
-    TextInputLayout textInputLayoutCantidadLamparaAdicional;*/
-    @BindView(R.id.radioButtonNoLamparaEncendidaDia)
-    RadioButton radioButtonNoLamparaEncendidaDia;
-    @BindView(R.id.radioButtonSiLamparaEncendidaDia)
-    RadioButton radioButtonSiLamparaEncendidaDia;
-    @BindView(R.id.radioButtonNoConexionIlicita)
-    RadioButton radioButtonNoConexionIlicita;
-    @BindView(R.id.radioButtonSiConexionIlicita)
-    RadioButton radioButtonSiConexionIlicita;
-    @BindView(R.id.radioButtonNoPoda)
-    RadioButton radioButtonNoPoda;
-    @BindView(R.id.radioButtonSiPoda)
-    RadioButton radioButtonSiPoda;
+    @BindView(R.id.spinnerTipoPerdida)
+    MaterialBetterSpinner spinnerTipoPerdida;
+    @BindView(R.id.btnAddPerdidas)
+    Button btnAddPerdidas;
+    @BindView(R.id.edtCantidad)
+    EditText edtCantidad;
+    @BindView(R.id.edtDescripcion)
+    EditText edtDescripcion;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.txtResults)
+    TextView txtResults;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.container)
     RelativeLayout container;
 
-    @BindView(R.id.radioGroupConexionIlicita)
-    RadioGroup radioGroupConexionIlicita;
-    @BindView(R.id.radioGroupLamparaAdicional)
-    RadioGroup radioGroupLamparaAdicional;
-    @BindView(R.id.radioGroupLamparaEncendidaDia)
-    RadioGroup radioGroupLamparaEncendidaDia;
-    @BindView(R.id.radioGroupPoda)
-    RadioGroup radioGroupPoda;
+    //Declaracion Arrays
+    List<Tipo_Perdida> tipoPerdidaList = new ArrayList<>();
+    List<Perdida> perdidaList = new ArrayList<>();
 
-    //Instancias
-    ElementoController elementoController;
+    //Adapters
+    ArrayAdapter<Tipo_Perdida> tipoPerdidaArrayAdapter;
+
+    //Instances
+    SincronizacionGetInformacionController sincronizacionGetInformacionController;
     PerdidaController perdidaController;
-    NovedadController novedadController;
+    ElementoController elementoController;
+
+    //Adapter
+    AdapterPerdida adapter;
 
     //Accion
     boolean ACCION_ADD;
     boolean ACCION_UPDATE;
 
-    Perdida perdida = new Perdida();
-
-    //Variables globales
+    //Variables
     long Elemento_Id;
-    //long cantidad_lampara_adicional = 0;
-    static boolean estado_lampara_adicional = false;
-    static boolean lampara_encendida_dia = false;
-    static boolean conexion_ilicita = false;
-    static boolean poda = false;
+    long Tipo_Perdida_Id;
+    String Nombre_Tipo_Perdida;
 
 
     @Override
@@ -94,319 +104,320 @@ public class PerdidaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perdida);
         ButterKnife.bind(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
         setupInjection();
         setToolbarInjection();
-        verificateDataAction();
+        initAdapter();
+        initRecyclerView();
+        showProgresss();
+        loadListSpinnerTipoPerdida();
+        loadListPerdidas();
     }
-
-
-    //region CLICKS EN ITEMS
-    @OnClick({R.id.radioButtonNoLamparaAdicional, R.id.radioButtonSiLamparaAdicional, R.id.radioButtonNoLamparaEncendidaDia, R.id.radioButtonSiLamparaEncendidaDia, R.id.radioButtonNoConexionIlicita, R.id.radioButtonSiConexionIlicita, R.id.radioButtonNoPoda, R.id.radioButtonSiPoda})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.radioButtonNoLamparaAdicional:
-                estado_lampara_adicional = false;
-                Novedad hayNovedadLamparaAdicional = novedadController.getNovedadByTipoNombreAndElementoId("Lampara Adicional", Elemento_Id);
-                if (hayNovedadLamparaAdicional != null) {
-                    borrarNovedad(hayNovedadLamparaAdicional);
-                }
-                break;
-            case R.id.radioButtonSiLamparaAdicional:
-                estado_lampara_adicional = true;
-                //cantidad_lampara_adicional = Long.parseLong(edtLamparaAdicional.getText().toString());
-                //textInputLayoutCantidadLamparaAdicional.setVisibility(View.VISIBLE);
-                Intent h = new Intent(this, NovedadActivity.class);
-                h.putExtra("Nombre", "Lampara Adicional");
-                h.putExtra("perdida", "1");
-                h.putExtra("Elemento_Id", Elemento_Id);
-                startActivityForResult(h, 100);
-                break;
-            case R.id.radioButtonNoLamparaEncendidaDia:
-                lampara_encendida_dia = false;
-                Novedad hayNovedadLamparaEncendida = novedadController.getNovedadByTipoNombreAndElementoId("Lampara Encendida", Elemento_Id);
-                if (hayNovedadLamparaEncendida != null) {
-                    borrarNovedad(hayNovedadLamparaEncendida);
-                }
-                break;
-            case R.id.radioButtonSiLamparaEncendidaDia:
-                lampara_encendida_dia = true;
-                Intent i = new Intent(this, NovedadActivity.class);
-                i.putExtra("Nombre", "Lampara Encendida");
-                i.putExtra("perdida", "1");
-                i.putExtra("Elemento_Id", Elemento_Id);
-                startActivityForResult(i, 100);
-                break;
-            case R.id.radioButtonNoConexionIlicita:
-                conexion_ilicita = false;
-                Novedad hayNovedadConexionIlicita = novedadController.getNovedadByTipoNombreAndElementoId("Conexion Ilicita", Elemento_Id);
-                if (hayNovedadConexionIlicita != null) {
-                    borrarNovedad(hayNovedadConexionIlicita);
-                }
-                break;
-            case R.id.radioButtonSiConexionIlicita:
-                conexion_ilicita = true;
-                Intent j = new Intent(this, NovedadActivity.class);
-                j.putExtra("Nombre", "Conexion Ilicita");
-                j.putExtra("perdida", "1");
-                j.putExtra("Elemento_Id", Elemento_Id);
-                startActivityForResult(j, 100);
-                break;
-            case R.id.radioButtonNoPoda:
-                poda = false;
-                Novedad hayNovedadPoda = novedadController.getNovedadByTipoNombreAndElementoId("Poda", Elemento_Id);
-                if (hayNovedadPoda != null) {
-                    borrarNovedad(hayNovedadPoda);
-                }
-                break;
-            case R.id.radioButtonSiPoda:
-                poda = true;
-                Intent k = new Intent(this, NovedadActivity.class);
-                k.putExtra("Nombre", "Poda");
-                k.putExtra("perdida", "1");
-                k.putExtra("Elemento_Id", Elemento_Id);
-                startActivityForResult(k, 100);
-                break;
-        }
-    }
-
-
-    //endregion
-
-    //region ON ACTIVITY RESULT
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == 100) && (resultCode == RESULT_OK)) {
-            Snackbar.make(container, getString(R.string.message_novedad), Snackbar.LENGTH_SHORT).show();
-        }
-    }
-
-
-    //endregion
-
-    //region METHODS
-    private void borrarNovedad(Novedad hayNovedad) {
-        final long idHayNovedad = hayNovedad.getNovedad_Id();
-        if (hayNovedad != null) {
-            novedadController.deleteNovedad(idHayNovedad);
-            Snackbar.make(container, "Novedad Borrada", Snackbar.LENGTH_SHORT).show();
-        }
-    }
-    //endregion
 
     //region SETUP INJECTION
     private void setupInjection() {
+        //Actualizar o Eliminar
         ACCION_ADD = getIntent().getExtras().getBoolean("ACCION_ADD");
         ACCION_UPDATE = getIntent().getExtras().getBoolean("ACCION_UPDATE");
         Elemento_Id = getIntent().getExtras().getLong("Elemento_Id");
+        this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
+        this.perdidaController = PerdidaController.getInstance(this);
+        this.elementoController = ElementoController.getInstance(this);
 
-        this.elementoController = elementoController.getInstance(this);
-        this.perdidaController = perdidaController.getInstance(this);
-        this.novedadController = novedadController.getInstance(this);
     }
 
     private void setToolbarInjection() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitle("Pérdidas");
+
         if (ACCION_UPDATE) {
             if (getSupportActionBar() != null)// Habilitar Up Button
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);//devolver
         }
+        toolbar.setTitle(getString(R.string.title_perdidas));
     }
 
-    private void verificateDataAction() {
-        if (ACCION_UPDATE) {
-            Perdida perdidaUpdate = perdidaController.getPerdidaByElementId(Elemento_Id);
-            perdida.setPerdida_Id(perdidaUpdate.getPerdida_Id());
-            if (perdidaUpdate.Is_Conexion_Ilicita) {
-                radioGroupConexionIlicita.check(R.id.radioButtonSiConexionIlicita);
-                conexion_ilicita = true;
+    //endregion
 
-            } else {
-                radioGroupConexionIlicita.check(R.id.radioButtonNoConexionIlicita);
-                conexion_ilicita = false;
-            }
-
-            if (perdidaUpdate.Is_Lampara_Adicional) {
-                radioGroupLamparaAdicional.check(R.id.radioButtonSiLamparaAdicional);
-                estado_lampara_adicional = true;
-
-            } else {
-                radioGroupLamparaAdicional.check(R.id.radioButtonNoLamparaAdicional);
-                estado_lampara_adicional = false;
-            }
-
-            if (perdidaUpdate.Is_Poda) {
-                radioGroupPoda.check(R.id.radioButtonSiPoda);
-                poda = true;
-
-            } else {
-                radioGroupPoda.check(R.id.radioButtonNoPoda);
-                poda = false;
-            }
-
-            if (perdidaUpdate.Is_Lampara_Encendida_Dia) {
-                radioGroupLamparaEncendidaDia.check(R.id.radioButtonSiLamparaEncendidaDia);
-                lampara_encendida_dia = true;
-            } else {
-                radioGroupLamparaEncendidaDia.check(R.id.radioButtonNoLamparaEncendidaDia);
-                lampara_encendida_dia = false;
-            }
-
-        } else {
-
+    //region METHODS
+    private void initAdapter() {
+        if (adapter == null) {
+            adapter = new AdapterPerdida(this, new ArrayList<Perdida>(), this);
         }
+    }
+
+    private void initRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void loadListSpinnerTipoPerdida() {
+        //Listas
+        tipoPerdidaList = sincronizacionGetInformacionController.getListTipoPerdidas();
+
+        spinnerTipoPerdida.setAdapter(null);
+        tipoPerdidaArrayAdapter =
+                new ArrayAdapter<Tipo_Perdida>(this, android.R.layout.simple_spinner_dropdown_item, tipoPerdidaList);
+        spinnerTipoPerdida.setAdapter(tipoPerdidaArrayAdapter);
+        spinnerTipoPerdida.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Tipo_Perdida_Id = tipoPerdidaList.get(position).getTipo_Perdida_Id();
+                Nombre_Tipo_Perdida = tipoPerdidaList.get(position).getNombre();
+            }
+        });
+    }
+
+    private void validarRegistrarPerdida() {
+        //VALIDACION
+        boolean cancel = false;
+        View focusView = null;
+        if (spinnerTipoPerdida.getText().toString().isEmpty()) {
+            spinnerTipoPerdida.setError(getString(R.string.error_field_required));
+            focusView = spinnerTipoPerdida;
+            cancel = true;
+        } else if (edtCantidad.getText().toString().isEmpty()) {
+            edtCantidad.setError(getString(R.string.error_field_required));
+            focusView = edtCantidad;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            registerPerdidas();
+        }
+    }
+
+    private void registerPerdidas() {
+        Perdida perdida = new Perdida(
+                Nombre_Tipo_Perdida,
+                Long.parseLong(edtCantidad.getText().toString()),
+                edtDescripcion.getText().toString(),
+                0.0,
+                true,
+                Elemento_Id,
+                Tipo_Perdida_Id
+        );
+
+        perdidaController.register(perdida);
+        limpiarCampos();
+        onMessageOk(R.color.colorAccent, "Pérdida registrada");
+        loadListPerdidas();
+        hideKeyboard();
+    }
+
+    private void loadListPerdidas() {
+        adapter.clear();
+        perdidaList.clear();
+        perdidaList = perdidaController.getListPerdida(Elemento_Id);
+        setContent(perdidaList);
+        resultsList(perdidaList);
+        hideProgress();
+    }
+
+    private void limpiarCampos() {
+        String title_tipo_perdida = String.format(getString(R.string.title_tipo_perdida));
+        spinnerTipoPerdida.setText("");
+        spinnerTipoPerdida.setHint(title_tipo_perdida);
+
+
+    }
+
+    //Ocultar teclado
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        try {
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        } catch (NullPointerException npe) {
+            Log.e(getLocalClassName(), Log.getStackTraceString(npe));
+        }
+    }
+    //endregion
+
+
+    //region MÉTODOS DE INTERFAZ MAINVIEWPERDIDA
+    @Override
+    public void showProgresss() {
+        progressBar.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showUIElements() {
+
+    }
+
+    @Override
+    public void hideUIElements() {
+
+    }
+
+    @Override
+    public void onMessageOk(int colorPrimary, String message) {
+        int color = Color.WHITE;
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.container), message, Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(this, colorPrimary));
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done, 0, 0, 0);
+        // textView.setCompoundDrawablePadding(getResources().getDimensionPixelOffset(R.dimen.activity_horizontal_margin));
+        textView.setTextColor(color);
+        snackbar.show();
+    }
+
+    @Override
+    public void onMessageError(int colorPrimary, String message) {
+        onMessageOk(colorPrimary, message);
+    }
+
+    @Override
+    public void resultsList(List<Perdida> listResult) {
+        String results = String.format(getString(R.string.results_global_search),
+                listResult.size());
+        txtResults.setText(results);
+    }
+
+    @Override
+    public void setContent(List<Perdida> items) {
+        adapter.setItems(items);
+    }
+
+
+    //endregion
+
+
+    //region METHODS OVERRIDES
+    @Override
+    public void onRefresh() {
+        showProgresss();
+        loadListPerdidas();
+    }
+
+    //No permite devolverse
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    //endregion
+
+    //region MÉTODOS DE INTERFAZ ON CLICK LISTENER
+    @Override
+    public void onItemClick(Perdida perdida) {
+
+    }
+
+    @Override
+    public void onClickDelete(Perdida perdida) {
+        Response response = perdidaController.DeletePerdidaByElemento(perdida.getElemento_Id());
+        onMessageOk(R.color.orange, getString(R.string.message_delete_global));
+        loadListPerdidas();
     }
 
     //endregion
 
     //region MENU
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_perdidas, menu);
+        /// getMenuInflater().inflate(R.menu.menu_equipos, menu);
+        /// return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_perdida, menu);
         if (ACCION_UPDATE) {
-            MenuItem itemRegister = menu.findItem(R.id.action_done);
-            itemRegister.setVisible(false);
-
-            MenuItem itemUpdate = menu.findItem(R.id.action_update);
-            itemUpdate.setVisible(true);
-
+            MenuItem item = menu.findItem(R.id.action_done);
+            item.setVisible(false);
         } else {
             MenuItem item = menu.findItem(R.id.action_done);
             item.setVisible(true);
-
-            MenuItem itemUpdate = menu.findItem(R.id.action_update);
-            itemUpdate.setVisible(false);
         }
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_done) {
-            validarCampos();
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.action_done:
+                final AlertDialog.Builder builder = new AlertDialog.Builder(PerdidaActivity.this);
+                builder.setTitle("Notificación");
+                builder.setMessage("¿Confirma todos los datos?");
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
+                        i.putExtra("ACCION_ADD", true);
+                        i.putExtra("ACCION_UPDATE", false);
+                        i.putExtra("Elemento_Id", Elemento_Id);
+                        startActivity(i);
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                break;
+
             ///Metodo que permite no recargar la pagina al devolverse
-        } else if (id == R.id.action_update) {
-            validarCampos();
-        } else if (id == android.R.id.home) {
-            // Obtener intent de la actividad padre
-            Intent upIntent = NavUtils.getParentActivityIntent(this);
-            upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            case android.R.id.home:
+                // Obtener intent de la actividad padre
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-            // Comprobar si DetailActivity no se creó desde CourseActivity
-            if (NavUtils.shouldUpRecreateTask(this, upIntent)
-                    || this.isTaskRoot()) {
+                // Comprobar si DetailActivity no se creó desde CourseActivity
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                        || this.isTaskRoot()) {
 
-                // Construir de nuevo la tarea para ligar ambas actividades
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    TaskStackBuilder.create(this)
-                            .addNextIntentWithParentStack(upIntent)
-                            .startActivities();
+                    // Construir de nuevo la tarea para ligar ambas actividades
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        TaskStackBuilder.create(this)
+                                .addNextIntentWithParentStack(upIntent)
+                                .startActivities();
+                    }
                 }
-            }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                // Terminar con el método correspondiente para Android 5.x
-                this.finishAfterTransition();
-                return true;
-            }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    this.finishAfterTransition();
+                    return true;
+                }
 
-            //Para versiones anterios a 5.x
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                // Terminar con el método correspondiente para Android 5.x
-                onBackPressed();
-                return true;
-            }
+                //Para versiones anterios a 5.x
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    onBackPressed();
+                    return true;
+                }
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private void onReturnActivity() {
-        // Obtener intent de la actividad padre
-        Intent upIntent = NavUtils.getParentActivityIntent(this);
-        upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        // Comprobar si DetailActivity no se creó desde CourseActivity
-        if (NavUtils.shouldUpRecreateTask(this, upIntent)
-                || this.isTaskRoot()) {
-
-            // Construir de nuevo la tarea para ligar ambas actividades
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                TaskStackBuilder.create(this)
-                        .addNextIntentWithParentStack(upIntent)
-                        .startActivities();
-            }
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Terminar con el método correspondiente para Android 5.x
-            this.finishAfterTransition();
-
-        }
-
-        //Para versiones anterios a 5.x
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            // Terminar con el método correspondiente para Android 5.x
-            onBackPressed();
-        }
-    }
-
-
     //endregion
 
-    //region VALIDACIÓN DE CAMPOS y REGISTRO DE PÉRDIDA
-    public void validarCampos() {
-       /* boolean cancel = false;
-        View focusView = null;
-        if (estado_lampara_adicional == true && edtLamparaAdicional.getText().toString().isEmpty()) {
-            //cantidad_lampara_adicional = Long.parseLong(edtLamparaAdicional.getText().toString());
-            edtLamparaAdicional.setError(getString(R.string.error_field_required));
-            focusView = edtLamparaAdicional;
-            cancel = true;
-        } else {*/
-        registrarPerdida();
-        //}
+    @OnClick({R.id.btnAddPerdidas})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btnAddPerdidas:
+                validarRegistrarPerdida();
+                break;
+        }
     }
 
-    private void registrarPerdida() {
-        /*
-        if (estado_lampara_adicional == true) {
-            cantidad_lampara_adicional = Long.parseLong(edtLamparaAdicional.getText().toString());
-        }*/
-        perdida.setElemento_Id(Elemento_Id);
-        perdida.setIs_Lampara_Adicional(estado_lampara_adicional);
-        //perdida.setCantidad_Lampara_Adicional(cantidad_lampara_adicional);
-        perdida.setIs_Lampara_Encendida_Dia(lampara_encendida_dia);
-        perdida.setIs_Conexion_Ilicita(conexion_ilicita);
-        perdida.setIs_Poda(poda);
-        perdidaController.registerUpdate(perdida);
 
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(PerdidaActivity.this);
-        builder.setTitle("Notificación");
-        builder.setMessage("¿Confirma todos los datos?");
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (ACCION_UPDATE) {
-                    onReturnActivity();
-                } else {
-                    Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
-                    i.putExtra("ACCION_ADD", true);
-                    i.putExtra("ACCION_UPDATE", false);
-                    i.putExtra("Elemento_Id", Elemento_Id);
-                    startActivity(i);
-                }
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    //endregion
 }

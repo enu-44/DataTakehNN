@@ -45,6 +45,8 @@ public class FotoController {
         foto.setDescripcion(fotoNew.getDescripcion());
         foto.setRuta_Foto(fotoNew.getRuta_Foto());
         foto.setImage(fotoNew.getImage());
+        foto.setFecha_Creacion(fotoNew.getFecha_Creacion());
+        foto.setHora(fotoNew.getHora());
         foto.save();
         return foto;
     }
@@ -63,6 +65,8 @@ public class FotoController {
         foto.setDescripcion(fotoNew.getDescripcion());
         foto.setRuta_Foto(fotoNew.getRuta_Foto());
         foto.setImage(fotoNew.getImage());
+        foto.setFecha_Creacion(fotoNew.getFecha_Creacion());
+        foto.setHora(fotoNew.getHora());
         foto.save();
         return foto;
     }
@@ -73,10 +77,10 @@ public class FotoController {
         return foto;
     }
 
-    public List<Foto> getListFotoByElemento(long elemento_id){
+    public List<Foto> getListFotoByElemento(long elemento_id) {
 
-        List<Foto> fotoList= SQLite.select().from(Foto.class).where(Foto_Table.Elemento_Id.eq(elemento_id)).queryList();
-        return  fotoList;
+        List<Foto> fotoList = SQLite.select().from(Foto.class).where(Foto_Table.Elemento_Id.eq(elemento_id)).queryList();
+        return fotoList;
     }
 
 }

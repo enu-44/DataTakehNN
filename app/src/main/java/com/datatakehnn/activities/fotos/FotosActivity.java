@@ -59,6 +59,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -431,16 +432,22 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     }
 
     private void updateFotoNovedad(Bitmap compressedImage, String path) {
+        String fecha = obtenerFecha();
+        String hora = obtenerHora();
         byte[] image = convertBitmapToByte(compressedImage);
         Blob imagenBlob = new Blob(image);
         ruta_foto_novedad = path;
         novedad.setRuta_Foto(ruta_foto_novedad);
         novedad.setImage_Novedad(imagenBlob);
+        novedad.setFecha_Creacion(fecha);
+        novedad.setHora(hora);
         novedadController.updateWithFoto(novedad);
         loadNovedades();
     }
 
     private void registerFoto1(Bitmap compressedImage, String path) {
+        String fecha = obtenerFecha();
+        String hora = obtenerHora();
         ruta_foto_1 = path;
         Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto_1, Elemento_Id);
         if (hayFoto != null) {
@@ -448,6 +455,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             byte[] image = convertBitmapToByte(compressedImage);
             Blob imagenBlob = new Blob(image);
             hayFoto.setImage(imagenBlob);
+            hayFoto.setFecha_Creacion(fecha);
+            hayFoto.setHora(hora);
             fotoController.update(hayFoto);
             yaTomoFoto1 = true;
         } else {
@@ -458,12 +467,16 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             Blob imagenBlob = new Blob(image);
             foto.setImage(imagenBlob);
             foto.setRuta_Foto(ruta_foto_1);
+            foto.setFecha_Creacion(fecha);
+            foto.setHora(hora);
             fotoController.register(foto);
             yaTomoFoto1 = true;
         }
     }
 
     private void registerFoto2(Bitmap compressedImage, String path) {
+        String fecha = obtenerFecha();
+        String hora = obtenerHora();
         ruta_foto_2 = path;
         Foto hayFoto = fotoController.getByRutaFotoAndElementoId(ruta_foto_2, Elemento_Id);
         if (hayFoto != null) {
@@ -471,6 +484,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             byte[] image = convertBitmapToByte(compressedImage);
             Blob imagenBlob = new Blob(image);
             hayFoto.setImage(imagenBlob);
+            hayFoto.setFecha_Creacion(fecha);
+            hayFoto.setHora(hora);
             fotoController.update(hayFoto);
             yaTomoFoto2 = true;
         } else {
@@ -480,6 +495,8 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
             byte[] image = convertBitmapToByte(compressedImage);
             Blob imagenBlob = new Blob(image);
             foto.setImage(imagenBlob);
+            foto.setFecha_Creacion(fecha);
+            foto.setHora(hora);
             foto.setRuta_Foto(ruta_foto_2);
             fotoController.register(foto);
             yaTomoFoto2 = true;
@@ -540,6 +557,14 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         DateFormat timeFormat = new SimpleDateFormat("HH:mm");
         String hora = timeFormat.format(cal.getTime());
         return hora;
+    }
+
+    private String obtenerFecha() {
+        //Obtener Fecha
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = new Date();
+        String fecha = dateFormat.format(date);
+        return fecha;
     }
 
     public byte[] convertBitmapToByte(Bitmap bitmap) {

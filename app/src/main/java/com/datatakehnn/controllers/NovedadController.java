@@ -68,6 +68,8 @@ public class NovedadController {
         novedad.setTipo_Novedad_Id(novedadNew.getTipo_Novedad_Id());
         novedad.setNombre_Tipo_Novedad(novedadNew.getNombre_Tipo_Novedad());
         novedad.setRuta_Foto(novedadNew.getRuta_Foto());
+        novedad.setFecha_Creacion(novedadNew.getFecha_Creacion());
+        novedad.setHora(novedadNew.getHora());
         novedad.save();
         return novedad;
     }
@@ -83,6 +85,8 @@ public class NovedadController {
         novedad.setTipo_Novedad_Id(novedadNew.getTipo_Novedad_Id());
         novedad.setImage_Novedad(novedadNew.getImage_Novedad());
         novedad.setRuta_Foto(novedadNew.getRuta_Foto());
+        novedad.setFecha_Creacion(novedadNew.getFecha_Creacion());
+        novedad.setHora(novedadNew.getHora());
         novedad.save();
         return novedad;
     }

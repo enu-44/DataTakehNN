@@ -39,6 +39,7 @@ import com.datatakehnn.models.reponse_generic.data_async.Response_Request_Data_S
 import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.tipo_equipo_model.Tipo_Equipo;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
+import com.datatakehnn.models.tipo_perdida_model.Tipo_Perdida;
 import com.datatakehnn.services.api_services.DataAsyncService.DataSyncApiService;
 import com.datatakehnn.services.api_services.DataAsyncService.IDataAsync;
 import com.datatakehnn.services.aplication.DataTakeApp;
@@ -54,6 +55,7 @@ import com.datatakehnn.services.data_arrays.Nivel_Tension_Elemento_List;
 import com.datatakehnn.services.data_arrays.Tipo_Cable_List;
 import com.datatakehnn.services.data_arrays.Tipo_Equipo_List;
 import com.datatakehnn.services.data_arrays.Tipo_Novedad_List;
+import com.datatakehnn.services.data_arrays.Tipo_Perdida_List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,20 +101,19 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
 
     //region API SERIVICE
 
-    private void loadDataAsync(){
+    private void loadDataAsync() {
         dataSyncApiService.loadDataAsync(this);
     }
 
     public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
 
             //Departamentos y Ciudades
-            List<Departamento> departamentoList= response.getResult().getDepartamento();
+            List<Departamento> departamentoList = response.getResult().getDepartamento();
             List<Ciudad> ciudadList = new ArrayList<>();
-            for (Departamento departamento:departamentoList){
+            for (Departamento departamento : departamentoList) {
                 ciudadList.addAll(departamento.getCiudades());
             }
-
 
             //Obtener Listas Poste
             List<Detalle_Tipo_Novedad> detalle_tipo_novedadList = Detalle_Tipo_Novedad_List.getListDetalleTipoNovedad();
@@ -129,7 +130,9 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
             //Empresas
             List<Empresa> empresaList = Empresa_List.getListEmpresa();
             //Tipo Equipos
-            List<Tipo_Equipo> tipo_equipos= Tipo_Equipo_List.getListTipoEquipo();
+            List<Tipo_Equipo> tipo_equipos = Tipo_Equipo_List.getListTipoEquipo();
+            //Tipo Perdidas
+            List<Tipo_Perdida> tipo_perdidas = Tipo_Perdida_List.getListTipoPerdida();
 
 
             sincronizacionGetInformacionController.deleteInformacionMaster();
@@ -144,19 +147,20 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
                     empresaList,
                     tipo_equipos,
                     departamentoList,
-                    ciudadList);
+                    ciudadList,
+                    tipo_perdidas
+            );
 
 
-
-            showSnakBar(R.color.colorAccent,  getString(R.string.message_information_sync));
+            showSnakBar(R.color.colorAccent, getString(R.string.message_information_sync));
             MenuItem item = menuGlobal.findItem(R.id.action_done);
             item.setVisible(true);
             sync = true;
             progressBar.setVisibility(View.GONE);
             ivSync.setImageResource(R.drawable.ic_botonsincronizado);
 
-        }else{
-            showSnakBar(R.color.colorAccent,  response.getMessage());
+        } else {
+            showSnakBar(R.color.colorAccent, response.getMessage());
             sync = false;
             progressBar.setVisibility(View.GONE);
         }
@@ -180,11 +184,11 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
 
     //region SET INJECTION
     private void setupInjection() {
-        this.dataSyncApiService= DataSyncApiService.getInstance(this);
+        this.dataSyncApiService = DataSyncApiService.getInstance(this);
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
 
 
-        this.coordsService= new CoordsService(this);
+        this.coordsService = new CoordsService(this);
     }
     /*
     public void iniciarServicioUbicacion(Context context) {
@@ -202,10 +206,9 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     //region MENU
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menuGlobal=menu;
+        menuGlobal = menu;
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.menu_workshops, menu);
         MenuInflater inflater = getMenuInflater();
@@ -224,7 +227,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
                 startActivity(i);
             } else {
 
-                showSnakBar(R.color.colorAccent,getString(R.string.message_sincronize_information));
+                showSnakBar(R.color.colorAccent, getString(R.string.message_sincronize_information));
             }
 
         }
@@ -273,26 +276,26 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
 
     // Sincronizar Informacion
     public void getInformationSync() {
-        if(checkConnection()){
+        if (checkConnection()) {
             loadDataAsync();
 
-        }else{
+        } else {
             //Verificar si existe informacion sincronizada(si no hay conexion a internet, se validad la sincronizacion de datos)
-            Longitud_Elemento longitud_elemento= sincronizacionGetInformacionController.getFirstLongitudElemento();
-            if(longitud_elemento!=null){
-                if(longitud_elemento.getLongitud_Elemento_Id()>0){
-                    showSnakBar(R.color.colorAccent,  getString(R.string.message_information_sync));
+            Longitud_Elemento longitud_elemento = sincronizacionGetInformacionController.getFirstLongitudElemento();
+            if (longitud_elemento != null) {
+                if (longitud_elemento.getLongitud_Elemento_Id() > 0) {
+                    showSnakBar(R.color.colorAccent, getString(R.string.message_information_sync));
                     MenuItem item = menuGlobal.findItem(R.id.action_done);
                     item.setVisible(true);
                     sync = true;
                     progressBar.setVisibility(View.GONE);
-                }else{
+                } else {
                     showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
                     progressBar.setVisibility(View.GONE);
                     sync = false;
                 }
-            }else{
-                showSnakBar(R.color.colorAccent,  getString(R.string.message_not_connection));
+            } else {
+                showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
                 progressBar.setVisibility(View.GONE);
                 sync = false;
             }
@@ -329,15 +332,11 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         if (isConnected) {
-            showSnakBar(R.color.colorAccent,  getString(R.string.message_connection));
+            showSnakBar(R.color.colorAccent, getString(R.string.message_connection));
         } else {
-            showSnakBar(R.color.colorAccent,  getString(R.string.message_not_connection));
+            showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
         }
     }
-
-
-
-
 
 
     //endregion
@@ -358,6 +357,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
                         @Override
                         public void onAnimationStart(Animator animation) {
                         }
+
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             ivSync.animate()
@@ -367,10 +367,12 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
                                     .setDuration(600)
                                     .start();
                         }
+
                         @Override
                         public void onAnimationCancel(Animator animation) {
 
                         }
+
                         @Override
                         public void onAnimationRepeat(Animator animation) {
                         }

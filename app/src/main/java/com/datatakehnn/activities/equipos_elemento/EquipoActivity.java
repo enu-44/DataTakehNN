@@ -125,6 +125,7 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
         showProgresss();
         loadListSpinners();
         loadListEquipos();
+
     }
 
     //region SETUP INJECTION

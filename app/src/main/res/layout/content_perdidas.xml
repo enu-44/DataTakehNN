@@ -1,264 +1,112 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <RelativeLayout
-        android:id="@+id/container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:layout_margin="5dp"
+        android:orientation="vertical">
 
-
-        <!-- LÁMPARA ADICIONAL-->
-        <TextView
-            android:id="@+id/tvLamparaAdicional"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:text="@string/lampara_adicional"
-            android:textSize="16sp" />
-
-        <RadioGroup
-            android:id="@+id/radioGroupLamparaAdicional"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@+id/tvLamparaAdicional"
-            android:layout_toEndOf="@id/tvLamparaAdicional"
-            android:layout_toRightOf="@id/tvLamparaAdicional"
-            android:background="@drawable/gray_out_line"
-            android:checkedButton="@+id/radioButtonNoLamparaAdicional"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioButtonNoLamparaAdicional"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="1dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_red"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/no"
-                android:textColor="@color/white" />
-
-            <RadioButton
-                android:id="@+id/radioButtonSiLamparaAdicional"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_green"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/si"
-                android:textColor="@color/white" />
-        </RadioGroup>
-<!--
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutCantidadLamparaAdicional"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/radioGroupLamparaAdicional"
-            android:layout_marginEnd="3dp"
-            android:layout_marginRight="3dp"
-            android:layout_marginTop="10dp"
-            android:hint="@string/cantidad_lampara_adicional"
-            android:visibility="gone"
-            app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+            android:layout_marginTop="1dp"
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/edtLamparaAdicional"
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                android:id="@+id/spinnerTipoPerdida"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="#ffffff"
-                android:drawablePadding="16dp"
-                android:inputType="number" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.5"
+                android:hint="Tipo de Pérdida"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="#CFD8DC"
+                android:textSize="13dp"
+                app:met_floatingLabel="normal" />
 
-        </android.support.design.widget.TextInputLayout>
--->
+            <Button
+                android:id="@+id/btnAddPerdidas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/orange"
+                android:text="+"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-        <!-- LÁMPARA ENCENDIDA DE DÍA -->
-        <TextView
-            android:id="@+id/tvLamparaEncendidaDia"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/radioGroupLamparaAdicional"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
-            android:text="@string/lampara_encendida_dia"
-            android:textSize="16sp" />
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
 
-        <RadioGroup
-            android:id="@+id/radioGroupLamparaEncendidaDia"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@+id/tvLamparaEncendidaDia"
-            android:layout_below="@+id/tvLamparaEncendidaDia"
-            android:layout_toEndOf="@id/tvLamparaEncendidaDia"
-            android:layout_toRightOf="@id/tvLamparaEncendidaDia"
-            android:background="@drawable/gray_out_line"
-            android:checkedButton="@+id/radioButtonNoLamparaEncendidaDia"
-            android:orientation="horizontal">
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
-            <RadioButton
-                android:id="@+id/radioButtonNoLamparaEncendidaDia"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="1dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_red"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/no"
-                android:textColor="@color/white" />
+                <EditText
+                    android:id="@+id/edtCantidad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/cantidad"
+                    android:inputType="number"
+                    android:padding="8dp" />
+            </android.support.design.widget.TextInputLayout>
 
-            <RadioButton
-                android:id="@+id/radioButtonSiLamparaEncendidaDia"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_green"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/si"
-                android:textColor="@color/white" />
-        </RadioGroup>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="10dp"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
-        <!-- CONEXIÓN ÍLICITA -->
-        <TextView
-            android:id="@+id/tvConexionIlicita"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/radioGroupLamparaEncendidaDia"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
-            android:text="@string/conexion_ilicita"
-            android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/edtDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/descripcion"
+                    android:inputType="text"
+                    android:padding="8dp" />
+            </android.support.design.widget.TextInputLayout>
 
-        <RadioGroup
-            android:id="@+id/radioGroupConexionIlicita"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@+id/tvConexionIlicita"
-            android:layout_below="@+id/tvConexionIlicita"
-            android:layout_toEndOf="@id/tvConexionIlicita"
-            android:layout_toRightOf="@id/tvConexionIlicita"
-            android:background="@drawable/gray_out_line"
-            android:checkedButton="@+id/radioButtonNoConexionIlicita"
-            android:orientation="horizontal">
+            <!-- <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutNovedad"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
-            <RadioButton
-                android:id="@+id/radioButtonNoConexionIlicita"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="1dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_red"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/no"
-                android:textColor="@color/white" />
-
-            <RadioButton
-                android:id="@+id/radioButtonSiConexionIlicita"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_green"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/si"
-                android:textColor="@color/white" />
-        </RadioGroup>
+                <EditText
+                    android:id="@+id/edtNovedad"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textMultiLine"
+                    android:overScrollMode="always"
+                    android:padding="15dp"
+                    android:scrollbars="vertical" />
+            </android.support.design.widget.TextInputLayout> -->
 
 
-        <!-- REQUIERE PODA -->
-        <TextView
-            android:id="@+id/tvPoda"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/radioGroupConexionIlicita"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
-            android:text="@string/poda"
-            android:textSize="16sp" />
-
-        <RadioGroup
-            android:id="@+id/radioGroupPoda"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@+id/tvPoda"
-            android:layout_below="@+id/tvPoda"
-            android:layout_toEndOf="@id/tvPoda"
-            android:layout_toRightOf="@id/tvPoda"
-            android:background="@drawable/gray_out_line"
-            android:checkedButton="@+id/radioButtonNoPoda"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioButtonNoPoda"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="1dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_red"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/no"
-                android:textColor="@color/white" />
-
-            <RadioButton
-                android:id="@+id/radioButtonSiPoda"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_green"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/si"
-                android:textColor="@color/white" />
-        </RadioGroup>
-
-    </RelativeLayout>
+        </LinearLayout>
 
 
-</ScrollView>
+        <View
+            android:id="@+id/indicator_schedule_status"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/colorAccent" />
+
+        <include layout="@layout/content_recycler_view" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

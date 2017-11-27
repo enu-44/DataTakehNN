@@ -43,13 +43,23 @@ public class Foto extends BaseModel {
     @Column
     public Blob Image;
 
-    public Foto(long foto_Id, long elemento_Id, long novedad_Id, String descripcion, String ruta_Foto, Blob image) {
+    @SerializedName("FechaCreacion")
+    @Column
+    public String Fecha_Creacion;
+
+    @SerializedName("Hora")
+    @Column
+    public String Hora;
+
+    public Foto(long foto_Id, long elemento_Id, long novedad_Id, String descripcion, String ruta_Foto, Blob image, String fecha_Creacion, String hora) {
         Foto_Id = foto_Id;
         Elemento_Id = elemento_Id;
         Novedad_Id = novedad_Id;
         Descripcion = descripcion;
         Ruta_Foto = ruta_Foto;
         Image = image;
+        Fecha_Creacion = fecha_Creacion;
+        Hora = hora;
     }
 
     public Foto() {
@@ -102,5 +112,21 @@ public class Foto extends BaseModel {
 
     public void setImage(Blob image) {
         Image = image;
+    }
+
+    public String getFecha_Creacion() {
+        return Fecha_Creacion;
+    }
+
+    public void setFecha_Creacion(String fecha_Creacion) {
+        Fecha_Creacion = fecha_Creacion;
+    }
+
+    public String getHora() {
+        return Hora;
+    }
+
+    public void setHora(String hora) {
+        Hora = hora;
     }
 }

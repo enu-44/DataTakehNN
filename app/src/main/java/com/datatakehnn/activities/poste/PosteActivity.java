@@ -165,6 +165,10 @@ public class PosteActivity extends AppCompatActivity {
     Date dateFecha;
     String hora;
     Double Altura_Disponible;
+    //Accion
+    boolean ACCION_ADD;
+    boolean ACCION_UPDATE;
+
 
     //Direccion
 
