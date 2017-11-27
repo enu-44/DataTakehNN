@@ -47,8 +47,8 @@
 
             <ImageButton
                 android:id="@+id/ibVerFoto1"
-                android:layout_width="35dp"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="end"
                 android:background="@color/colorPrimary"
                 android:padding="5dp"
@@ -85,8 +85,8 @@
 
             <ImageButton
                 android:id="@+id/ibVerFoto2"
-                android:layout_width="35dp"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="end"
                 android:background="@color/colorPrimary"
                 android:padding="5dp"

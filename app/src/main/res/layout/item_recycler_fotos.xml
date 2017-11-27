@@ -18,23 +18,24 @@
             android:layout_gravity="center"
             android:layout_weight="0.5"
             android:src="@drawable/boton_foto_gris" />
-<!--
-        <TextView
-            android:id="@+id/tvRutaFoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Hello World"
-            android:textStyle="bold"
-            android:textColor="@color/red" />-->
+        <!--
+                <TextView
+                    android:id="@+id/tvRutaFoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Hello World"
+                    android:textStyle="bold"
+                    android:textColor="@color/red" />-->
         <TextView
             android:id="@+id/tvTipoFoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Hello World"
-            android:textStyle="bold"
-            android:textColor="@color/orange_dark" />
+            android:textColor="@color/orange_dark"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/tvDescripcionFoto"
             android:layout_width="wrap_content"
@@ -45,12 +46,12 @@
 
         <ImageButton
             android:id="@+id/ibVerFoto"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_ver_foto"
             android:padding="5dp"
-            android:layout_width="35dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"/>
+            android:src="@drawable/ic_ver_foto" />
     </LinearLayout>
 
 </RelativeLayout>
