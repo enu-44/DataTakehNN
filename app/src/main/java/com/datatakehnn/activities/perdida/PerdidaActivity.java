@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
+import com.datatakehnn.activities.novedad.NovedadActivity;
 import com.datatakehnn.activities.perdida.adapter.AdapterPerdida;
 import com.datatakehnn.activities.perdida.adapter.OnItemClickListenerPerdida;
 import com.datatakehnn.controllers.ElementoController;
@@ -209,6 +210,14 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
         onMessageOk(R.color.colorAccent, "Pérdida registrada");
         loadListPerdidas();
         hideKeyboard();
+
+        //TODO Registrar Novedad.
+        Intent i = new Intent(this, NovedadActivity.class);
+        i.putExtra("Nombre", Nombre_Tipo_Perdida);
+        i.putExtra("perdida", 1);
+        startActivityForResult(i, 100);
+
+
     }
 
     private void loadListPerdidas() {
@@ -225,6 +234,8 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
         spinnerTipoPerdida.setText("");
         spinnerTipoPerdida.setHint(title_tipo_perdida);
 
+        edtCantidad.setText("");
+        edtDescripcion.setText("");
 
     }
 
@@ -237,6 +248,16 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
             Log.e(getLocalClassName(), Log.getStackTraceString(npe));
         }
     }
+    //endregion
+
+    //region ON ACTIVITY RESULT
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == 100) && (resultCode == RESULT_OK)) {
+            Snackbar.make(container, getString(R.string.message_novedad), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
     //endregion
 
 
@@ -324,7 +345,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
 
     @Override
     public void onClickDelete(Perdida perdida) {
-        Response response = perdidaController.DeletePerdidaByElemento(perdida.getElemento_Id());
+        Response response = perdidaController.DeletePerdidaById(perdida.getPerdida_Id());
         onMessageOk(R.color.orange, getString(R.string.message_delete_global));
         loadListPerdidas();
     }

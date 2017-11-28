@@ -71,10 +71,10 @@ public class PerdidaController {
         return lisFilter;
     }
 
-    public Response DeletePerdidaByElemento(long elemento_id) {
+    public Response DeletePerdidaById(long perdida_id) {
         Response response = new Response();
         ///Elemento_Cable elementoCable= new Elemento_Cable();
-        SQLite.delete(Perdida.class).where(Perdida_Table.Elemento_Id.eq(elemento_id)).async().execute();
+        SQLite.delete(Perdida.class).where(Perdida_Table.Perdida_Id.eq(perdida_id)).async().execute();
         ///Elemento_Cable listee= new Select().from(Elemento_Cable.class).where(Elemento_Cable_Table.Elemento_Cable_Id.eq(elemento_cable_id)).querySingle();
         response.setMessage("Ok");
         response.setSuccess(true);

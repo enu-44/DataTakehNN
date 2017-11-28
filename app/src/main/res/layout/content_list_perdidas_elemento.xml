@@ -40,7 +40,7 @@
                     android:gravity="left"
                     android:text="LÁMPARA ADICIONAL"
                     android:textColor="@color/orange_dark"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
             </RelativeLayout>

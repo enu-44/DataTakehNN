@@ -64,17 +64,24 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textInputLayoutDescripcion"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:hint="@string/descripcion"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
                 <EditText
                     android:id="@+id/edtDescripcion"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/descripcion"
-                    android:inputType="text"
-                    android:padding="8dp" />
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"
+                    android:drawablePadding="16dp"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:overScrollMode="always"
+                    android:padding="15dp"
+                    android:scrollbars="vertical" />
             </android.support.design.widget.TextInputLayout>
 
             <!-- <android.support.design.widget.TextInputLayout
@@ -101,7 +108,7 @@
             android:id="@+id/indicator_schedule_status"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="5dp"
             android:background="@color/colorAccent" />
 
         <include layout="@layout/content_recycler_view" />
