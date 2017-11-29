@@ -31,7 +31,7 @@ public class Elemento extends BaseModel implements Parcelable {
     @Column
     public String Codigo_Apoyo;
     @Column
-    public String Numero_Apoyo;
+    public long Numero_Apoyo;
     @Column
     public String Fecha_Levantamiento;
     @Column
@@ -133,11 +133,11 @@ public class Elemento extends BaseModel implements Parcelable {
         Codigo_Apoyo = codigo_Apoyo;
     }
 
-    public String getNumero_Apoyo() {
+    public long getNumero_Apoyo() {
         return Numero_Apoyo;
     }
 
-    public void setNumero_Apoyo(String numero_Apoyo) {
+    public void setNumero_Apoyo(long numero_Apoyo) {
         Numero_Apoyo = numero_Apoyo;
     }
 
@@ -360,7 +360,7 @@ public class Elemento extends BaseModel implements Parcelable {
         Elemento_Id = in.readLong();
         Usuario_Id = in.readLong();
         Codigo_Apoyo = in.readString();
-        Numero_Apoyo = in.readString();
+        Numero_Apoyo = in.readLong();
         Fecha_Levantamiento = in.readString();
         Hora_Inicio = in.readString();
         Hora_Fin = in.readString();
@@ -399,7 +399,7 @@ public class Elemento extends BaseModel implements Parcelable {
         dest.writeLong(Elemento_Id);
         dest.writeLong(Usuario_Id);
         dest.writeString(Codigo_Apoyo);
-        dest.writeString(Numero_Apoyo);
+        dest.writeLong(Numero_Apoyo);
         dest.writeString(Fecha_Levantamiento);
         dest.writeString(Hora_Inicio);
         dest.writeString(Hora_Fin);

@@ -100,6 +100,8 @@ public class PosteActivity extends AppCompatActivity {
     RadioGroup radioGroupCodigoApoyo;
 
 
+    @BindView(R.id.radioGroupPlaca)
+    RadioGroup radioGroupPlaca;
     @BindView(R.id.radioButtonNoPlaca)
     RadioButton radioButtonNoPlaca;
     @BindView(R.id.radioButtonSiPlaca)
@@ -139,6 +141,8 @@ public class PosteActivity extends AppCompatActivity {
     TextView tvCoords;
     @BindView(R.id.titleCoords)
     TextView titleCoords;
+    @BindView(R.id.tvPlaca)
+    TextView tvPlaca;
 
     @BindView(R.id.edtAlturaDisponible)
     EditText edtAlturaDisponible;
@@ -213,6 +217,11 @@ public class PosteActivity extends AppCompatActivity {
             tvCoords.setVisibility(View.GONE);
             tvCodigoApoyo.setVisibility(View.GONE);
             radioGroupCodigoApoyo.setVisibility(View.GONE);
+            /*tvPlaca.setVisibility(View.GONE);
+            radioGroupCodigoApoyo.setVisibility(View.GONE);
+            spinnerEstado.setEnabled(false);
+            spinnerEstado.setVisibility(View.GONE);*/
+
             if (!elementoUpdate.getCodigo_Apoyo().equals("")) {
                 edtCodigoApoyo.setText(elementoUpdate.getCodigo_Apoyo());
                 edtCodigoApoyo.setEnabled(true);
@@ -233,6 +242,84 @@ public class PosteActivity extends AppCompatActivity {
             String descripcion_direccion = elementoUpdate.getDescripcion_Direccion();
             edtDetalleTipoDireccion.setText(descripcion_direccion);
             edtReferencia.setText(elementoUpdate.getReferencia_Localizacion());
+
+            //Material
+            Material_Id = elementoUpdate.getMaterial_Id();
+            int material_id_integer = (int) (long) Material_Id;
+            int positionMaterial = material_id_integer - 1;
+            Material material = materials.get(positionMaterial);
+            spinnerMaterial.setText(material.getNombre());
+
+            //Longitud Poste
+            Longitud_Elemento_Id = elementoUpdate.getLongitud_Elemento_Id();
+            int longitud_elemento_id_integer = (int) (long) Longitud_Elemento_Id;
+            int positionLongitudElemento = longitud_elemento_id_integer - 1;
+            Longitud_Elemento longitud_elemento = longitud_elementos.get(positionLongitudElemento);
+            spinnerLongitudPoste.setText(String.valueOf(longitud_elemento.getValor()));
+
+
+            //Resistencia Mecánica
+            tvPlaca.setVisibility(View.GONE);
+            radioGroupPlaca.setVisibility(View.GONE);
+            if (!elementoUpdate.getResistencia_Mecanica().equals("")) {
+                edtResistenciaMecanica.setText(elementoUpdate.getResistencia_Mecanica());
+                edtResistenciaMecanica.setEnabled(true);
+            } else {
+                edtResistenciaMecanica.setVisibility(View.GONE);
+                edtResistenciaMecanica.setEnabled(false);
+                tvPlaca.setVisibility(View.VISIBLE);
+                tvPlaca.setText("No tiene Resistencia Mecánica");
+            }
+
+            //Estado
+            spinnerEstado.setEnabled(false);
+            spinnerEstado.setVisibility(View.GONE);
+
+            //Retenidas
+            Cantidad_Retenidas = elementoUpdate.getRetenidas();
+            spinnerCantidadRetenidas.setText(String.valueOf(Cantidad_Retenidas));
+
+            //Nivel de Tensión
+            Nivel_Tension_Elemento_Id = elementoUpdate.getNivel_Tension_Elemento_Id();
+            int nivel_tension_id_integer = (int) (long) Nivel_Tension_Elemento_Id;
+            int positionNivelTension = nivel_tension_id_integer - 1;
+            Nivel_Tension_Elemento nivel_tension_elemento = nivel_tension_elementos.get(positionNivelTension);
+            spinnerNivelTension.setText(nivel_tension_elemento.getNombre());
+
+            //Altura Disponible
+            Double altura_disponible = elementoUpdate.getAltura_Disponible();
+            edtAlturaDisponible.setText(String.valueOf(altura_disponible));
+
+        }
+    }
+
+    private void onReturnActivity() {
+        // Obtener intent de la actividad padre
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        // Comprobar si DetailActivity no se creó desde CourseActivity
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                || this.isTaskRoot()) {
+
+            // Construir de nuevo la tarea para ligar ambas actividades
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Terminar con el método correspondiente para Android 5.x
+            this.finishAfterTransition();
+
+        }
+
+        //Para versiones anterios a 5.x
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            // Terminar con el método correspondiente para Android 5.x
+            onBackPressed();
 
         }
     }
@@ -419,7 +506,7 @@ public class PosteActivity extends AppCompatActivity {
             edtResistenciaMecanica.setError(getString(R.string.error_field_required));
             focusView = edtResistenciaMecanica;
             cancel = true;
-        } else if (spinnerEstado.getText().toString().isEmpty()) {
+        } else if (spinnerEstado.getText().toString().isEmpty() && spinnerEstado.isEnabled()) {
             spinnerEstado.setError(getString(R.string.error_field_required));
             focusView = spinnerEstado;
             cancel = true;
@@ -451,12 +538,17 @@ public class PosteActivity extends AppCompatActivity {
         //TODO Registrar el poste
         Elemento elemento = new Elemento();
         long elemento_id = 0;
-        elemento = elementoController.getLast();
-        if (elemento == null) {
-            elemento = new Elemento();
-            elemento_id = 1;
-        } else {
-            elemento_id = elemento.getElemento_Id() + 1;
+        if (ACCION_ADD) {
+            elemento = elementoController.getLast();
+            if (elemento == null) {
+                elemento = new Elemento();
+                elemento_id = 1;
+            } else {
+                elemento_id = elemento.getElemento_Id() + 1;
+            }
+        } else if (ACCION_UPDATE) {
+            elemento_id = Elemento_Id;
+            elemento = elementoController.getElementoById(elemento_id);
         }
         Altura_Disponible = Double.parseDouble(edtAlturaDisponible.getText().toString());
         Usuario usuario = new Usuario();
@@ -467,15 +559,22 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setFecha_Levantamiento(fecha);
         elemento.setHora_Inicio(hora);
         elemento.setCodigo_Apoyo(edtCodigoApoyo.getText().toString());
+        elemento.setNumero_Apoyo(elemento_id);
         elemento.setMaterial_Id(Material_Id);
         elemento.setLongitud_Elemento_Id(Longitud_Elemento_Id);
         elemento.setResistencia_Mecanica(edtResistenciaMecanica.getText().toString());
-        elemento.setEstado_Id(Estado_Id);
+        if (ACCION_ADD) {
+            elemento.setEstado_Id(Estado_Id);
+        }
         elemento.setRetenidas(Cantidad_Retenidas);
         elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
         elemento.setAltura_Disponible(Altura_Disponible);
         elemento.setIs_Sync(false);
         elemento.setDireccion(Nombre_Tipo_Direccion + " " + edtTipoDireccion.getText().toString() + " " + Nombre_Detalle_Tipo_Direccion + " " + edtDetalleTipoDireccion.getText().toString());
+        elemento.setNombre_Direccion(Nombre_Tipo_Direccion);
+        elemento.setVia(edtTipoDireccion.getText().toString());
+        elemento.setCon(Nombre_Detalle_Tipo_Direccion);
+        elemento.setDescripcion_Direccion(edtDetalleTipoDireccion.getText().toString());
         elemento.setReferencia_Localizacion(edtReferencia.getText().toString());
         elemento.setLongitud(location.getLongitude());
         elemento.setLatitud(location.getLatitude());
@@ -493,12 +592,17 @@ public class PosteActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //((SyncActivity) syncActivity).coordsService.closeService();
-                Intent i = new Intent(getApplicationContext(), PerdidaActivity.class);
-                i.putExtra("ACCION_ADD", true);
-                i.putExtra("ACCION_UPDATE", false);
-                i.putExtra("Elemento_Id", finalElemento_id);
-                startActivity(i);
+                if (ACCION_ADD) {
+                    Intent i = new Intent(getApplicationContext(), PerdidaActivity.class);
+                    i.putExtra("ACCION_ADD", true);
+                    i.putExtra("ACCION_UPDATE", false);
+                    i.putExtra("Elemento_Id", finalElemento_id);
+                    startActivity(i);
+                } else if (ACCION_UPDATE) {
+                    onReturnActivity();
+                }
             }
+
         });
 
         AlertDialog dialog = builder.create();
