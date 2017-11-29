@@ -72,48 +72,24 @@ public class Detalle_Tipo_Novedad_List {
             ),
             new Detalle_Tipo_Novedad(
                     10,
-                    "1",
+                    "Lampara Adicional",
                     "",
                     4
             ),
             new Detalle_Tipo_Novedad(
                     11,
-                    "2",
-                    "",
-                    4
-            ),
-            new Detalle_Tipo_Novedad(
-                    12,
-                    "3",
-                    "",
-                    4
-            ),
-            new Detalle_Tipo_Novedad(
-                    13,
-                    "4",
-                    "",
-                    4
-            ),
-            new Detalle_Tipo_Novedad(
-                    14,
-                    "5",
-                    "",
-                    4
-            ),
-            new Detalle_Tipo_Novedad(
-                    15,
                     "Lampara Encendida",
                     "",
                     5
             ),
             new Detalle_Tipo_Novedad(
-                    16,
+                    12,
                     "Conexion Ilicita",
                     "",
                     6
             ),
             new Detalle_Tipo_Novedad(
-                    17,
+                    13,
                     "Poda",
                     "",
                     7
