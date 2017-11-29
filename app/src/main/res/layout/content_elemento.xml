@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
 
 
     <RelativeLayout
@@ -25,8 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="COORDS: "
-            android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvCoords"
@@ -36,21 +35,21 @@
             android:layout_toEndOf="@+id/titleCoords"
             android:layout_toRightOf="@+id/titleCoords"
             android:text=""
-            android:textStyle="italic"
             android:textColor="@color/orange"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="italic" />
 
         <!-- CÓDIGO DE APOYO -->
         <TextView
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/tvCoords"
             android:id="@+id/tvCodigoApoyo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvCoords"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
             android:text="@string/pregunta_codigo_apoyo"
             android:textSize="16sp" />
 
@@ -95,7 +94,6 @@
         </RadioGroup>
 
 
-
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayoutCodigoApoyo"
             android:layout_width="match_parent"
@@ -118,9 +116,9 @@
 
         <LinearLayout
             android:id="@+id/content_direccion"
-            android:layout_below="@+id/textInputLayoutCodigoApoyo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textInputLayoutCodigoApoyo"
             android:orientation="vertical">
 
             <LinearLayout
@@ -161,10 +159,12 @@
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                     android:id="@+id/spinnerDetalleTipoDireccion"
                     android:layout_width="match_parent"
@@ -197,6 +197,7 @@
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -204,6 +205,7 @@
                 android:layout_marginRight="3dp"
                 android:hint="Referencia Direccion (Opcional)"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+
                 <EditText
                     android:id="@+id/edtReferencia"
                     android:layout_width="match_parent"
@@ -213,7 +215,6 @@
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
-
 
 
         <!--<com.jaredrummler.mat

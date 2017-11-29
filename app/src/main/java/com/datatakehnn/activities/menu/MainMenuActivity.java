@@ -48,8 +48,8 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void setupInjection() {
-        this.usuarioController= UsuarioController.getInstance(this);
-        usuarioLogued= usuarioController.getLoggedUser();
+        this.usuarioController = UsuarioController.getInstance(this);
+        usuarioLogued = usuarioController.getLoggedUser();
     }
 
     //region SETUP INJECTION
@@ -64,31 +64,33 @@ public class MainMenuActivity extends AppCompatActivity {
 
 
     //region EVENTS
-    @OnClick({R.id.imgAddElement, R.id.imgListElement, R.id.imgLogout,R.id.imgCiudad})
+    @OnClick({R.id.imgAddElement, R.id.imgListElement, R.id.imgLogout, R.id.imgCiudad})
     public void onViewClicked(View view) {
         Intent i = null;
         switch (view.getId()) {
             case R.id.imgAddElement:
-                usuarioLogued= usuarioController.getLoggedUser();
+                usuarioLogued = usuarioController.getLoggedUser();
                 ///Toast.makeText(this,usuarioLogued.getDepartamento_Id()+" - "+usuarioLogued.getCiudad_Id(),Toast.LENGTH_LONG).show();
-                if(usuarioLogued.getCiudad_Id()>0 && usuarioLogued.getDepartamento_Id()>0){
+                if (usuarioLogued.getCiudad_Id() > 0 && usuarioLogued.getDepartamento_Id() > 0) {
                     i = new Intent(this, PosteActivity.class);
-                }else{
-                    i=  new Intent(this, CiudadActivity.class);
+                    i.putExtra("ACCION_ADD", true);
+                    i.putExtra("ACCION_UPDATE", false);
+                } else {
+                    i = new Intent(this, CiudadActivity.class);
                 }
                 break;
             case R.id.imgListElement:
-               i= new Intent(this, Poste_Usuario_Activity.class);
+                i = new Intent(this, Poste_Usuario_Activity.class);
                 break;
             case R.id.imgLogout:
                 showExit();
                 break;
             case R.id.imgCiudad:
-                i=  new Intent(this, CiudadActivity.class);
+                i = new Intent(this, CiudadActivity.class);
                 break;
         }
 
-        if(i!=null){
+        if (i != null) {
             startActivity(i);
         }
     }
@@ -97,7 +99,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     //region UI Elements
 
-    public Dialog showExit(){
+    public Dialog showExit() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmacion");
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

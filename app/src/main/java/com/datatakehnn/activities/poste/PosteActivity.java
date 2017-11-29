@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,6 +94,10 @@ public class PosteActivity extends AppCompatActivity {
     EditText edtCodigoApoyo;
     @BindView(R.id.container)
     RelativeLayout container;
+    @BindView(R.id.tvCodigoApoyo)
+    TextView tvCodigoApoyo;
+    @BindView(R.id.radioGroupCodigoApoyo)
+    RadioGroup radioGroupCodigoApoyo;
 
 
     @BindView(R.id.radioButtonNoPlaca)
@@ -132,6 +137,8 @@ public class PosteActivity extends AppCompatActivity {
 
     @BindView(R.id.tvCoords)
     TextView tvCoords;
+    @BindView(R.id.titleCoords)
+    TextView titleCoords;
 
     @BindView(R.id.edtAlturaDisponible)
     EditText edtAlturaDisponible;
@@ -195,10 +202,41 @@ public class PosteActivity extends AppCompatActivity {
         setupInjection();
         loadInformacionMaster();
         obtenerFechayHora();
-
+        loadDatosPosteUpdate();
     }
 
     //region METHODS
+    private void loadDatosPosteUpdate() {
+        if (ACCION_UPDATE) {
+            Elemento elementoUpdate = elementoController.getElementoById(Elemento_Id);
+            titleCoords.setVisibility(View.GONE);
+            tvCoords.setVisibility(View.GONE);
+            tvCodigoApoyo.setVisibility(View.GONE);
+            radioGroupCodigoApoyo.setVisibility(View.GONE);
+            if (!elementoUpdate.getCodigo_Apoyo().equals("")) {
+                edtCodigoApoyo.setText(elementoUpdate.getCodigo_Apoyo());
+                edtCodigoApoyo.setEnabled(true);
+            } else {
+                edtCodigoApoyo.setVisibility(View.GONE);
+                edtCodigoApoyo.setEnabled(false);
+                tvCodigoApoyo.setVisibility(View.VISIBLE);
+                tvCodigoApoyo.setText("No tiene Código de Apoyo");
+            }
+
+            //Dirección
+            Nombre_Tipo_Direccion = elementoUpdate.getNombre_Direccion();
+            spinnerTipoDireccion.setText(Nombre_Tipo_Direccion);
+            String via = elementoUpdate.getVia();
+            edtTipoDireccion.setText(via);
+            Nombre_Detalle_Tipo_Direccion = elementoUpdate.getCon();
+            spinnerDetalleTipoDireccion.setText(Nombre_Detalle_Tipo_Direccion);
+            String descripcion_direccion = elementoUpdate.getDescripcion_Direccion();
+            edtDetalleTipoDireccion.setText(descripcion_direccion);
+            edtReferencia.setText(elementoUpdate.getReferencia_Localizacion());
+
+        }
+    }
+
 
     private void getElementoId() {
         Elemento elemento = elementoController.getLast();
@@ -482,7 +520,9 @@ public class PosteActivity extends AppCompatActivity {
     }
 
     private void setupInjection() {
-
+        ACCION_ADD = getIntent().getExtras().getBoolean("ACCION_ADD");
+        ACCION_UPDATE = getIntent().getExtras().getBoolean("ACCION_UPDATE");
+        Elemento_Id = getIntent().getExtras().getLong("Elemento_Id");
         this.syncActivity = SyncActivity.getInstance(this);
         //Llama la instancia del servicio
         this.intentIntegrator = new IntentIntegrator(this, PACKAGE_NAME);
@@ -518,7 +558,6 @@ public class PosteActivity extends AppCompatActivity {
             longitud = location.getLongitude();
         } catch (Exception ex) {
         }
-
         */
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.novedadController = NovedadController.getInstance(this);
@@ -704,9 +743,6 @@ public class PosteActivity extends AppCompatActivity {
 
     //endregion
 }
-
-
-
 
 
 

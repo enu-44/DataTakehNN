@@ -4,26 +4,31 @@
 
     <item
         android:id="@+id/action_settings"
+        android:icon="@drawable/ic_action_more_vert"
         android:orderInCategory="100"
         android:title="Opciones"
-        android:icon="@drawable/ic_action_more_vert"
-        app:showAsAction="always" >
+        app:showAsAction="always">
         <menu>
-            <item android:id="@+id/menu_cables"
+            <item
+                android:id="@+id/menu_postes"
+                android:icon="@drawable/ic_boton_poste_add"
+                android:title="Datos Poste"></item>
+            <item
+                android:id="@+id/menu_cables"
                 android:icon="@drawable/ic_action_cables"
-                android:title="Cables">
-            </item>
-            <item android:id="@+id/menu_equipos"
+                android:title="Cables"></item>
+            <item
+                android:id="@+id/menu_equipos"
                 android:icon="@drawable/ic_action_equipos"
-                android:title="Equipos">
-            </item>
+                android:title="Equipos"></item>
 
-            <item android:id="@+id/menu_novedades"
+            <item
+                android:id="@+id/menu_novedades"
                 android:icon="@drawable/ic_action_novedad"
-                android:title="Novedades-Fotos">
-            </item>
+                android:title="Novedades-Fotos"></item>
 
-            <item android:id="@+id/menu_perdfidas"
+            <item
+                android:id="@+id/menu_perdfidas"
                 android:icon="@drawable/ic_action_cables"
                 android:title="Perdidas">
 

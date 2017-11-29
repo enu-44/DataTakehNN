@@ -70,8 +70,23 @@ public class Elemento extends BaseModel implements Parcelable {
     public String Direccion;
     @Column
     public String Direccion_Aproximada_Gps;
+
+    //Datos Individuales Adicionales Dirección
+    @Column
+    public String Nombre_Direccion;
+
+    @Column
+    public String Via;
+
+    @Column
+    public String Con;
+
+    @Column
+    public String Descripcion_Direccion;
+
     @Column
     public String Referencia_Localizacion;
+
 
     //Ciudad
     @Column
@@ -267,6 +282,38 @@ public class Elemento extends BaseModel implements Parcelable {
         Direccion_Aproximada_Gps = direccion_Aproximada_Gps;
     }
 
+    public String getNombre_Direccion() {
+        return Nombre_Direccion;
+    }
+
+    public void setNombre_Direccion(String nombre_Direccion) {
+        Nombre_Direccion = nombre_Direccion;
+    }
+
+    public String getVia() {
+        return Via;
+    }
+
+    public void setVia(String via) {
+        Via = via;
+    }
+
+    public String getCon() {
+        return Con;
+    }
+
+    public void setCon(String con) {
+        Con = con;
+    }
+
+    public String getDescripcion_Direccion() {
+        return Descripcion_Direccion;
+    }
+
+    public void setDescripcion_Direccion(String descripcion_Direccion) {
+        Descripcion_Direccion = descripcion_Direccion;
+    }
+
     public String getReferencia_Localizacion() {
         return Referencia_Localizacion;
     }
@@ -309,7 +356,6 @@ public class Elemento extends BaseModel implements Parcelable {
     }
 
 
-
     protected Elemento(Parcel in) {
         Elemento_Id = in.readLong();
         Usuario_Id = in.readLong();
@@ -332,6 +378,10 @@ public class Elemento extends BaseModel implements Parcelable {
         Longitud = in.readDouble();
         Direccion = in.readString();
         Direccion_Aproximada_Gps = in.readString();
+        Nombre_Direccion = in.readString();
+        Via = in.readString();
+        Con = in.readString();
+        Descripcion_Direccion = in.readString();
         Referencia_Localizacion = in.readString();
         Ciudad_Id = in.readLong();
         Nombre_Ciudad = in.readString();
@@ -367,6 +417,10 @@ public class Elemento extends BaseModel implements Parcelable {
         dest.writeDouble(Longitud);
         dest.writeString(Direccion);
         dest.writeString(Direccion_Aproximada_Gps);
+        dest.writeString(Nombre_Direccion);
+        dest.writeString(Via);
+        dest.writeString(Con);
+        dest.writeString(Descripcion_Direccion);
         dest.writeString(Referencia_Localizacion);
         dest.writeLong(Ciudad_Id);
         dest.writeString(Nombre_Ciudad);

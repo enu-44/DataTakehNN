@@ -40,6 +40,7 @@ import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
 import com.datatakehnn.activities.equipos_elemento.EquipoActivity;
 import com.datatakehnn.activities.fotos.FotosActivity;
 import com.datatakehnn.activities.perdida.PerdidaActivity;
+import com.datatakehnn.activities.poste.PosteActivity;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.services.aplication.DataTakeApp;
@@ -87,10 +88,9 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     TextView txtDireccionAproximada;
 
 
-
-
     //Location
-    Location location= new Location("dummyprovider");;
+    Location location = new Location("dummyprovider");
+    ;
     CoordsService servicioUbicacion;
     double latitud;
     double longitud;
@@ -119,7 +119,7 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_coords);
         ButterKnife.bind(this);
 
-        elemento= getIntent().getExtras().getParcelable("Elemento");
+        elemento = getIntent().getExtras().getParcelable("Elemento");
         setToolbarInjection();
         setupInjection();
         initMap();
@@ -127,10 +127,10 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void setupData() {
-        Nombre_Material=sincronizacionGetInformacionController.getMaterialById(elemento.getMaterial_Id()).getNombre();
-        Nombre_Estado=sincronizacionGetInformacionController.getEstadoById(elemento.getEstado_Id()).getNombre();
-        Nivel_Tension=sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id()).getNombre();
-        Longitud= String.valueOf(sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.Longitud_Elemento_Id).getValor());
+        Nombre_Material = sincronizacionGetInformacionController.getMaterialById(elemento.getMaterial_Id()).getNombre();
+        Nombre_Estado = sincronizacionGetInformacionController.getEstadoById(elemento.getEstado_Id()).getNombre();
+        Nivel_Tension = sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id()).getNombre();
+        Longitud = String.valueOf(sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.Longitud_Elemento_Id).getValor());
     }
 
 
@@ -168,34 +168,40 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
+            case R.id.menu_postes:
+                Intent j = new Intent(getApplicationContext(), PosteActivity.class);
+                j.putExtra("ACCION_ADD", false);
+                j.putExtra("ACCION_UPDATE", true);
+                j.putExtra("Elemento_Id", elemento.getElemento_Id());
+                startActivity(j);
+                break;
             case R.id.menu_cables:
                 Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
-                i.putExtra("ACCION_ADD",false);
-                i.putExtra("ACCION_UPDATE",true);
+                i.putExtra("ACCION_ADD", false);
+                i.putExtra("ACCION_UPDATE", true);
                 i.putExtra("Elemento_Id", elemento.getElemento_Id());
                 startActivity(i);
                 break;
             case R.id.menu_equipos:
                 Intent r = new Intent(getApplicationContext(), EquipoActivity.class);
-                r.putExtra("ACCION_ADD",false);
-                r.putExtra("ACCION_UPDATE",true);
+                r.putExtra("ACCION_ADD", false);
+                r.putExtra("ACCION_UPDATE", true);
                 r.putExtra("Elemento_Id", elemento.getElemento_Id());
                 startActivity(r);
                 break;
             case R.id.menu_novedades:
                 Intent t = new Intent(getApplicationContext(), FotosActivity.class);
-                t.putExtra("ACCION_ADD",false);
-                t.putExtra("ACCION_UPDATE",true);
+                t.putExtra("ACCION_ADD", false);
+                t.putExtra("ACCION_UPDATE", true);
                 t.putExtra("Elemento_Id", elemento.getElemento_Id());
                 startActivity(t);
                 break;
 
             case R.id.menu_perdfidas:
                 Intent b = new Intent(getApplicationContext(), PerdidaActivity.class);
-                b.putExtra("ACCION_ADD",false);
-                b.putExtra("ACCION_UPDATE",true);
+                b.putExtra("ACCION_ADD", false);
+                b.putExtra("ACCION_UPDATE", true);
                 b.putExtra("Elemento_Id", elemento.getElemento_Id());
                 startActivity(b);
                 break;
@@ -238,21 +244,18 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
 
-
-
     //endregion
-
 
 
     //region SETUP INJECTION
     private void setupInjection() {
-        textCoordenada.setText(elemento.getLatitud()+","+elemento.getLongitud());
-        this.sincronizacionGetInformacionController=SincronizacionGetInformacionController.getInstance(this);
+        textCoordenada.setText(elemento.getLatitud() + "," + elemento.getLongitud());
+        this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         //Guarda en un location la ubicación
-        try{
+        try {
             location.setLongitude(elemento.getLongitud());
             location.setLatitude(elemento.getLatitud());
-        }catch (Exception ex){
+        } catch (Exception ex) {
         }
     }
 
@@ -279,12 +282,12 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        try{
+        try {
             mMap = googleMap;
             // Add a marker in Sydney and move the camera
             LatLng positionInitial = new LatLng(4.565473550710278, -74.058837890625);
             /// mMap.addMarker(new MarkerOptions().position(positionInitial).title("Ecuador"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positionInitial,6));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positionInitial, 6));
             //Configuracion de InfoWindow
             mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
@@ -322,9 +325,9 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
                 this.setLocation(location);
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setZoomControlsEnabled(true);
-                mMap.getUiSettings().setZoomGesturesEnabled (true);
+                mMap.getUiSettings().setZoomGesturesEnabled(true);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
         }
     }
 
@@ -370,14 +373,13 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void addMarker(double lat, double lng) {
         //Get Zoom last(Obtener zoom anterior)
-        float zoom= mMap.getCameraPosition().zoom;
+        float zoom = mMap.getCameraPosition().zoom;
         /// Toast.makeText(getApplicationContext(),"Zoom: "+String.valueOf(zoom),Toast.LENGTH_SHORT).show();
         LatLng coordenadas = new LatLng(lat, lng);
         CameraUpdate myposition = CameraUpdateFactory.newLatLngZoom(coordenadas, zoom);
-        if(marcador != null) marcador.remove();
+        if (marcador != null) marcador.remove();
         //Define color del marker
-        BitmapDescriptor bitmapMarker= BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-
+        BitmapDescriptor bitmapMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
 
 
         String Descripcion_Elemento = "Codigo Poste: " + elemento.getCodigo_Apoyo() +
@@ -389,7 +391,7 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
                 "\n\n" + "Altura: " + String.valueOf(elemento.getAltura_Disponible()) +
                 "\n\n" + "Longitud: " + Longitud;
 
-        marcador = drawMarker(coordenadas,"Ubicacion",Descripcion_Elemento,bitmapMarker);
+        marcador = drawMarker(coordenadas, "Ubicacion", Descripcion_Elemento, bitmapMarker);
         if (circle != null) circle.remove();
         circle = drawCircle(coordenadas);
 
@@ -416,7 +418,7 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     //Dibujar Marker
-    private Marker drawMarker(LatLng latLng, String title,String snippet, BitmapDescriptor bitmapDescriptor ) {
+    private Marker drawMarker(LatLng latLng, String title, String snippet, BitmapDescriptor bitmapDescriptor) {
         // Instantiating CircleOptions to draw a circle around the marker
         MarkerOptions markerOption = new MarkerOptions();
         // Specifying the psition of the marker
@@ -434,9 +436,6 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     //endregion
-
-
-
 
 
     //region CHECK CONNECTION INTERNET
@@ -462,9 +461,9 @@ public class CoordsActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onNetworkConnectionChanged(boolean isConnected) {
         if (isConnected) {
             setAddress(location);
-            showSnakBar(R.color.orange,  getString(R.string.message_connection));
+            showSnakBar(R.color.orange, getString(R.string.message_connection));
         } else {
-            showSnakBar(R.color.orange,  getString(R.string.message_not_connection));
+            showSnakBar(R.color.orange, getString(R.string.message_not_connection));
         }
     }
 

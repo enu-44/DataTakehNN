@@ -60,6 +60,10 @@ public class ElementoController {
         elemento.setLongitud(elementoNew.getLongitud());
         elemento.setDireccion(elementoNew.getDireccion());
         elemento.setDireccion_Aproximada_Gps(elementoNew.getDireccion_Aproximada_Gps());
+        elemento.setNombre_Direccion(elementoNew.getNombre_Direccion());
+        elemento.setVia(elementoNew.getVia());
+        elemento.setCon(elementoNew.getCon());
+        elemento.setDescripcion_Direccion(elementoNew.getDescripcion_Direccion());
         elemento.setReferencia_Localizacion(elementoNew.getReferencia_Localizacion());
         elemento.setDepartamento_Id(elementoNew.getDepartamento_Id());
         elemento.setCiudad_Id(elementoNew.getCiudad_Id());
@@ -98,6 +102,10 @@ public class ElementoController {
         elemento.setLongitud(elementoNew.getLongitud());
         elemento.setDireccion(elementoNew.getDireccion());
         elemento.setDireccion_Aproximada_Gps(elementoNew.getDireccion_Aproximada_Gps());
+        elemento.setNombre_Direccion(elementoNew.getNombre_Direccion());
+        elemento.setVia(elementoNew.getVia());
+        elemento.setCon(elementoNew.getCon());
+        elemento.setDescripcion_Direccion(elementoNew.getDescripcion_Direccion());
         elemento.setReferencia_Localizacion(elementoNew.getReferencia_Localizacion());
         elemento.setDepartamento_Id(elementoNew.getDepartamento_Id());
         elemento.setCiudad_Id(elementoNew.getCiudad_Id());
@@ -131,15 +139,11 @@ public class ElementoController {
     }
 
 
-
     public List<Elemento> getListElementsByUserLogued(long Usuario_Id) {
         //  List<Elemento> elementos = new Select().from(Elemento.class).queryList();
         List<Elemento> elemento = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(Usuario_Id)).orderBy(Elemento_Table.Elemento_Id, false).queryList();
         return elemento;
     }
-
-
-
 
 
 }
