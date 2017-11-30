@@ -24,7 +24,8 @@ public class Usuario_List {
                     0,
                     "",
                     0,
-                    ""
+                    "",
+                    2
             )
     };
 

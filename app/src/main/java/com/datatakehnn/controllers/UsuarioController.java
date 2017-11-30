@@ -1,6 +1,10 @@
 package com.datatakehnn.controllers;
 
 import android.content.Context;
+
+import com.datatakehnn.models.empresa_model.Empresa;
+import com.datatakehnn.models.proyectos_model.Proyecto;
+import com.datatakehnn.models.tipo_usuario_model.Tipo_Usuario;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.models.reponse_generic.Response;
 import com.datatakehnn.models.usuario_model.Usuario_Table;
@@ -23,6 +27,7 @@ public class UsuarioController {
     public UsuarioController() {
         _instance = this;
     }
+
     public static UsuarioController getInstance(Context c) {
         if (_instance == null) {
             ourcontext = c;
@@ -35,8 +40,8 @@ public class UsuarioController {
     ///Methods
 
     ////Registrar
-    public Usuario register(Usuario userNew){
-        Usuario user= new Usuario();
+    public Usuario register(Usuario userNew) {
+        Usuario user = new Usuario();
         user.setUsuario_Id(userNew.getUsuario_Id());
         user.setNombre(userNew.getNombre());
         user.setApellido(userNew.getApellido());
@@ -51,6 +56,7 @@ public class UsuarioController {
         user.setCiudad_Id(userNew.getCiudad_Id());
         user.setNombre_Ciudad(userNew.getNombre_Ciudad());
         user.setNombre_Departamento(userNew.getNombre_Departamento());
+        user.setTipo_Usuario_Id(userNew.getTipo_Usuario_Id());
         user.save();
         return user;
     }
@@ -61,7 +67,7 @@ public class UsuarioController {
     }
 
     ///Actualizar
-    public Usuario update(Usuario userUpdate){
+    public Usuario update(Usuario userUpdate) {
         SQLite.update(Usuario.class)
                 .set(Usuario_Table.Usuario_Id.eq(userUpdate.getUsuario_Id()),
                         Usuario_Table.Nombre.eq(userUpdate.getNombre()),
@@ -76,35 +82,33 @@ public class UsuarioController {
                         Usuario_Table.Ciudad_Id.eq(userUpdate.getCiudad_Id()),
                         Usuario_Table.Nombre_Ciudad.eq(userUpdate.getNombre_Ciudad()),
                         Usuario_Table.Departamento_Id.eq(userUpdate.getDepartamento_Id()),
-                        Usuario_Table.Nombre_Departamento.eq(userUpdate.getNombre_Departamento())
-                        )
+                        Usuario_Table.Nombre_Departamento.eq(userUpdate.getNombre_Departamento()),
+                        Usuario_Table.Tipo_Usuario_Id.eq(userUpdate.getTipo_Usuario_Id())
+                )
                 .where(Usuario_Table.Usuario_Id.is(userUpdate.getUsuario_Id()))
-             //   .and(Usuario_Table.IsRemembered.is(true))
+                //   .and(Usuario_Table.IsRemembered.is(true))
                 .async()
                 .execute(); // non-UI blocking
 
-        Usuario user=  getLoggedUser();
+        Usuario user = getLoggedUser();
 
         return user;
     }
 
 
-
-
-
     ///Cerrar Sesion
-    public Usuario logoutLogin(){
-        Usuario userfirst= SQLite.select().from(Usuario.class).where(Usuario_Table.IsRemembered.eq(true)).querySingle();
+    public Usuario logoutLogin() {
+        Usuario userfirst = SQLite.select().from(Usuario.class).where(Usuario_Table.IsRemembered.eq(true)).querySingle();
         userfirst.setRemembered(false);
         userfirst.save();
-        Usuario userUpdate=SQLite.select().from(Usuario.class).querySingle();
+        Usuario userUpdate = SQLite.select().from(Usuario.class).querySingle();
         return userUpdate;
     }
 
     ///Obtener el primero
     public Usuario getFirst() {
-        Usuario user=new Select().from(Usuario.class).querySingle();
-        return  user;
+        Usuario user = new Select().from(Usuario.class).querySingle();
+        return user;
     }
 
     //Get User Logueado
@@ -115,23 +119,64 @@ public class UsuarioController {
 
     ////Login Usuario_List
     public Response loginUsuario(String Cedula, String Password) {
-        Usuario user= new Usuario();
-        user=new Select().from(Usuario.class).where(Usuario_Table.Cedula.eq(Cedula), Usuario_Table.Password.eq(Password)).querySingle();
-        Response response= new Response();
+        Usuario user = new Usuario();
+        user = new Select().from(Usuario.class).where(Usuario_Table.Cedula.eq(Cedula), Usuario_Table.Password.eq(Password)).querySingle();
+        Response response = new Response();
 
-        if(user!=null){
+        if (user != null) {
             response.setMessage("login Ok");
             response.setResult(user);
             response.setSuccess(true);
-        }else{
+        } else {
             response.setMessage("Cedula o contraseña incorrectos");
             response.setResult(user);
             response.setSuccess(false);
         }
-        return  response;
+        return response;
     }
 
 
+    //Get Usuario por cedula y Contraseña
+    public Usuario getUsuario(String Cedula, String Password) {
+        Usuario user = SQLite.select().from(Usuario.class).where(Usuario_Table.Cedula.eq(Cedula))
+                .and(Usuario_Table.Password.eq(Password)).querySingle();
+        return user;
+    }
+
+    //Registrar Tipo Usuario
+    public Tipo_Usuario registerTipoUsuario(Tipo_Usuario tipoUserNew) {
+        Tipo_Usuario tipo_usuario = new Tipo_Usuario();
+        tipo_usuario.setTipo_Usuario_Id(tipoUserNew.getTipo_Usuario_Id());
+        tipo_usuario.setNombre(tipoUserNew.getNombre());
+        tipo_usuario.save();
+        return tipo_usuario;
+    }
+
+    //Registrar Empresa
+    public Empresa registerEmpresa(Empresa empresaNew) {
+        Empresa empresa = new Empresa();
+        empresa.setEmpresa_Id(empresaNew.getEmpresa_Id());
+        empresa.setNombre(empresaNew.getNombre());
+        empresa.setDireccion(empresaNew.getDireccion());
+        empresa.setTelefono(empresaNew.getTelefono());
+        empresa.setNit(empresaNew.getNit());
+        empresa.save();
+        return empresa;
+    }
+
+    //Registrar Proyectos
+    public Proyecto registerProyecto(Proyecto proyectoNew) {
+        Proyecto proyecto = new Proyecto();
+        proyecto.setProyecto_Id(proyectoNew.getProyecto_Id());
+        proyecto.setNombre(proyectoNew.getNombre());
+
+        return proyecto;
+    }
+
+    public Proyecto getFirstProyecto() {
+        Proyecto proyecto = new Select().from(Proyecto.class).querySingle();
+        return proyecto;
+    }
 
 
 }

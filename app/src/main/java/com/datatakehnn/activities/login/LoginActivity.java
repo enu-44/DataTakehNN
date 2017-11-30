@@ -19,11 +19,17 @@ import android.widget.TextView;
 import com.datatakehnn.R;
 import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.controllers.UsuarioController;
+import com.datatakehnn.models.empresa_model.Empresa;
+import com.datatakehnn.models.proyectos_model.Proyecto;
 import com.datatakehnn.models.reponse_generic.Response;
+import com.datatakehnn.models.reponse_generic.login.Response_Request_Login;
+import com.datatakehnn.models.tipo_usuario_model.Tipo_Usuario;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.aplication.DataTakeApp;
 import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 import com.datatakehnn.services.data_arrays.Usuario_List;
+import com.datatakehnn.services.loginservice.ILogin;
+import com.datatakehnn.services.loginservice.LoginApiService;
 
 import java.util.List;
 
@@ -31,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
+public class LoginActivity extends AppCompatActivity implements ILogin, ConnectivityReceiver.ConnectivityReceiverListener {
 
     //UI Elements
     @BindView(R.id.edtUsuario)
@@ -48,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
     //Instances
     UsuarioController usuarioController;
+    LoginApiService loginApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     //region INJECTION
     private void setupInjection() {
         this.usuarioController = UsuarioController.getInstance(this);
+
+        this.loginApiService = LoginApiService.getInstance(this);
     }
 
 
@@ -103,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         //mPasswordView.setError(null);
         // Store values at the time of the login attempt.
         String usuario = edtUsuario.getText().toString();
-        String password = edtUsuario.getText().toString();
+        String password = edtContrasena.getText().toString();
         ///String password = mPasswordView.getText().toString();
         boolean cancel = false;
         View focusView = null;
@@ -129,9 +138,14 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             // perform the user login attempt.
 
             if (checkConnection()) {
-
                 ///Verificate en servicio rest
-                loginSqlite(edtUsuario.getText().toString(), edtContrasena.getText().toString());
+                Usuario user = usuarioController.getUsuario(usuario, password);
+                if (user != null) {
+                    loginSqlite(edtUsuario.getText().toString(), edtContrasena.getText().toString());
+                } else {
+                    loginApiService.getLoginAsync(this, usuario, password);
+                }
+                //loginSqlite(edtUsuario.getText().toString(), edtContrasena.getText().toString());
             } else {
                 loginSqlite(edtUsuario.getText().toString(), edtContrasena.getText().toString());
             }
@@ -232,6 +246,37 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         } else {
             showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
         }
+    }
+
+    //endregion
+
+    //region API SERVICE
+
+    @Override
+    public void processFinishGetLogin(Response_Request_Login response) {
+        if (response.isSuccess()) {
+            //Snackbar.make(container, "Login OK por Api", Snackbar.LENGTH_SHORT).show();
+            Usuario user = (Usuario) response.getResult();
+            user.setRemembered(true);
+            //Tipo Usuario
+            Tipo_Usuario tipo_usuario_response = response.getResult().getTipo_usuario();
+            usuarioController.registerTipoUsuario(tipo_usuario_response);
+            //Empresa
+            Empresa empresa_response = response.getResult().getEmpresa();
+            usuarioController.registerEmpresa(empresa_response);
+            //Proyecto
+            List<Proyecto> list_proyectos_response = response.getResult().getProyectos();
+            for (Proyecto items : list_proyectos_response) {
+                usuarioController.registerProyecto(items);
+            }
+            user.setProyecto_Id(usuarioController.getFirstProyecto().getProyecto_Id());
+            usuarioController.register(user);
+
+            sendMenu(user);
+        } else {
+            Snackbar.make(container, "Usuario o Contraseña Incorrectos", Snackbar.LENGTH_SHORT).show();
+        }
+
     }
     //endregion
 
