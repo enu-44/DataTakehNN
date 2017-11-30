@@ -18,29 +18,32 @@ public class Detalle_Tipo_Cable  extends BaseModel {
     @PrimaryKey
     public  long Detalle_Tipo_Cable_Id;
 
-    @SerializedName("Tipo_Cable_Id")
+    @SerializedName("Tipocable_Id")
     @Column
     public long Tipo_Cable_Id;
 
-    @SerializedName("Nombre")
+    @SerializedName("Cable_Id")
+    @Column
+    public long Cable_Id;
+
+    @SerializedName("NombreCable")
     @Column
     public  String Nombre;
 
-    @SerializedName("Sigla")
+    @SerializedName("SiglaCable")
     @Column
     public  String Sigla;
 
     //Constructor
-
-    public Detalle_Tipo_Cable(long detalle_Tipo_Cable_Id, long tipo_Cable_Id, String nombre, String sigla) {
+    public Detalle_Tipo_Cable(long detalle_Tipo_Cable_Id, long tipo_Cable_Id,long cable_Id, String nombre, String sigla) {
         Detalle_Tipo_Cable_Id = detalle_Tipo_Cable_Id;
         Tipo_Cable_Id = tipo_Cable_Id;
+        Cable_Id = cable_Id;
         Nombre = nombre;
         Sigla = sigla;
     }
 
     public Detalle_Tipo_Cable(){
-
 
     }
 
@@ -75,6 +78,14 @@ public class Detalle_Tipo_Cable  extends BaseModel {
 
     public void setSigla(String sigla) {
         Sigla = sigla;
+    }
+
+    public long getCable_Id() {
+        return Cable_Id;
+    }
+
+    public void setCable_Id(long cable_Id) {
+        Cable_Id = cable_Id;
     }
 
     @Override

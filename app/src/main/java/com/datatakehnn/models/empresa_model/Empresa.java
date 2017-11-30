@@ -33,14 +33,19 @@ public class Empresa  extends BaseModel {
     @Column
     public String Nit;
 
+    @SerializedName("Is_Operadora")
+    @Column
+    public boolean Is_Operadora;
+
     //Constructor
 
-    public Empresa(long empresa_Id, String nombre, String direccion, String telefono, String nit) {
+    public Empresa(long empresa_Id, String nombre, String direccion, String telefono, String nit,boolean is_Operadora ) {
         Empresa_Id = empresa_Id;
         Nombre = nombre;
         Direccion = direccion;
         Telefono = telefono;
         Nit = nit;
+        Is_Operadora=is_Operadora;
     }
 
     public Empresa() {
@@ -88,6 +93,14 @@ public class Empresa  extends BaseModel {
 
     public void setNit(String nit) {
         Nit = nit;
+    }
+
+    public boolean isIs_Operadora() {
+        return Is_Operadora;
+    }
+
+    public void setIs_Operadora(boolean is_Operadora) {
+        Is_Operadora = is_Operadora;
     }
 
     @Override

@@ -16,7 +16,7 @@
         android:src="@drawable/fondo_primary"
         tools:ignore="ContentDescription"></ImageView>
 
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/progressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
@@ -24,14 +24,41 @@
         android:layout_marginTop="-5dp"
         android:indeterminate="true"
         android:visibility="gone"
-         />
+         />-->
 
-    <ImageView
-        android:id="@+id/ivSync"
-        android:layout_width="144dp"
-        android:layout_height="144dp"
-        android:layout_centerInParent="true"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_sincronizacion" />
+
+   <ImageView
+       android:id="@+id/ivSync"
+       android:layout_width="144dp"
+       android:layout_height="144dp"
+       android:layout_centerInParent="true"
+       android:contentDescription="@null"
+       android:src="@drawable/ic_sincronizacion" />
+
+    <ProgressBar
+
+        android:layout_below="@+id/ivSync"
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="0dp"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateTint="@color/orange_dark"/>
+
+
+    <TextView
+        android:id="@+id/txtCargando"
+        android:gravity="center"
+        android:text="Cargando..."
+        android:visibility="gone"
+        android:layout_below="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
 </RelativeLayout>

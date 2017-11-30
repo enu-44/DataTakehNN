@@ -17,11 +17,13 @@ public class Detalle_Tipo_Cable_List {
             new Detalle_Tipo_Cable(
                     1,
                     1,
+                    1,
                     "Aluminio Desnudo",
                     "ACSR"
             ),
             new Detalle_Tipo_Cable(
                     2,
+                    1,
                     1,
                     "Aluminio Aislado",
                     "ASC"
@@ -29,11 +31,13 @@ public class Detalle_Tipo_Cable_List {
             new Detalle_Tipo_Cable(
                     3,
                     1,
+                    1,
                     "Trensado",
                     "TRE"
             ),
             new Detalle_Tipo_Cable(
                     4,
+                    1,
                     1,
                     "Cobre Aislado",
                     "CUA"
@@ -41,30 +45,35 @@ public class Detalle_Tipo_Cable_List {
             new Detalle_Tipo_Cable(
                     5,
                     1,
+                    1,
                     "Cobre Desnudo",
                     "CUD"
             ),
             new Detalle_Tipo_Cable(
                     6,
                     2,
+                    1,
                     ".500",
                     ".500"
             ),
             new Detalle_Tipo_Cable(
                     7,
                     2,
+                    1,
                     "RG6",
                     "RG6"
             ),
             new Detalle_Tipo_Cable(
                     8,
                     2,
+                    1,
                     "RG11",
                     "RG11"
             ),
             new Detalle_Tipo_Cable(
                     9,
                     2,
+                    1,
                     "Fibra Optica",
                     "FO"
             ),
@@ -72,12 +81,14 @@ public class Detalle_Tipo_Cable_List {
             new Detalle_Tipo_Cable(
                     10,
                     3,
+                    1,
                     "Fibra Optica",
                     "Fibra Optica"
             ),
             new Detalle_Tipo_Cable(
                     11,
                     3,
+                    1,
                     ".500",
                     ".500"
             )

@@ -26,7 +26,7 @@ public class Detalle_Tipo_Novedad extends BaseModel {
     @Column
     public String Descripcion;
 
-    @SerializedName("Tipo_Novedad_Id")
+    @SerializedName("Tipo_Novedad_id")
     @Column
     public long Tipo_Novedad_Id;
 

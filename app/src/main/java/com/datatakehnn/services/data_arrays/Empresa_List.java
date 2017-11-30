@@ -15,43 +15,50 @@ public class Empresa_List {
                     "Claro",
                     "Carrera 6 # 3-23",
                     "123123123",
-                    "23432434-3"
+                    "23432434-3",
+                    true
             ),
             new Empresa(2,
                     "Movistar",
                     "Transversal 5 # 3-23",
                     "123123123",
-                    "23432434-3"
+                    "23432434-3",
+                    true
             ),
             new Empresa(3,
                     "Alpavision",
                     "Calle 6 # 3-23",
                     "123123123",
-                    "23432434-3"
+                    "23432434-3",
+                    true
             ),
             new Empresa(4,
                     "ETB",
                     "Calle 6 # 3-23",
                     "123123123",
-                    "23432434-3"
+                    "23432434-3",
+                    true
             ),
             new Empresa(5,
                     "Azteca",
                     "Calle 6 # 3-23",
                     "123123123",
-                    "23432434-3"
+                    "23432434-3",
+                    true
             ),
             new Empresa(6,
                     "Media Commerce",
                     "Calle 6 # 3-23",
                     "123123123",
-                    "23432434-3"
+                    "23432434-3",
+                    true
             ),
             new Empresa(7,
                     "No Identificado",
                     "",
                     "",
-                    ""
+                    "",
+                    true
             )
     };
 

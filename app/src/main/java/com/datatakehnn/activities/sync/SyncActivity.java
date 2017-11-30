@@ -40,8 +40,8 @@ import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.tipo_equipo_model.Tipo_Equipo;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
 import com.datatakehnn.models.tipo_perdida_model.Tipo_Perdida;
-import com.datatakehnn.services.api_services.DataAsyncService.DataSyncApiService;
-import com.datatakehnn.services.api_services.DataAsyncService.IDataAsync;
+import com.datatakehnn.services.api_services.data_async_services.DataSyncApiService;
+import com.datatakehnn.services.api_services.data_async_services.IDataAsync;
 import com.datatakehnn.services.aplication.DataTakeApp;
 import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 import com.datatakehnn.services.coords.CoordsService;
@@ -76,6 +76,9 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
+    @BindView(R.id.txtCargando)
+    TextView txtCargando;
+
     //Variables Globales
     private boolean sync = false;
 
@@ -97,16 +100,26 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
         setToolbarInjection();
         setupInjection();
         animationButton();
+        loadInformation();
+    }
+
+    private void loadInformation() {
+        if(checkConnection()){
+            showUIElements();
+            loadDataAsync();
+
+
+        }
     }
 
     //region API SERIVICE
-
     private void loadDataAsync() {
         dataSyncApiService.loadDataAsync(this);
     }
 
     public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
         if (response.isSuccess()) {
+
 
             //Departamentos y Ciudades
             List<Departamento> departamentoList = response.getResult().getDepartamento();
@@ -116,14 +129,17 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
             }
 
             //Obtener Listas Poste
-            List<Detalle_Tipo_Novedad> detalle_tipo_novedadList = Detalle_Tipo_Novedad_List.getListDetalleTipoNovedad();
+
+            ///Informacion Estatica
+            /*List<Detalle_Tipo_Novedad> detalle_tipo_novedadList = Detalle_Tipo_Novedad_List.getListDetalleTipoNovedad();
             List<Estado> estado_lists = Estado_List.getListEstado();
             List<Longitud_Elemento> longitud_elementos = Longitud_Elemento_List.getListLongitudElemento();
             List<Material> materiales = Material_List.getListMaterial();
             List<Nivel_Tension_Elemento> nivel_tension_elementos = Nivel_Tension_Elemento_List.getListNivelTension();
             List<Tipo_Novedad> tipo_novedades = Tipo_Novedad_List.getListTipoNovedad();
 
-            ///Lista Cables
+
+               ///Lista Cables
             List<Tipo_Cable> tipo_cables = Tipo_Cable_List.getListTipo_Cable();
             List<Detalle_Tipo_Cable> detalle_tipo_cables = Detalle_Tipo_Cable_List.getListDetalle_Tipo_Cable();
 
@@ -133,7 +149,26 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
             List<Tipo_Equipo> tipo_equipos = Tipo_Equipo_List.getListTipoEquipo();
             //Tipo Perdidas
             List<Tipo_Perdida> tipo_perdidas = Tipo_Perdida_List.getListTipoPerdida();
+            */
 
+            List<Detalle_Tipo_Novedad> detalle_tipo_novedadList = response.getResult().getDetalle_Tipo_Novedad();
+            List<Estado> estado_lists = response.getResult().getEstados();
+            List<Longitud_Elemento> longitud_elementos = response.getResult().getLongitud_Elementos();
+            List<Material> materiales = response.getResult().getMateriales();
+            List<Nivel_Tension_Elemento> nivel_tension_elementos =response.getResult().getNivel_Tension_Elementos();
+            List<Tipo_Novedad> tipo_novedades = response.getResult().getTipo_Novedad();
+
+
+            ///Lista Cables
+            List<Tipo_Cable> tipo_cables = response.getResult().getTipo_Cable();
+            List<Detalle_Tipo_Cable> detalle_tipo_cables = response.getResult().getDetalle_Tipo_Cable();
+
+            //Empresas
+            List<Empresa> empresaList = response.getResult().getEmpresa();
+            //Tipo Equipos
+            List<Tipo_Equipo> tipo_equipos = response.getResult().getTipo_Equipo();
+            //Tipo Perdidas
+            List<Tipo_Perdida> tipo_perdidas = response.getResult().getTipo_Perdidas();
 
             sincronizacionGetInformacionController.deleteInformacionMaster();
             sincronizacionGetInformacionController.registerDataGetInformacion(estado_lists,
@@ -156,13 +191,13 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
             MenuItem item = menuGlobal.findItem(R.id.action_done);
             item.setVisible(true);
             sync = true;
-            progressBar.setVisibility(View.GONE);
+           hideUIElements();
             ivSync.setImageResource(R.drawable.ic_botonsincronizado);
 
         } else {
             showSnakBar(R.color.colorAccent, response.getMessage());
             sync = false;
-            progressBar.setVisibility(View.GONE);
+           hideUIElements();
         }
     }
 
@@ -239,7 +274,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     //region EVENTS
     @OnClick(R.id.ivSync)
     public void onViewClicked() {
-        progressBar.setVisibility(View.VISIBLE);
+        showUIElements();
         getInformationSync();
 
     }
@@ -273,6 +308,19 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
 
     }
 
+    public void showUIElements() {
+        progressBar.setVisibility(View.VISIBLE);
+        txtCargando.setVisibility(View.VISIBLE);
+        ivSync.setEnabled(false);
+
+    }
+
+    public void hideUIElements() {
+        progressBar.setVisibility(View.GONE);
+        txtCargando.setVisibility(View.GONE);
+        ivSync.setEnabled(true);
+    }
+
 
     // Sincronizar Informacion
     public void getInformationSync() {
@@ -288,15 +336,15 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
                     MenuItem item = menuGlobal.findItem(R.id.action_done);
                     item.setVisible(true);
                     sync = true;
-                    progressBar.setVisibility(View.GONE);
+                    hideUIElements();
                 } else {
                     showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
-                    progressBar.setVisibility(View.GONE);
+                   hideUIElements();
                     sync = false;
                 }
             } else {
                 showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
-                progressBar.setVisibility(View.GONE);
+               hideUIElements();
                 sync = false;
             }
         }
@@ -366,6 +414,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
                                     .setInterpolator(interpolador)
                                     .setDuration(600)
                                     .start();
+
                         }
 
                         @Override
