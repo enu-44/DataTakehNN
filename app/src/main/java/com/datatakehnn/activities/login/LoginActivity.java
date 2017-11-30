@@ -256,8 +256,6 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
     public void processFinishGetLogin(Response_Request_Login response) {
         if (response.isSuccess()) {
             //Snackbar.make(container, "Login OK por Api", Snackbar.LENGTH_SHORT).show();
-            Usuario user = (Usuario) response.getResult();
-            user.setRemembered(true);
             //Tipo Usuario
             Tipo_Usuario tipo_usuario_response = response.getResult().getTipo_usuario();
             usuarioController.registerTipoUsuario(tipo_usuario_response);
@@ -269,7 +267,10 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
             for (Proyecto items : list_proyectos_response) {
                 usuarioController.registerProyecto(items);
             }
-            user.setProyecto_Id(usuarioController.getFirstProyecto().getProyecto_Id());
+
+            Usuario user = response.getResult();
+            user.setRemembered(true);
+            user.setProyecto_Id(usuarioController.getFirstProyecto().getId());
             usuarioController.register(user);
 
             sendMenu(user);

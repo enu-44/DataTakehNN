@@ -167,9 +167,21 @@ public class UsuarioController {
     //Registrar Proyectos
     public Proyecto registerProyecto(Proyecto proyectoNew) {
         Proyecto proyecto = new Proyecto();
-        proyecto.setProyecto_Id(proyectoNew.getProyecto_Id());
+        proyecto.setId(proyectoNew.getId());
         proyecto.setNombre(proyectoNew.getNombre());
-
+        proyecto.setDescripcion(proyectoNew.getDescripcion());
+        proyecto.setFechaInicio(proyectoNew.getFechaInicio());
+        proyecto.setFechaFin(proyectoNew.getFechaFin());
+        proyecto.setOrdenTrabajo(proyectoNew.getOrdenTrabajo());
+        proyecto.setActivo(proyectoNew.isActivo());
+        proyecto.setProyecto_Empresa_Id(proyectoNew.getProyecto_Empresa_Id());
+        proyecto.setOperadora(proyectoNew.isOperadora());
+        proyecto.setPropietaria(proyectoNew.isPropietaria());
+        proyecto.setInterventora(proyectoNew.isInterventora());
+        proyecto.setEmpresa_Id(proyectoNew.getEmpresa_Id());
+        proyecto.setProyecto_Id(proyectoNew.getProyecto_Id());
+        proyecto.setCiudad_Id(proyectoNew.getCiudad_Id());
+        proyecto.save();
         return proyecto;
     }
 
