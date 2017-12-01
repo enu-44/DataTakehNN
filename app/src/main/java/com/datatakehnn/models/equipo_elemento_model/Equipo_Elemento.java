@@ -16,18 +16,34 @@ public class Equipo_Elemento  extends BaseModel {
     //Atributes
     @PrimaryKey(autoincrement = true)
     public long Equipo_Elemento_Id;
+
+    @Column
+    public String Codigo;
+
+    @Column
+    public String Descripcion;
+
     @Column
     public long Cantidad;
     @Column
-    public long Tipo_Equipo_Id;
+    public long EmpresaId;
+    @Column
+    public boolean ConectadoRbt;
+    @Column
+    public boolean MedidorBt;
+    @Column
+    public long Consumo;
+    @Column
+    public String UnidadMedida;
+
+
+
+    @Column
+    public long TipoEquipo_Id;
     @Column
     public long Elemento_Id;
-    @Column
-    public long Empresa_Id;
-    @Column
-    public boolean Conectado_Red_Electrica;
-    @Column
-    public boolean Medidor_Red;
+
+
 
     //Externos
     @Column
@@ -37,14 +53,18 @@ public class Equipo_Elemento  extends BaseModel {
 
 
     //Constructor
-    public Equipo_Elemento(long cantidad, long tipo_Equipo_Id, long elemento_Id, long empresa_Id, boolean conectado_Red_Electrica, boolean medidor_Red, String nombre_Tipo_Equipo, String nombre_Empresa) {
 
+    public Equipo_Elemento( String codigo, String descripcion, long cantidad, long empresaId, boolean conectadoRbt, boolean medidorBt, long consumo, String unidadMedida, long tipoEquipo_Id, long elemento_Id, String nombre_Tipo_Equipo, String nombre_Empresa) {
+        Codigo = codigo;
+        Descripcion = descripcion;
         Cantidad = cantidad;
-        Tipo_Equipo_Id = tipo_Equipo_Id;
+        EmpresaId = empresaId;
+        ConectadoRbt = conectadoRbt;
+        MedidorBt = medidorBt;
+        Consumo = consumo;
+        UnidadMedida = unidadMedida;
+        TipoEquipo_Id = tipoEquipo_Id;
         Elemento_Id = elemento_Id;
-        Empresa_Id = empresa_Id;
-        Conectado_Red_Electrica = conectado_Red_Electrica;
-        Medidor_Red = medidor_Red;
         Nombre_Tipo_Equipo = nombre_Tipo_Equipo;
         Nombre_Empresa = nombre_Empresa;
     }
@@ -70,11 +90,11 @@ public class Equipo_Elemento  extends BaseModel {
     }
 
     public long getTipo_Equipo_Id() {
-        return Tipo_Equipo_Id;
+        return TipoEquipo_Id;
     }
 
     public void setTipo_Equipo_Id(long tipo_Activo_Id) {
-        Tipo_Equipo_Id = tipo_Activo_Id;
+        TipoEquipo_Id = tipo_Activo_Id;
     }
 
     public long getElemento_Id() {
@@ -86,29 +106,93 @@ public class Equipo_Elemento  extends BaseModel {
     }
 
     public long getEmpresa_Id() {
-        return Empresa_Id;
+        return EmpresaId;
     }
 
     public void setEmpresa_Id(long empresa_Id) {
-        Empresa_Id = empresa_Id;
+        EmpresaId = empresa_Id;
     }
 
     public boolean isConectado_Red_Electrica() {
-        return Conectado_Red_Electrica;
+        return ConectadoRbt;
     }
 
     public void setConectado_Red_Electrica(boolean conectado_Red) {
-        Conectado_Red_Electrica = conectado_Red;
+        ConectadoRbt = conectado_Red;
     }
 
     public boolean isMedidor_Red() {
-        return Medidor_Red;
+        return MedidorBt;
     }
 
     public void setMedidor_Red(boolean medidor_Red) {
-        Medidor_Red = medidor_Red;
+        MedidorBt = medidor_Red;
     }
 
+
+    public String getCodigo() {
+        return Codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        Codigo = codigo;
+    }
+
+    public String getDescripcion() {
+        return Descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        Descripcion = descripcion;
+    }
+
+    public long getEmpresaId() {
+        return EmpresaId;
+    }
+
+    public void setEmpresaId(long empresaId) {
+        EmpresaId = empresaId;
+    }
+
+    public boolean isConectadoRbt() {
+        return ConectadoRbt;
+    }
+
+    public void setConectadoRbt(boolean conectadoRbt) {
+        ConectadoRbt = conectadoRbt;
+    }
+
+    public boolean isMedidorBt() {
+        return MedidorBt;
+    }
+
+    public void setMedidorBt(boolean medidorBt) {
+        MedidorBt = medidorBt;
+    }
+
+    public long getConsumo() {
+        return Consumo;
+    }
+
+    public void setConsumo(long consumo) {
+        Consumo = consumo;
+    }
+
+    public String getUnidadMedida() {
+        return UnidadMedida;
+    }
+
+    public void setUnidadMedida(String unidadMedida) {
+        UnidadMedida = unidadMedida;
+    }
+
+    public long getTipoEquipo_Id() {
+        return TipoEquipo_Id;
+    }
+
+    public void setTipoEquipo_Id(long tipoEquipo_Id) {
+        TipoEquipo_Id = tipoEquipo_Id;
+    }
 
     public String getNombre_Tipo_Equipo() {
         return Nombre_Tipo_Equipo;
@@ -125,4 +209,6 @@ public class Equipo_Elemento  extends BaseModel {
     public void setNombre_Empresa(String nombre_Empresa) {
         Nombre_Empresa = nombre_Empresa;
     }
+
+
 }

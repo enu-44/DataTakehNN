@@ -72,8 +72,8 @@
             android:name=".activities.fotos.FotosActivity"
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.CoordsActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/MiTema.NoActionBar" />
+            android:theme="@style/MiTema.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activities.menu.MainMenuActivity"
             android:screenOrientation="portrait"
@@ -88,12 +88,20 @@
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.menu.MainMenuActivity"
             android:theme="@style/MiTema.NoActionBar" />
-
         <activity
-            android:screenOrientation="portrait"
             android:name=".activities.ciudad.CiudadActivity"
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.menu.MainMenuActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MiTema.NoActionBar" />
+
+
+        <activity
+
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.menu.MainMenuActivity"
+            android:screenOrientation="portrait"
+            android:name=".activities.sync.post_sync_activity.UploadDataActivity"
             android:theme="@style/MiTema.NoActionBar"></activity>
 
         <meta-data

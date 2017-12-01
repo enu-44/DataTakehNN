@@ -193,19 +193,23 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
 
     private void registerEquipos() {
         Equipo_Elemento equipo_elemento = new Equipo_Elemento(
+                "",
+                "",
                 1,
-                Tipo_Equipo_Id,
-                Elemento_Id,
                 Empresa_Id,
                 Conectado_Red_Electrica,
                 Medidor_Red,
+                0,
+                "",
+                Tipo_Equipo_Id,
+                Elemento_Id,
                 Nombre_Tipo_Equipo,
                 Nombre_Empresa
         );
 
         equipoController.register(equipo_elemento);
         limpiarCampos();
-        onMessageOk(R.color.colorAccent, "Cable Registrado");
+        onMessageOk(R.color.colorAccent, "Equipo Registrado");
         loadListEquipos();
         hideKeyboard();
     }

@@ -13,6 +13,7 @@
 
 
     <!--Titles Activities-->
+    <string name="title_sincronizacion">Sincronizacion</string>
     <string name="title_cables">Cables</string>
     <string name="title_equipos">Equipos</string>
     <string name="title_menu">Menu</string>
@@ -108,6 +109,8 @@
     <string name="gps_disabled">Activar GPS</string>
     <string name="please_enable_gps">Necesitas habilitar el GPS</string>
     <string name="confirm">Aceptar</string>
+
+    <string name="start_sync">Iniciar Sincronizacion</string>
 
 
 </resources>

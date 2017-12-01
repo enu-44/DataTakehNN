@@ -369,9 +369,22 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+
+
             //CALL THIS METHOD EVER
             //magicalCamera.setResizePhoto(100);
+
+
+            if(data==null ){
+                Snackbar.make(container, "data Null", Snackbar.LENGTH_SHORT).show();
+            }
+
+            if(magicalCamera==null ){
+                Snackbar.make(container, "magicalCamera Null", Snackbar.LENGTH_SHORT).show();
+            }
+
             magicalCamera.resultPhoto(requestCode, resultCode, data);
+
             Bitmap bitmap = magicalCamera.getPhoto();
             //this is for rotate picture in this method
             //magicalCamera.resultPhoto(requestCode, resultCode, data, MagicalCamera.ORIENTATION_ROTATE_180);
@@ -426,7 +439,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
 
         } else {
-            Snackbar.make(container, "No pudo tomar la foto", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(container, "Error de cámara", Snackbar.LENGTH_SHORT).show();
         }
 
     }

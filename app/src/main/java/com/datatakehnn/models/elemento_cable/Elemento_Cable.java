@@ -19,19 +19,20 @@ public class Elemento_Cable extends BaseModel {
     @PrimaryKey(autoincrement = true)
     public long Elemento_Cable_Id;
     @Column
-    public long Detalle_Tipo_Cable_Id;
-    @Column
-    public long Elemento_Id;
-    @Column
     public String Codigo;
-    @Column
-    public long Empresa_Id;
     @Column
     public long Cantidad;
     @Column
-    public boolean Sobre_Rbt;
+    public boolean SobreRbt;
+
     @Column
-    public boolean Is_Marquilla;
+    public boolean Tiene_Marquilla;
+    @Column
+    public long Empresa_Id;
+    @Column
+    public long DetalleTipocable_Id;
+    @Column
+    public long Elemento_Id;
 
     //Externos
     @Column
@@ -45,17 +46,21 @@ public class Elemento_Cable extends BaseModel {
     ///Constructor
     public Elemento_Cable(long detalle_Tipo_Cable_Id, long elemento_Id, String codigo, long empresa_Id, long cantidad, boolean sobre_Rbt, String nombre_Detalle_Tipo_Cable, String nombre_Tipo_Cable, String nombre_Empresa, boolean is_Marquilla) {
 
-        Detalle_Tipo_Cable_Id = detalle_Tipo_Cable_Id;
+        DetalleTipocable_Id = detalle_Tipo_Cable_Id;
         Elemento_Id = elemento_Id;
         Codigo = codigo;
         Empresa_Id = empresa_Id;
         Cantidad = cantidad;
-        Sobre_Rbt = sobre_Rbt;
+        SobreRbt = sobre_Rbt;
         Nombre_Detalle_Tipo_Cable = nombre_Detalle_Tipo_Cable;
         Nombre_Tipo_Cable = nombre_Tipo_Cable;
         Nombre_Empresa = nombre_Empresa;
-        Is_Marquilla = is_Marquilla;
+        Tiene_Marquilla = is_Marquilla;
     }
+
+
+
+
 
     public Elemento_Cable() {
 
@@ -73,11 +78,11 @@ public class Elemento_Cable extends BaseModel {
     }
 
     public long getDetalle_Tipo_Cable_Id() {
-        return Detalle_Tipo_Cable_Id;
+        return DetalleTipocable_Id;
     }
 
     public void setDetalle_Tipo_Cable_Id(long detalle_Tipo_Cable_Id) {
-        Detalle_Tipo_Cable_Id = detalle_Tipo_Cable_Id;
+        DetalleTipocable_Id = detalle_Tipo_Cable_Id;
     }
 
     public long getElemento_Id() {
@@ -113,11 +118,11 @@ public class Elemento_Cable extends BaseModel {
     }
 
     public boolean isSobre_Rbt() {
-        return Sobre_Rbt;
+        return SobreRbt;
     }
 
     public void setSobre_Rbt(boolean sobre_Rbt) {
-        Sobre_Rbt = sobre_Rbt;
+        SobreRbt = sobre_Rbt;
     }
 
 
@@ -148,10 +153,10 @@ public class Elemento_Cable extends BaseModel {
     }
 
     public boolean isIs_Marquilla() {
-        return Is_Marquilla;
+        return Tiene_Marquilla;
     }
 
     public void setIs_Marquilla(boolean is_Marquilla) {
-        Is_Marquilla = is_Marquilla;
+        Tiene_Marquilla = is_Marquilla;
     }
 }

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true"
 
-    tools:context=".activities.sync.SyncActivity">
-
+tools:context="com.datatakehnn.activities.sync.post_sync_activity.UploadDataActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -17,11 +16,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/naranja_superior"
             app:popupTheme="@style/MiTema.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
 
-    <include layout="@layout/content_sync" />
+<include layout="@layout/content_post_syncronizacion" />
 
 </android.support.design.widget.CoordinatorLayout>

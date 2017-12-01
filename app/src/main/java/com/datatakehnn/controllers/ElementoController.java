@@ -124,17 +124,20 @@ public class ElementoController {
 
     public Elemento getLast() {
 
-        //  List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-
+        //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
         Elemento elemento = new Select().from(Elemento.class).where().orderBy(Elemento_Table.Elemento_Id, false).querySingle();
         return elemento;
     }
 
     public Elemento getElementoById(long Elemento_Id) {
-
-        //  List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-
+        //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
         Elemento elemento = new Select().from(Elemento.class).where(Elemento_Table.Elemento_Id.eq(Elemento_Id)).querySingle();
+        return elemento;
+    }
+
+    public Elemento getElementoByIdAndBySync(boolean Is_Sync) {
+        //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
+        Elemento elemento = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(Is_Sync)).querySingle();
         return elemento;
     }
 
@@ -144,7 +147,5 @@ public class ElementoController {
         List<Elemento> elemento = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(Usuario_Id)).orderBy(Elemento_Table.Elemento_Id, false).queryList();
         return elemento;
     }
-
-
 }
 

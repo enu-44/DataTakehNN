@@ -33,7 +33,6 @@ public class EquipoController {
         return _instance;
     }
 
-
     ////Registrar
     public Response register(Equipo_Elemento tipo_equipo){
         Response response= new Response();
@@ -74,7 +73,4 @@ public class EquipoController {
         response.setSuccess(true);
         return response;
     }
-
-
-
 }

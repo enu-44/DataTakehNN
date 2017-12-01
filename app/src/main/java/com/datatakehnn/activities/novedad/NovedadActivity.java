@@ -64,6 +64,8 @@ public class NovedadActivity extends AppCompatActivity {
         setupToolbarInjection();
         setupInjection();
         Tipo_Novedad = getIntent().getExtras().getString("Nombre");
+
+
         if (getIntent().getExtras().getString("perdida") != null) {
             perdida = true;
         }

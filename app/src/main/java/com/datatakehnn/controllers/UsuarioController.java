@@ -57,6 +57,7 @@ public class UsuarioController {
         user.setNombre_Ciudad(userNew.getNombre_Ciudad());
         user.setNombre_Departamento(userNew.getNombre_Departamento());
         user.setTipo_Usuario_Id(userNew.getTipo_Usuario_Id());
+        user.setProyecto_Id(userNew.getProyecto_Id());
         user.save();
         return user;
     }
@@ -83,7 +84,8 @@ public class UsuarioController {
                         Usuario_Table.Nombre_Ciudad.eq(userUpdate.getNombre_Ciudad()),
                         Usuario_Table.Departamento_Id.eq(userUpdate.getDepartamento_Id()),
                         Usuario_Table.Nombre_Departamento.eq(userUpdate.getNombre_Departamento()),
-                        Usuario_Table.Tipo_Usuario_Id.eq(userUpdate.getTipo_Usuario_Id())
+                        Usuario_Table.Tipo_Usuario_Id.eq(userUpdate.getTipo_Usuario_Id()),
+                        Usuario_Table.Proyecto_Id.eq(userUpdate.getProyecto_Id())
                 )
                 .where(Usuario_Table.Usuario_Id.is(userUpdate.getUsuario_Id()))
                 //   .and(Usuario_Table.IsRemembered.is(true))

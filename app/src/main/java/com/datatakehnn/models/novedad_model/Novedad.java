@@ -42,7 +42,7 @@ public class Novedad extends BaseModel {
 
     @SerializedName("Image_Novedad")
     @Column
-    public Blob Image_Novedad;
+    public Blob ImageArray;
 
     @SerializedName("Tipo_Novedad_Id")
     @Column
@@ -54,7 +54,7 @@ public class Novedad extends BaseModel {
 
     @SerializedName("FechaCreacion")
     @Column
-    public String Fecha_Creacion;
+    public String FechaCreacion;
 
     @SerializedName("Hora")
     @Column
@@ -71,10 +71,10 @@ public class Novedad extends BaseModel {
         Nombre_Tipo_Novedad = nombre_Tipo_Novedad;
         Elemento_Id = elemento_Id;
         Descripcion = descripcion;
-        Image_Novedad = image_Novedad;
+        ImageArray = image_Novedad;
         Tipo_Novedad_Id = tipo_Novedad_Id;
         Ruta_Foto = ruta_Foto;
-        Fecha_Creacion = fecha_Creacion;
+        FechaCreacion = fecha_Creacion;
         Hora = hora;
     }
 
@@ -128,11 +128,11 @@ public class Novedad extends BaseModel {
     }
 
     public Blob getImage_Novedad() {
-        return Image_Novedad;
+        return ImageArray;
     }
 
     public void setImage_Novedad(Blob image_Novedad) {
-        Image_Novedad = image_Novedad;
+        ImageArray = image_Novedad;
     }
 
     public long getTipo_Novedad_Id() {
@@ -152,11 +152,11 @@ public class Novedad extends BaseModel {
     }
 
     public String getFecha_Creacion() {
-        return Fecha_Creacion;
+        return FechaCreacion;
     }
 
     public void setFecha_Creacion(String fecha_Creacion) {
-        Fecha_Creacion = fecha_Creacion;
+        FechaCreacion = fecha_Creacion;
     }
 
     public String getHora() {
