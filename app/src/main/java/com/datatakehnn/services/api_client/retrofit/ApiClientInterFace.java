@@ -1,5 +1,6 @@
 package com.datatakehnn.services.api_client.retrofit;
 
+import com.datatakehnn.models.material_model.Material;
 import com.datatakehnn.models.reponse_generic.data_async.Response_Data_Sync;
 import com.datatakehnn.models.reponse_generic.login.Response_Request_Login;
 import com.datatakehnn.models.request_data_sync_model.Request_Post_Data_Sync;
@@ -31,5 +32,10 @@ public interface ApiClientInterFace {
     @Headers("Content-Type: application/json")
     @POST("api/ResponseDataSync")
     Call<Response_Post_Data_Sync> postDataSync(@Body Request_Post_Data_Sync body);
+
+
+    @Headers("Content-Type: application/json")
+    @POST("api/MasterData/PostMaterial")
+    Call<Material> postMaterial(@Body Material body);
 
 }

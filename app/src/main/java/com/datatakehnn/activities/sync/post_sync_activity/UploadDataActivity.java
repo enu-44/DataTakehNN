@@ -22,6 +22,7 @@ import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.models.elemento_cable.Elemento_Cable;
 import com.datatakehnn.models.equipo_elemento_model.Equipo_Elemento;
 import com.datatakehnn.models.foto_model.Foto;
+import com.datatakehnn.models.material_model.Material;
 import com.datatakehnn.models.novedad_model.Novedad;
 import com.datatakehnn.models.perdida_model.Perdida;
 import com.datatakehnn.models.request_data_sync_model.Request_Post_Data_Sync;
@@ -174,7 +175,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
         if(checkConnection()){
             //FooResponse = apiService.postAppoinments(new ListAppointmentRequest(numero_doc_user))
-            Call<Response_Post_Data_Sync> call;   call = apiService.postDataSync(new Request_Post_Data_Sync(
+           /* Call<Response_Post_Data_Sync> call;   call = apiService.postDataSync(new Request_Post_Data_Sync(
                     elemento.getElemento_Id(),
                     elemento.getCodigo_Apoyo(),
                     elemento.getNumero_Apoyo(),
@@ -222,10 +223,48 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                     Toast.makeText(UploadDataActivity.this,t.toString(),Toast.LENGTH_SHORT).show();
                 }
             });
-        }else{
+
+             */
+
+            Call<Material> call;   call = apiService.postMaterial(new Material(
+                    0,
+                    "David",
+                   "D"
+
+            ));
+
+            call.enqueue(new Callback<Material>() {
+                @Override
+                public void onResponse(Call<Material> call, retrofit2.Response<Material> response) {
+                    int statusCode = response.code();
+                    if(statusCode==200){
+
+                        Toast.makeText(UploadDataActivity.this,"Correcto",Toast.LENGTH_SHORT).show();
+
+                        hideProgress();
+
+                    }else{
+                        //  progressBarIndeterminate.setVisibility(View.GONE);
+                        hideProgress();
+                        Toast.makeText(UploadDataActivity.this,"Error en la peticion",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<Material> call, Throwable t) {
+                    // Log error here since request failed
+                    //Log.e(TAG, t.toString());
+                    hideProgress();
+                    Toast.makeText(UploadDataActivity.this,t.toString(),Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
+        else{
             onMessageOk(R.color.colorPrimary,"Verifique su conexion a Internet !");
             hideProgress();
         }
+
 
         //postDataAsync();
         //postDataSyncApiService.postDataAsync(this,post_data_sync);
