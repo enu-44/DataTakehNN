@@ -215,6 +215,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
         Intent i = new Intent(this, NovedadActivity.class);
         i.putExtra("Nombre", Nombre_Tipo_Perdida);
         i.putExtra("perdida", 1);
+        i.putExtra("Elemento_Id", Elemento_Id);
         startActivityForResult(i, 100);
 
 
