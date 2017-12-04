@@ -120,10 +120,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
 
         List<Novedad_Request> Novedades=new ArrayList<>();
-
-
-
-
         for (Novedad novedad:novedades){
 
             Novedad_Request novedad_request=  new Novedad_Request();
@@ -134,7 +130,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             novedad_request.setDetalle_Tipo_Novedad_Id(novedad.getDetalle_Tipo_Novedad_Id());
 
             if(novedad.getImage_Novedad()!=null){
-                    novedad_request.setImageArray(null);
+                novedad_request.setImageArray(null);
 
             }else{
                 novedad_request.setImageArray(null);
@@ -191,7 +187,12 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                 foto_requests
         );
         */
-        
+
+
+
+
+
+
 
         if(checkConnection()){
             //FooResponse = apiService.postAppoinments(new ListAppointmentRequest(numero_doc_user))
@@ -318,6 +319,15 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         //postDataSyncApiService.postDataAsync(this,post_data_sync);
     }
 
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
+    }
 
     //region Api Service
     /*-----------------------------------------------------------------------------------------------*/
