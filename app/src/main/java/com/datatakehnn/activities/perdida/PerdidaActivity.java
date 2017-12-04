@@ -184,7 +184,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
             focusView = edtCantidad;
             cancel = true;
         } else if (perdidaController.getPerdidaByElementoIdAndTipo(Elemento_Id, Tipo_Perdida_Id) != null) {
-            spinnerTipoPerdida.setError(getString(R.string.perdida_registrada));
+            spinnerTipoPerdida.setError("Pérdida Registrada");
             focusView = spinnerTipoPerdida;
             cancel = true;
         }

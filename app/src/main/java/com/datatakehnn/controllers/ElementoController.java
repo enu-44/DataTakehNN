@@ -143,6 +143,12 @@ public class ElementoController {
         return elemento;
     }
 
+    public List<Elemento> getElementosByUserAndSync(long user_id, boolean is_sync) {
+        List<Elemento> elementos = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(user_id))
+                .and(Elemento_Table.Is_Sync.eq(is_sync)).queryList();
+        return elementos;
+    }
+
 
     public List<Elemento> getListElementsByUserLogued(long Usuario_Id) {
         //  List<Elemento> elementos = new Select().from(Elemento.class).queryList();
