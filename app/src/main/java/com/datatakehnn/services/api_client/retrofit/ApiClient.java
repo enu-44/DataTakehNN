@@ -22,8 +22,9 @@ public class ApiClient {
     private static Gson gson=null;
 
     static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .readTimeout(100, TimeUnit.SECONDS) //Tiempo de respuesta del servicio
-            .connectTimeout(100, TimeUnit.SECONDS)
+            .readTimeout(30000, TimeUnit.SECONDS) //Tiempo de respuesta del servicio
+            .connectTimeout(30000, TimeUnit.SECONDS)
+
             .build();
 
     public static Retrofit getClientAmazon() {
@@ -37,8 +38,6 @@ public class ApiClient {
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
-
-
         }
 
 

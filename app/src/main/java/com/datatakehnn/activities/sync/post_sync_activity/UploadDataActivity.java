@@ -1,11 +1,14 @@
 package com.datatakehnn.activities.sync.post_sync_activity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,8 +38,13 @@ import com.datatakehnn.services.api_services.data_async_services.IPostDataSync;
 import com.datatakehnn.services.api_services.data_async_services.PostDataSyncApiService;
 import com.datatakehnn.services.aplication.DataTakeApp;
 import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,6 +127,9 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         List<Foto> fotos= fotoController.getListFotoByElemento(elemento.getElemento_Id());
 
 
+
+
+
         List<Novedad_Request> Novedades=new ArrayList<>();
         for (Novedad novedad:novedades){
 
@@ -129,13 +140,34 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             novedad_request.setHora(novedad.getHora());
             novedad_request.setDetalle_Tipo_Novedad_Id(novedad.getDetalle_Tipo_Novedad_Id());
 
-            if(novedad.getImage_Novedad()!=null){
-                novedad_request.setImageArray(null);
 
+
+            if(novedad.getImage_Novedad()!=null){
+
+                //novedad_request.setImageArray(null);
+                File imgFile = new  File(novedad.getRuta_Foto());
+                if(imgFile.exists()){
+                    Bitmap bitmap = BitmapFactory.decodeFile(novedad.getRuta_Foto());
+                    novedad_request.setImageArray(getEncoded64ImageStringFromBitmap(bitmap));
+                }else{
+                    byte[] data = novedad.getImage_Novedad().getBlob();
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    novedad_request.setImageArray(getEncoded64ImageStringFromBitmap(bitmap));
+                }
+
+
+                //byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
+                //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                /*
+                byte[] foto= null;
+                foto=novedad.getImage_Novedad().getBlob();
+                Gson gson = new Gson();
+                String festmengeStr = gson.toJson(foto);
+                Type collectionType = new TypeToken<byte[]>(){}.getType();
+                byte[] festmengeNew = gson.fromJson(festmengeStr, collectionType);*/
             }else{
                 novedad_request.setImageArray(null);
             }
-
             Novedades.add(novedad_request);
         }
 
@@ -147,14 +179,26 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             foto_request.setFechaCreacion(foto.getFecha_Creacion());
             foto_request.setHora(foto.getHora());
             foto_request.setTitulo(foto.getDescripcion());
-
-            if(foto_request.getImageArray()!=null){
+            if(foto.getImage()!=null){
                 //foto_request.setImageArray(foto.getImage().getBlob());
-                foto_request.setImageArray(null);//TODO Verificar upload foto
+                //foto_request.setImageArray(null);//TODO Verificar upload foto
+
+
+                File imgFile = new  File(foto.getRuta_Foto());
+                if(imgFile.exists()){
+                    Bitmap bitmap = BitmapFactory.decodeFile(foto.getRuta_Foto());
+                    foto_request.setImageArray(getEncoded64ImageStringFromBitmap(bitmap));
+                }else{
+                    byte[] data = foto.getImage().getBlob();
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    foto_request.setImageArray(getEncoded64ImageStringFromBitmap(bitmap));
+                }
+                //
+
+
             }else {
                 foto_request.setImageArray(null);
             }
-
 
             foto_request.setNovedad_Id(foto.getNovedad_Id());
             foto_request.setElemento_Id(foto.getElemento_Id());
@@ -187,6 +231,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                 foto_requests
         );
         */
+
 
 
 
@@ -319,15 +364,16 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         //postDataSyncApiService.postDataAsync(this,post_data_sync);
     }
 
-    public static byte[] hexStringToByteArray(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
-        }
-        return data;
+    public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+        byte[] byteFormat = stream.toByteArray();
+        // get the base 64 string
+        String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+        //String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return imgString;
     }
+
 
     //region Api Service
     /*-----------------------------------------------------------------------------------------------*/

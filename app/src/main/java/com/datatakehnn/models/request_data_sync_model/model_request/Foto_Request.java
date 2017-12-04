@@ -20,7 +20,7 @@ public class Foto_Request {
     @SerializedName("Hora")
     public String Hora;
     @SerializedName("ImageArray")
-    public byte[] ImageArray;
+    public String ImageArray;
 
     //Relaciones
     @SerializedName("Novedad_Id")
@@ -30,7 +30,7 @@ public class Foto_Request {
     public long Elemento_Id;
 
     //Constructor
-    public Foto_Request(String titulo, String descripcion, String ruta, String fechaCreacion, String hora, byte[] imageArray, long novedad_Id, long elemento_Id) {
+    public Foto_Request(String titulo, String descripcion, String ruta, String fechaCreacion, String hora, String imageArray, long novedad_Id, long elemento_Id) {
         Titulo = titulo;
         Descripcion = descripcion;
         Ruta = ruta;
@@ -87,11 +87,11 @@ public class Foto_Request {
         Hora = hora;
     }
 
-    public byte[] getImageArray() {
+    public String getImageArray() {
         return ImageArray;
     }
 
-    public void setImageArray(byte[] imageArray) {
+    public void setImageArray(String imageArray) {
         ImageArray = imageArray;
     }
 

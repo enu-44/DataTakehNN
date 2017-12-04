@@ -15,7 +15,7 @@ public class Novedad_Request {
     public String Descripcion;
 
     @SerializedName("ImageArray")
-    public byte[] ImageArray;
+    public String ImageArray;
 
     @SerializedName("Detalle_Tipo_Novedad_Id")
     public long Detalle_Tipo_Novedad_Id;
@@ -27,7 +27,7 @@ public class Novedad_Request {
     public String Hora;
 
     //Constructor
-    public Novedad_Request(long elemento_Id, String descripcion, byte[] imageArray, long detalle_Tipo_Novedad_Id, String fechaCreacion, String hora) {
+    public Novedad_Request(long elemento_Id, String descripcion, String imageArray, long detalle_Tipo_Novedad_Id, String fechaCreacion, String hora) {
         Elemento_Id = elemento_Id;
         Descripcion = descripcion;
         ImageArray = imageArray;
@@ -58,11 +58,11 @@ public class Novedad_Request {
         Descripcion = descripcion;
     }
 
-    public byte[] getImageArray() {
+    public String getImageArray() {
         return ImageArray;
     }
 
-    public void setImageArray(byte[] imageArray) {
+    public void setImageArray(String imageArray) {
         ImageArray = imageArray;
     }
 
