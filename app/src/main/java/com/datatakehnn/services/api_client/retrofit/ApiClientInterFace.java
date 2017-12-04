@@ -30,7 +30,7 @@ public interface ApiClientInterFace {
     Call<Response_Request_Login> getLoginUser(@Path("Cedula") String cedula, @Path("Password") String password);
 
     @Headers("Content-Type: application/json")
-    @POST("api/ResponseDataSync")
+    @POST("api/ResponseDataSync/PostDataSync")
     Call<Response_Post_Data_Sync> postDataSync(@Body Request_Post_Data_Sync body);
 
 

@@ -19,7 +19,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 public class Foto extends BaseModel {
 
     //Atributes
-    @SerializedName("Id")
+    @SerializedName("Foto_Id")
     @PrimaryKey(autoincrement = true)
     public long Foto_Id;
 

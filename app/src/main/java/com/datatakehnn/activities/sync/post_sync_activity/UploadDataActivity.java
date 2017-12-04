@@ -36,6 +36,7 @@ import com.datatakehnn.services.api_services.data_async_services.PostDataSyncApi
 import com.datatakehnn.services.aplication.DataTakeApp;
 import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,7 +104,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
     @OnClick(R.id.btnSyncData)
     public void onViewClicked() {
         showProgresss();
-       syncData();
+        syncData();
     }
 
     private void syncData() {
@@ -119,6 +120,10 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
 
         List<Novedad_Request> Novedades=new ArrayList<>();
+
+
+
+
         for (Novedad novedad:novedades){
 
             Novedad_Request novedad_request=  new Novedad_Request();
@@ -126,8 +131,15 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             novedad_request.setDescripcion(novedad.getDescripcion());
             novedad_request.setFechaCreacion(novedad.getFecha_Creacion());
             novedad_request.setHora(novedad.getHora());
-            novedad_request.setTipo_Novedad_Id(novedad.getTipo_Novedad_Id());
-            novedad_request.setImageArray(novedad.getImage_Novedad().getBlob());
+            novedad_request.setDetalle_Tipo_Novedad_Id(novedad.getDetalle_Tipo_Novedad_Id());
+
+            if(novedad.getImage_Novedad()!=null){
+                    novedad_request.setImageArray(null);
+
+            }else{
+                novedad_request.setImageArray(null);
+            }
+
             Novedades.add(novedad_request);
         }
 
@@ -139,7 +151,15 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             foto_request.setFechaCreacion(foto.getFecha_Creacion());
             foto_request.setHora(foto.getHora());
             foto_request.setTitulo(foto.getDescripcion());
-            foto_request.setImageArray(foto.getImage().getBlob());
+
+            if(foto_request.getImageArray()!=null){
+                //foto_request.setImageArray(foto.getImage().getBlob());
+                foto_request.setImageArray(null);//TODO Verificar upload foto
+            }else {
+                foto_request.setImageArray(null);
+            }
+
+
             foto_request.setNovedad_Id(foto.getNovedad_Id());
             foto_request.setElemento_Id(foto.getElemento_Id());
 
@@ -171,11 +191,11 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                 foto_requests
         );
         */
-
+        
 
         if(checkConnection()){
             //FooResponse = apiService.postAppoinments(new ListAppointmentRequest(numero_doc_user))
-           /* Call<Response_Post_Data_Sync> call;   call = apiService.postDataSync(new Request_Post_Data_Sync(
+            Request_Post_Data_Sync request_post_data_sync= new Request_Post_Data_Sync(
                     elemento.getElemento_Id(),
                     elemento.getCodigo_Apoyo(),
                     elemento.getNumero_Apoyo(),
@@ -193,11 +213,38 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                     elemento.getNivel_Tension_Elemento_Id(),
                     elemento.getCiudad_Id(),
                     Cables,
+                    Equipos,
+                    Perdidas,
+                    Novedades,
+                    Fotos
+            );
+
+            Call<Response_Post_Data_Sync> call;
+            call = apiService.postDataSync(request_post_data_sync);
+            /*
+            Call<Response_Post_Data_Sync> call;   call = apiService.postDataSync(new Request_Post_Data_Sync(
+                    elemento.getElemento_Id(),
+                    elemento.getCodigo_Apoyo(),
+                    1,
+                    elemento.getFecha_Levantamiento(),
+                    elemento.getHora_Inicio(),
+                    elemento.getHora_Fin(),
+                    elemento.getResistencia_Mecanica(),
+                    elemento.getRetenidas(),
+                    elemento.getAltura_Disponible(),
+                    1,
+                    elemento.getEstado_Id(),
+                    elemento.getLongitud_Elemento_Id(),
+                    elemento.getMaterial_Id(),
+                    elemento.getProyecto_Id(),
+                    elemento.getNivel_Tension_Elemento_Id(),
+                    elemento.getCiudad_Id(),
+                    Cables,
                     Perdidas,
                     Equipos,
                     Novedades,
                     Fotos
-            ));
+            ));*/
 
             call.enqueue(new Callback<Response_Post_Data_Sync>() {
                 @Override
@@ -206,7 +253,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                     if(statusCode==200){
 
                         Toast.makeText(UploadDataActivity.this,"Correcto",Toast.LENGTH_SHORT).show();
-
                         hideProgress();
 
                     }else{
@@ -224,12 +270,13 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                 }
             });
 
-             */
 
+
+           /*
             Call<Material> call;   call = apiService.postMaterial(new Material(
                     0,
                     "David",
-                   "D"
+                    "D"
 
             ));
 
@@ -257,6 +304,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                     Toast.makeText(UploadDataActivity.this,t.toString(),Toast.LENGTH_SHORT).show();
                 }
             });
+            */
 
         }
 
@@ -269,6 +317,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         //postDataAsync();
         //postDataSyncApiService.postDataAsync(this,post_data_sync);
     }
+
 
     //region Api Service
     /*-----------------------------------------------------------------------------------------------*/

@@ -1,20 +1,32 @@
 package com.datatakehnn.models.request_data_sync_model.model_request;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by usuario on 30/11/2017.
  */
 
 public class Foto_Request {
 
+
+    @SerializedName("Titulo")
     public String Titulo;
+    @SerializedName("Descripcion")
     public String Descripcion;
+    @SerializedName("Ruta")
     public String Ruta;
+    @SerializedName("FechaCreacion")
     public String FechaCreacion;
+    @SerializedName("Hora")
     public String Hora;
+    @SerializedName("ImageArray")
     public byte[] ImageArray;
 
     //Relaciones
+    @SerializedName("Novedad_Id")
     public long Novedad_Id;
+
+    @SerializedName("Elemento_Id")
     public long Elemento_Id;
 
     //Constructor

@@ -11,7 +11,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 public class Perdida extends BaseModel {
 
     //Atributes
-    //@SerializedName("Id")
+    @SerializedName("Perdida_Id")
     @PrimaryKey(autoincrement = true)
     public long Perdida_Id;
 
@@ -34,6 +34,7 @@ public class Perdida extends BaseModel {
     @SerializedName("Response_Checked")
     @Column
     public boolean Response_Checked;
+
 
     @SerializedName("Elemento_Id")
     @Column

@@ -14,32 +14,47 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 public class Equipo_Elemento  extends BaseModel {
 
     //Atributes
+
     @PrimaryKey(autoincrement = true)
     public long Equipo_Elemento_Id;
 
+    @SerializedName("Codigo")
     @Column
     public String Codigo;
 
+    @SerializedName("Descripcion")
     @Column
     public String Descripcion;
 
+    @SerializedName("Cantidad")
     @Column
     public long Cantidad;
+
+    @SerializedName("EmpresaId")
     @Column
     public long EmpresaId;
+
+    @SerializedName("ConectadoRbt")
     @Column
     public boolean ConectadoRbt;
+
+    @SerializedName("MedidorBt")
     @Column
     public boolean MedidorBt;
+
+    @SerializedName("Consumo")
     @Column
     public long Consumo;
+
+    @SerializedName("UnidadMedida")
     @Column
     public String UnidadMedida;
 
-
-
+    @SerializedName("TipoEquipo_Id")
     @Column
     public long TipoEquipo_Id;
+
+    @SerializedName("Elemento_Id")
     @Column
     public long Elemento_Id;
 

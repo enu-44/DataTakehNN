@@ -9,8 +9,10 @@ import com.datatakehnn.models.novedad_model.Novedad;
 import com.datatakehnn.models.perdida_model.Perdida;
 import com.datatakehnn.models.request_data_sync_model.model_request.Foto_Request;
 import com.datatakehnn.models.request_data_sync_model.model_request.Novedad_Request;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by usuario on 30/11/2017.
@@ -18,35 +20,57 @@ import java.util.List;
 
 public class Request_Post_Data_Sync {
 
+    @SerializedName("Elemento_Id")
     public long Elemento_Id;
+    @SerializedName("CodigoApoyo")
     public String CodigoApoyo;
+    @SerializedName("NumeroApoyo")
     public long  NumeroApoyo;
+    @SerializedName("FechaLevantamiento")
     public String FechaLevantamiento;
+    @SerializedName("HoraInicio")
     public String HoraInicio;
+    @SerializedName("HoraFin")
     public String HoraFin;
+    @SerializedName("ResistenciaMecanica")
     public String ResistenciaMecanica;
+    @SerializedName("Retenidas")
     public long Retenidas;
+    @SerializedName("AlturaDisponible")
     public double AlturaDisponible;
+    @SerializedName("Usuario_Id")
     public long Usuario_Id;
+    @SerializedName("Estado_id")
     public long Estado_id;
+    @SerializedName("Longitud_Elemento_Id")
     public long Longitud_Elemento_Id;
+    @SerializedName("Material_Id")
     public long Material_Id;
+    @SerializedName("Proyecto_Id")
     public long Proyecto_Id;
+    @SerializedName("Nivel_Tension_Id")
     public long Nivel_Tension_Id;
+    @SerializedName("Ciudad_Id")
     public long Ciudad_Id;
 
+    @SerializedName("Cables")
     public List<Elemento_Cable> Cables;
 
-    public List<Perdida> Perdidas;
-
+    @SerializedName("Equipos")
     public List<Equipo_Elemento> Equipos;
 
+    @SerializedName("Perdidas")
+    public List<Perdida> Perdidas;
+
+    @SerializedName("Novedades")
     public List<Novedad_Request> Novedades;
 
+    @SerializedName("Fotos")
     public List<Foto_Request> Fotos;
 
+
     //Constructor
-    public Request_Post_Data_Sync(long elemento_Id, String codigoApoyo, long numeroApoyo, String fechaLevantamiento, String horaInicio, String horaFin, String resistenciaMecanica, long retenidas, double alturaDisponible, long usuario_Id, long estado_id, long longitud_Elemento_Id, long material_Id, long proyecto_Id, long nivel_Tension_Id, long ciudad_Id, List<Elemento_Cable> cables, List<Perdida> perdidas, List<Equipo_Elemento> equipos, List<Novedad_Request> novedades, List<Foto_Request> fotos) {
+    /*public Request_Post_Data_Sync(long elemento_Id, String codigoApoyo, long numeroApoyo, String fechaLevantamiento, String horaInicio, String horaFin, String resistenciaMecanica, long retenidas, double alturaDisponible, long usuario_Id, long estado_id, long longitud_Elemento_Id, long material_Id, long proyecto_Id, long nivel_Tension_Id, long ciudad_Id, List<Elemento_Cable> cables, List<Perdida> perdidas, List<Equipo_Elemento> equipos, List<Novedad_Request> novedades, List<Foto_Request> fotos) {
         Elemento_Id = elemento_Id;
         CodigoApoyo = codigoApoyo;
         NumeroApoyo = numeroApoyo;
@@ -68,9 +92,32 @@ public class Request_Post_Data_Sync {
         Equipos = equipos;
         Novedades = novedades;
         Fotos = fotos;
-    }
+    }*/
 
-    //Methods
+    public Request_Post_Data_Sync(long elemento_Id, String codigoApoyo, long numeroApoyo, String fechaLevantamiento, String horaInicio, String horaFin, String resistenciaMecanica, long retenidas, double alturaDisponible, long usuario_Id, long estado_id, long longitud_Elemento_Id, long material_Id, long proyecto_Id, long nivel_Tension_Id, long ciudad_Id, List<Elemento_Cable> cables, List<Equipo_Elemento> equipos, List<Perdida> perdidas, List<Novedad_Request> novedades, List<Foto_Request> fotos) {
+        Elemento_Id = elemento_Id;
+        CodigoApoyo = codigoApoyo;
+        NumeroApoyo = numeroApoyo;
+        FechaLevantamiento = fechaLevantamiento;
+        HoraInicio = horaInicio;
+        HoraFin = horaFin;
+        ResistenciaMecanica = resistenciaMecanica;
+        Retenidas = retenidas;
+        AlturaDisponible = alturaDisponible;
+        Usuario_Id = usuario_Id;
+        Estado_id = estado_id;
+        Longitud_Elemento_Id = longitud_Elemento_Id;
+        Material_Id = material_Id;
+        Proyecto_Id = proyecto_Id;
+        Nivel_Tension_Id = nivel_Tension_Id;
+        Ciudad_Id = ciudad_Id;
+        Cables = cables;
+        Equipos = equipos;
+        Perdidas = perdidas;
+        Novedades = novedades;
+        Fotos = fotos;
+    }
+//Methods
 
 
     public long getElemento_Id() {
@@ -201,6 +248,8 @@ public class Request_Post_Data_Sync {
         Ciudad_Id = ciudad_Id;
     }
 
+
+
     public List<Elemento_Cable> getCables() {
         return Cables;
     }
@@ -240,4 +289,25 @@ public class Request_Post_Data_Sync {
     public void setFotos(List<Foto_Request> fotos) {
         Fotos = fotos;
     }
+
+    /*
+
+
+    public List<Novedad_Request> getNovedades() {
+        return Novedades;
+    }
+
+    public void setNovedades(List<Novedad_Request> novedades) {
+        Novedades = novedades;
+    }
+
+    public List<Foto_Request> getFotos() {
+        return Fotos;
+    }
+
+    public void setFotos(List<Foto_Request> fotos) {
+        Fotos = fotos;
+    }
+
+    */
 }

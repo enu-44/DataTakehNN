@@ -16,7 +16,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 public class Novedad extends BaseModel {
 
     //Atributes
-    @SerializedName("Id")
+    @SerializedName("Novedad_Id")
     @PrimaryKey(autoincrement = true)
     public long Novedad_Id;
 
