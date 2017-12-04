@@ -13,7 +13,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 @Table(database = DataSource.class)
 public class Sincronizacion extends BaseModel {
     //Atributes
-    @PrimaryKey(autoincrement = true)
+    @PrimaryKey
     public long Sincronizacion_Id;
     @Column
     public long Usuario_Id;
@@ -30,8 +30,9 @@ public class Sincronizacion extends BaseModel {
 
     //Contructor
 
-    public Sincronizacion(long usuario_Id, String fecha, String hora, String cuenta, String usuario, String codigos_Elementos_Sync) {
 
+    public Sincronizacion(long sincronizacion_Id, long usuario_Id, String fecha, String hora, String cuenta, String usuario, String codigos_Elementos_Sync) {
+        Sincronizacion_Id = sincronizacion_Id;
         Usuario_Id = usuario_Id;
         Fecha = fecha;
         Hora = hora;

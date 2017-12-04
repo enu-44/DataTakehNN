@@ -200,6 +200,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 if (i == 1) {
                     try {
                         if (item.getImage() != null) {
+                            yaTomoFoto1=true;
                             byte[] foto = item.getImage().getBlob();
                             Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
                             ivFoto1.setImageBitmap(bitmap);
@@ -207,14 +208,13 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                             ruta_foto_1 = item.getRuta_Foto();
                         }
                     } catch (Exception ex) {
-
                         String error = ex.toString();
                     }
-
                     ///Asignar foto 2
                 } else {
                     try {
                         if (item.getImage() != null) {
+                            yaTomoFoto2=true;
                             byte[] foto = item.getImage().getBlob();
                             Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
                             ivFoto2.setImageBitmap(bitmap);
@@ -373,14 +373,13 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
             //CALL THIS METHOD EVER
             //magicalCamera.setResizePhoto(100);
-
-
             if(data==null ){
-                Snackbar.make(container, "data Null", Snackbar.LENGTH_SHORT).show();
+              //  Snackbar.make(container, "data Null", Snackbar.LENGTH_SHORT).show();
             }
 
             if(magicalCamera==null ){
                 Snackbar.make(container, "magicalCamera Null", Snackbar.LENGTH_SHORT).show();
+                return;
             }
 
             magicalCamera.resultPhoto(requestCode, resultCode, data);
@@ -551,16 +550,29 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 } catch (Exception e) {
                     e.getMessage().toString();
                 }*/
-                Elemento elemento = elementoController.getElementoById(Elemento_Id);
-                String horaFin = obtenerHora();
-                elemento.setHora_Fin(horaFin);
-                elemento.setIs_Finished(true);
-                elementoController.update(elemento);
+
+                if(ACCION_UPDATE){
+                    Elemento elemento = elementoController.getElementoById(Elemento_Id);
+                    String horaFin = obtenerHora();
+                    elemento.setHora_Fin(horaFin);
+                    elemento.setIs_Finished(true);
+                    elementoController.update(elemento);
+                    onReturnActivity();
+
+                }else{
+
+                    Elemento elemento = elementoController.getElementoById(Elemento_Id);
+                    String horaFin = obtenerHora();
+                    elemento.setHora_Fin(horaFin);
+                    elemento.setIs_Finished(true);
+                    elementoController.update(elemento);
+                    startActivity(new Intent(getBaseContext(), MainMenuActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    finish();
+                }
 
 
-                startActivity(new Intent(getBaseContext(), MainMenuActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-                finish();
+
             }
         });
 
@@ -632,8 +644,16 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_foto, menu);
         if (ACCION_UPDATE) {
-            MenuItem item = menu.findItem(R.id.action_done);
-            item.setVisible(false);
+
+            Elemento elemento = elementoController.getElementoById(Elemento_Id);
+            if(!elemento.isIs_Finished()){
+                MenuItem item = menu.findItem(R.id.action_done);
+                item.setVisible(true);
+            }else{
+                MenuItem item = menu.findItem(R.id.action_done);
+                item.setVisible(false);
+            }
+
         } else {
             MenuItem item = menu.findItem(R.id.action_done);
             item.setVisible(true);
@@ -688,6 +708,38 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
 
     }
+
+    private void onReturnActivity() {
+        // Obtener intent de la actividad padre
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        // Comprobar si DetailActivity no se creó desde CourseActivity
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                || this.isTaskRoot()) {
+
+            // Construir de nuevo la tarea para ligar ambas actividades
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Terminar con el método correspondiente para Android 5.x
+            this.finishAfterTransition();
+
+        }
+
+        //Para versiones anterios a 5.x
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            // Terminar con el método correspondiente para Android 5.x
+            onBackPressed();
+
+        }
+    }
+
 
     //endregion
 

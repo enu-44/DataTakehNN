@@ -97,7 +97,9 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
     UsuarioController usuarioController;
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
 
-    //Last Sincronize
+    //Variables
+    static  boolean History_Sincronizacion_Register =true;
+    Sincronizacion sincronizacionGlobal;
 
     //Api
     ApiClientInterFace apiService = ApiClient.getClientAmazon().create(ApiClientInterFace.class);
@@ -128,6 +130,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
     }
 
     public void checkLastSincronizacion(){
+
         if(checkConnection()){
             viewEstateConect.setBackgroundResource(R.drawable.circle);
             txtconectividad.setText(getString(R.string.on_connectividad));
@@ -136,24 +139,24 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             txtconectividad.setText(getString(R.string.off_connectividad));
         }
 
-        Sincronizacion sincronizacion= sincronizacionGetInformacionController.getLastSincronizacion();
-        if(sincronizacion!=null){
-            try {
-                SimpleDateFormat sdfStart = new SimpleDateFormat("H:mm");
-                Date dateObjStart = sdfStart.parse(sincronizacion.getHora());
-                ///System.out.println(dateObjStart);
-                txt_last_sincronizacion.setText("Utima sincronizacion: "+sincronizacion.getFecha()+" "+new SimpleDateFormat("KK:mm a").format(dateObjStart));
-
-            } catch (final ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
 
         txt_count_all_elements.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsFinished().size())+" Elementos");
         txt_count_all_elements_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsSyncronized().size())+" Elementos");
         txt_count_all_without_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsWithuotSync().size())+" Elementos");
 
+
+        //Si ya no existe mas informacion por sincronizar se registra datos de la ultima sincronizacion completada
+        Sincronizacion sincronizacion = sincronizacionGetInformacionController.getLastSincronizacion();
+        if (sincronizacion != null) {
+            try {
+                SimpleDateFormat sdfStart = new SimpleDateFormat("H:mm");
+                Date dateObjStart = sdfStart.parse(sincronizacion.getHora());
+                ///System.out.println(dateObjStart);
+                txt_last_sincronizacion.setText("Utima sincronizacion: " + sincronizacion.getFecha() + " " + new SimpleDateFormat("KK:mm a").format(dateObjStart));
+            }catch (final ParseException e) {
+                    e.printStackTrace();
+            }
+        }
 
     }
 
@@ -172,25 +175,31 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
     @OnClick(R.id.btnSyncData)
     public void onViewClicked() {
         showProgresss();
-        syncData();
+        verificateDataSync();
     }
 
-    private void syncData() {
-
-
-
+    public void verificateDataSync(){
         Elemento elemento= elementoController.getElementoByIdAndBySync(false);
+        if(elemento!=null){
+            syncData(elemento);
+        }else{
+            hideProgress();
+            onMessageOk(R.color.orange,"Toda la informacion se ha sincronizado correctamente");
+        }
+    }
+
+    //region Api Service
+    /*-----------------------------------------------------------------------------------------------*/
+    private void syncData(Elemento elemento) {
+
+
         List<Elemento_Cable> Cables= cablesController.getList_Cable_Element(elemento.getElemento_Id());
         List<Equipo_Elemento> Equipos= equipoController.getListEquipoElement(elemento.getElemento_Id());
         List<Perdida> Perdidas= perdidaController.getListPerdida(elemento.getElemento_Id());
         List<Novedad> novedades= novedadController.getListNovedadesByElementoId(elemento.getElemento_Id());
         List<Foto> fotos= fotoController.getListFotoByElemento(elemento.getElemento_Id());
-
-
-
-
-
         List<Novedad_Request> Novedades=new ArrayList<>();
+
         for (Novedad novedad:novedades){
 
             Novedad_Request novedad_request=  new Novedad_Request();
@@ -199,11 +208,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             novedad_request.setFechaCreacion(novedad.getFecha_Creacion());
             novedad_request.setHora(novedad.getHora());
             novedad_request.setDetalle_Tipo_Novedad_Id(novedad.getDetalle_Tipo_Novedad_Id());
-
-
-
             if(novedad.getImage_Novedad()!=null){
-
                 //novedad_request.setImageArray(null);
                 File imgFile = new  File(novedad.getRuta_Foto());
                 if(imgFile.exists()){
@@ -214,8 +219,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                     Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                     novedad_request.setImageArray(getEncoded64ImageStringFromBitmap(bitmap));
                 }
-
-
                 //byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
                 //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 /*
@@ -230,10 +233,8 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             }
             Novedades.add(novedad_request);
         }
-
         List<Foto_Request> Fotos=new ArrayList<>();
         for (Foto foto:fotos){
-
             Foto_Request foto_request= new Foto_Request();
             foto_request.setDescripcion(foto.getDescripcion());
             foto_request.setFechaCreacion(foto.getFecha_Creacion());
@@ -242,8 +243,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             if(foto.getImage()!=null){
                 //foto_request.setImageArray(foto.getImage().getBlob());
                 //foto_request.setImageArray(null);//TODO Verificar upload foto
-
-
                 File imgFile = new  File(foto.getRuta_Foto());
                 if(imgFile.exists()){
                     Bitmap bitmap = BitmapFactory.decodeFile(foto.getRuta_Foto());
@@ -253,9 +252,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                     Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                     foto_request.setImageArray(getEncoded64ImageStringFromBitmap(bitmap));
                 }
-                //
-
-
             }else {
                 foto_request.setImageArray(null);
             }
@@ -266,42 +262,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             Fotos.add(foto_request);
         }
 
-        /*
-        Request_Post_Data_Sync post_data_sync= new Request_Post_Data_Sync(
-                elemento.getElemento_Id(),
-                elemento.getCodigo_Apoyo(),
-                elemento.getNumero_Apoyo(),
-                elemento.getFecha_Levantamiento(),
-                elemento.getHora_Inicio(),
-                elemento.getHora_Fin(),
-                elemento.getResistencia_Mecanica(),
-                elemento.getRetenidas(),
-                elemento.getAltura_Disponible(),
-                elemento.getUsuario_Id(),
-                elemento.getEstado_Id(),
-                elemento.getLongitud_Elemento_Id(),
-                elemento.getMaterial_Id(),
-                elemento.getProyecto_Id(),
-                elemento.getNivel_Tension_Elemento_Id(),
-                elemento.getCiudad_Id(),
-                cables,
-                perdidas,
-                equipos,
-                novedad_requests,
-                foto_requests
-        );
-        */
-
-
-
-
-
-
-
-
         if(checkConnection()){
-
-
             //FooResponse = apiService.postAppoinments(new ListAppointmentRequest(numero_doc_user))
             Request_Post_Data_Sync request_post_data_sync= new Request_Post_Data_Sync(
                     elemento.getElemento_Id(),
@@ -331,17 +292,13 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             /*
             Call<Response_Post_Data_Sync> call;
             call = apiService.postDataSync(request_post_data_sync);
-
-
             call.enqueue(new Callback<Response_Post_Data_Sync>() {
                 @Override
                 public void onResponse(Call<Response_Post_Data_Sync> call, retrofit2.Response<Response_Post_Data_Sync> response) {
                     int statusCode = response.code();
                     if(statusCode==200){
-
                         Toast.makeText(UploadDataActivity.this,"Correcto",Toast.LENGTH_SHORT).show();
                         hideProgress();
-
                     }else{
                         //  progressBarIndeterminate.setVisibility(View.GONE);
                         hideProgress();
@@ -355,27 +312,20 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                     hideProgress();
                     Toast.makeText(UploadDataActivity.this,t.toString(),Toast.LENGTH_SHORT).show();
                 }
-            });
-*/
-
+            });*/
            /*
             Call<Material> call;   call = apiService.postMaterial(new Material(
                     0,
                     "David",
                     "D"
-
             ));
-
             call.enqueue(new Callback<Material>() {
                 @Override
                 public void onResponse(Call<Material> call, retrofit2.Response<Material> response) {
                     int statusCode = response.code();
                     if(statusCode==200){
-
                         Toast.makeText(UploadDataActivity.this,"Correcto",Toast.LENGTH_SHORT).show();
-
                         hideProgress();
-
                     }else{
                         //  progressBarIndeterminate.setVisibility(View.GONE);
                         hideProgress();
@@ -391,7 +341,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                 }
             });
             */
-
         }
 
         else{
@@ -414,12 +363,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         return imgString;
     }
 
-
-    //region Api Service
-    /*-----------------------------------------------------------------------------------------------*/
-    private void postDataAsync() {
-
-    }
 
 
     //endregion
@@ -508,17 +451,17 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
     public void processFinishPostDataAsync(Response_Post_Data_Sync response) {
         if(response.isSuccess()){
             registerSincronizacion(response);
-            onMessageOk(R.color.orange,"Sincronizado");
+            onMessageOk(R.color.orange,"Sincronizado: "+String.valueOf(response.getResult().getElemento_Id()));
+
         }else{
-            onMessageOk(R.color.orange,"Error Sincronizacion");
+            onMessageOk(R.color.orange,response.getMessage());
+            hideProgress();
         }
-
-        hideProgress();
-
     }
 
 
     private void registerSincronizacion(Response_Post_Data_Sync response) {
+
 
         //Obtener Fecha
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -534,21 +477,48 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         String poste_id_local= String.valueOf(response.getResult().getElemento_Id());
 
 
-        Sincronizacion sincronizacion= new Sincronizacion(
-                usuarioLogued.getUsuario_Id(),
-                fecha,
-                hora,
-                usuarioLogued.getCorreo_Electronico(),
-                usuarioLogued.getNombre()+" "+usuarioLogued.getApellido(),
-                poste_id_local
+        if(History_Sincronizacion_Register==true) {
+
+            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
+            if (sincronizacionGlobal == null) {
+                sincronizacionGlobal = new Sincronizacion();
+                sincronizacionGlobal.setSincronizacion_Id(1);
+                History_Sincronizacion_Register=false;
+            } else {
+                sincronizacionGlobal.setSincronizacion_Id(sincronizacionGlobal.getSincronizacion_Id()+1);
+                History_Sincronizacion_Register=false;
+            }
 
 
-        );
+
+            sincronizacionGlobal.setUsuario_Id( usuarioLogued.getUsuario_Id());
+            sincronizacionGlobal.setFecha( fecha);
+            sincronizacionGlobal.setHora( hora);
+            sincronizacionGlobal.setCuenta(  usuarioLogued.getCorreo_Electronico());
+            sincronizacionGlobal.setUsuario( usuarioLogued.getNombre()+" "+usuarioLogued.getApellido());
+            sincronizacionGlobal.setCodigos_Elementos_Sync(poste_id_local);
+
+            sincronizacionGetInformacionController.registerUpdateHistorySinconization(sincronizacionGlobal);
+            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
+
+        }else{
+            sincronizacionGlobal.setUsuario_Id( usuarioLogued.getUsuario_Id());
+            sincronizacionGlobal.setFecha( fecha);
+            sincronizacionGlobal.setHora( hora);
+            sincronizacionGlobal.setCuenta(  usuarioLogued.getCorreo_Electronico());
+            sincronizacionGlobal.setUsuario( usuarioLogued.getNombre()+" "+usuarioLogued.getApellido());
+            sincronizacionGlobal.setCodigos_Elementos_Sync(sincronizacionGlobal.getCodigos_Elementos_Sync()+","+poste_id_local);
+            sincronizacionGetInformacionController.registerUpdateHistorySinconization(sincronizacionGlobal);
+            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
+        }
 
 
-        sincronizacionGetInformacionController.registerHistorySinconization(sincronizacion);
-
+        Elemento elemento = elementoController.getElementoById(response.getResult().getElemento_Id());
+        elemento.setIs_Sync(true);
+        elementoController.update(elemento);
         checkLastSincronizacion();
+        verificateDataSync();
+
     }
 
 

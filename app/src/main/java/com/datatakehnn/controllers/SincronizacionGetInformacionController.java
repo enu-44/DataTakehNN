@@ -61,20 +61,22 @@ public class SincronizacionGetInformacionController {
 
     //register History Sincronizacion
 
-    public  Sincronizacion registerHistorySinconization(Sincronizacion sincronizacionNew){
+    public  Sincronizacion registerUpdateHistorySinconization(Sincronizacion sincronizacionNew){
 
         Sincronizacion sincronizacion= new Sincronizacion();
+        sincronizacion.setSincronizacion_Id(sincronizacionNew.getSincronizacion_Id());
         sincronizacion.setHora(sincronizacionNew.getHora());
         sincronizacion.setFecha(sincronizacionNew.getFecha());
         sincronizacion.setCuenta(sincronizacionNew.getCuenta());
         sincronizacion.setUsuario(sincronizacionNew.getUsuario());
         sincronizacion.setUsuario_Id(sincronizacionNew.getUsuario_Id());
         sincronizacion.setCodigos_Elementos_Sync(sincronizacionNew.getCodigos_Elementos_Sync());
-
         sincronizacion.save();
 
         return getLastSincronizacion();
     }
+
+
 
     public Sincronizacion getLastSincronizacion() {
 

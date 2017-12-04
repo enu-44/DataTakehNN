@@ -59,7 +59,6 @@ public class DataSyncApiService {
                         response_request_data_sync.setResult(response.body());
                         IDataAsync.processFinishGetDataAsync(response_request_data_sync);
                     }
-
                 }else{
                     response_request_data_sync.setSuccess(false);
                     response_request_data_sync.setMessage("Error en la peticion");

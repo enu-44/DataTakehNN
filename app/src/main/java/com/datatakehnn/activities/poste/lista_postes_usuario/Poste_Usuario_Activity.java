@@ -218,6 +218,13 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         showProgresss();
         loadListElementsRegister();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadListElementsRegister();
+    }
+
     //endregion
 
     //region IMPLEMENTS OnItemClickLestenerElemento

@@ -843,6 +843,8 @@ public class PosteActivity extends AppCompatActivity {
         super.onResume();
         registerReceiver(mNotificationReceiver, new IntentFilter("LOCATION"));
 
+
+
     }
     /*----------------------------------------------------------------------------------------------------------------------*/
 
