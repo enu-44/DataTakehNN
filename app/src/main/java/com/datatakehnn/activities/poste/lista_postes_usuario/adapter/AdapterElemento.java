@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.datatakehnn.R;
@@ -79,25 +80,41 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
 
         try {
 
-            if (elemento.getHora_Inicio() != null && elemento.getHora_Fin() != null) {
+            String hora_inicio="";
+            String hora_fin="";
+            Date dateObjStart=new Date();
+            Date dateObjEnd=new Date();
+            long minutos=0;
+
+
+            if (elemento.getHora_Inicio() != null ) {
                 SimpleDateFormat sdfStart = new SimpleDateFormat("H:mm");
-                Date dateObjStart = sdfStart.parse(elemento.getHora_Inicio());
+                 dateObjStart = sdfStart.parse(elemento.getHora_Inicio());
+                hora_inicio=new SimpleDateFormat("KK:mm a").format(dateObjStart);
                 ///System.out.println(dateObjStart);
+            }
+
+            if(elemento.getHora_Fin() != null){
+
                 SimpleDateFormat sdfEnd = new SimpleDateFormat("H:mm");
-                Date dateObjEnd = sdfEnd.parse(elemento.getHora_Fin());
-                holder.txtHoraInicioFin.setText(new SimpleDateFormat("KK:mm a").format(dateObjStart) + " - " + new SimpleDateFormat("KK:mm a").format(dateObjEnd));
-
-
-                long diff = dateObjEnd.getTime() - dateObjStart.getTime();
-                long segundos = diff / 1000;
-                long minutos = segundos / 60;
-                long horas = minutos / 60;
-                long dias = horas / 24;
-
-                holder.txtTiempo.setText(String.format(context.getString(R.string.tiempo_global), minutos));
+                dateObjEnd = sdfEnd.parse(elemento.getHora_Fin());
+                hora_fin=new SimpleDateFormat("KK:mm a").format(dateObjEnd);
 
             }
 
+            holder.txtHoraInicioFin.setText(hora_inicio + " - " + hora_fin);
+
+            if (elemento.getHora_Inicio() != null &&  elemento.getHora_Fin() != null) {
+                long diff = dateObjEnd.getTime() - dateObjStart.getTime();
+                long segundos = diff / 1000;
+                minutos = segundos / 60;
+                long horas = minutos / 60;
+                long dias = horas / 24;
+
+
+            }
+
+            holder.txtTiempo.setText(String.format(context.getString(R.string.tiempo_global), minutos));
 
         } catch (final ParseException e) {
             e.printStackTrace();
@@ -110,6 +127,18 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         }
         if (nivel_tension_elemento   != null) {
             holder.txtNivelTension.setText(nivel_tension_elemento.getSigla());
+        }
+
+        if(elemento.isIs_Sync()){
+            holder.img_status_sincronized.setImageResource(R.drawable.ic_cloud_sincronized);
+        }else{
+            holder.img_status_sincronized.setImageResource(R.drawable.ic_cloud_without_sincronized);
+        }
+
+        if(elemento.isIs_Finished()){
+            holder.indicator_element_sincronize_status.setBackgroundResource(R.color.orange);
+        }else{
+            holder.indicator_element_sincronize_status.setBackgroundResource(R.color.red);
         }
 
 
@@ -154,6 +183,14 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         TextView txtNivelTension;
         @BindView(R.id.txtArchivo)
         TextView txtArchivo;
+
+        @BindView(R.id.img_status_sincronized)
+        ImageView img_status_sincronized;
+
+        @BindView(R.id.indicator_element_sincronize_status)
+        View indicator_element_sincronize_status;
+
+
 
 
         //@BindView(R.id.btnEditCable)

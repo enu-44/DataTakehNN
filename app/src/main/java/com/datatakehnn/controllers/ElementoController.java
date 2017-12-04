@@ -69,6 +69,7 @@ public class ElementoController {
         elemento.setCiudad_Id(elementoNew.getCiudad_Id());
         elemento.setNombre_Ciudad(elementoNew.getNombre_Ciudad());
         elemento.setNombre_Departamento(elementoNew.getNombre_Departamento());
+        elemento.setIs_Finished(elementoNew.isIs_Finished());
         elemento.save();
         return elemento;
     }
@@ -111,6 +112,7 @@ public class ElementoController {
         elemento.setCiudad_Id(elementoNew.getCiudad_Id());
         elemento.setNombre_Ciudad(elementoNew.getNombre_Ciudad());
         elemento.setNombre_Departamento(elementoNew.getNombre_Departamento());
+        elemento.setIs_Finished(elementoNew.isIs_Finished());
         elemento.save();
         return elemento;
     }

@@ -101,6 +101,9 @@ public class Elemento extends BaseModel implements Parcelable {
     @Column
     public String Nombre_Departamento;
 
+    @Column
+    public boolean Is_Finished; //registro de informacion del poste completa(true)
+
 
     ///Contructor
 
@@ -355,6 +358,13 @@ public class Elemento extends BaseModel implements Parcelable {
         Nombre_Departamento = nombre_Departamento;
     }
 
+    public boolean isIs_Finished() {
+        return Is_Finished;
+    }
+
+    public void setIs_Finished(boolean is_Finished) {
+        Is_Finished = is_Finished;
+    }
 
     protected Elemento(Parcel in) {
         Elemento_Id = in.readLong();
@@ -387,6 +397,7 @@ public class Elemento extends BaseModel implements Parcelable {
         Nombre_Ciudad = in.readString();
         Departamento_Id = in.readLong();
         Nombre_Departamento = in.readString();
+        Is_Finished = in.readByte() != 0x00;
     }
 
     @Override
@@ -426,6 +437,7 @@ public class Elemento extends BaseModel implements Parcelable {
         dest.writeString(Nombre_Ciudad);
         dest.writeLong(Departamento_Id);
         dest.writeString(Nombre_Departamento);
+        dest.writeByte((byte) (Is_Finished ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")

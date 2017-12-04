@@ -41,6 +41,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:textStyle="bold"
                         android:id="@+id/conectao"
                         android:textColor="@color/black"
 
@@ -53,16 +54,16 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:background="@drawable/circle"
-                        android:id="@+id/view" />
+                        android:id="@+id/viewEstateConect" />
 
                     <TextView
                         android:id="@+id/txtconectividad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/view"
-                        android:layout_toEndOf="@+id/view"
-                        android:layout_toRightOf="@+id/view"
-                        android:text="Conectado" />
+                        android:layout_alignBottom="@+id/viewEstateConect"
+                        android:layout_toEndOf="@+id/viewEstateConect"
+                        android:layout_toRightOf="@+id/viewEstateConect"
+                        android:text="" />
                 </RelativeLayout>
             </LinearLayout>
             <View
@@ -88,6 +89,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
+                        android:textStyle="bold"
                         android:id="@+id/actividad"
                         android:textColor="@color/black"
                         android:layout_width="wrap_content"
@@ -100,7 +102,66 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/actividad"
-                        android:text="Ultima Sincronizacion: 30/11/2017 02:30 PM" />
+                        android:textColor="@color/black"
+                        android:text=" " />
+
+                    <TextView
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:textStyle="bold"
+                        android:id="@+id/tittle_count_all_datos"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cantidad Elementos"
+                        android:layout_below="@+id/txt_last_sincronizacion"/>
+                    <TextView
+                        android:id="@+id/txt_count_all_elements"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/tittle_count_all_datos"
+                        android:textColor="@color/black"
+                        android:text="" />
+
+                    <TextView
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:textStyle="bold"
+                        android:id="@+id/tittle_count_all_sincronize"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sincronizados"
+                        android:layout_below="@+id/txt_count_all_elements"/>
+                    <TextView
+                        android:id="@+id/txt_count_all_elements_sincronize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/tittle_count_all_sincronize"
+                        android:textColor="@color/black"
+                        android:text=" " />
+
+
+                    <TextView
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:textStyle="bold"
+                        android:id="@+id/tittle_count_all_without_sincronize"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Por Sincronizar"
+                        android:layout_below="@+id/txt_count_all_elements_sincronize"/>
+                    <TextView
+                        android:id="@+id/txt_count_all_without_sincronize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/tittle_count_all_without_sincronize"
+                        android:textColor="@color/orange_dark"
+                        android:text="" />
                 </RelativeLayout>
             </LinearLayout>
 

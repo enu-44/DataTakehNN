@@ -538,10 +538,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
     }
 
     private void actualizarPoste() {
-        Elemento elemento = elementoController.getLast();
-        String horaFin = obtenerHora();
-        elemento.setHora_Fin(horaFin);
-        elementoController.update(elemento);
+
         //Snackbar.make(container, "Fotos Registradas", Snackbar.LENGTH_SHORT).show();
         final AlertDialog.Builder builder = new AlertDialog.Builder(FotosActivity.this);
         builder.setTitle("Notificación");
@@ -554,6 +551,13 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 } catch (Exception e) {
                     e.getMessage().toString();
                 }*/
+                Elemento elemento = elementoController.getElementoById(Elemento_Id);
+                String horaFin = obtenerHora();
+                elemento.setHora_Fin(horaFin);
+                elemento.setIs_Finished(true);
+                elementoController.update(elemento);
+
+
                 startActivity(new Intent(getBaseContext(), MainMenuActivity.class)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                 finish();

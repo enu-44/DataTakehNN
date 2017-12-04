@@ -583,6 +583,7 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setNombre_Ciudad(usuario.getNombre_Ciudad());
         elemento.setNombre_Departamento(usuario.getNombre_Departamento());
         elemento.setProyecto_Id(usuario.getProyecto_Id());
+        elemento.setIs_Finished(false);
         elementoController.register(elemento);
         //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
         final AlertDialog.Builder builder = new AlertDialog.Builder(PosteActivity.this);

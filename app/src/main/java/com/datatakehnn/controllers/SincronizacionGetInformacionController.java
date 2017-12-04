@@ -8,6 +8,8 @@ import com.datatakehnn.models.departmentos_model.Departamento;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable_Table;
 import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad;
+import com.datatakehnn.models.element_model.Elemento;
+import com.datatakehnn.models.element_model.Elemento_Table;
 import com.datatakehnn.models.empresa_model.Empresa;
 import com.datatakehnn.models.estado_model.Estado;
 import com.datatakehnn.models.estado_model.Estado_Table;
@@ -20,6 +22,8 @@ import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Element
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento_Table;
 import com.datatakehnn.models.perdida_model.Perdida;
 import com.datatakehnn.models.reponse_generic.Response;
+import com.datatakehnn.models.request_data_sync_model.Sincronizacion;
+import com.datatakehnn.models.request_data_sync_model.Sincronizacion_Table;
 import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.tipo_equipo_model.Tipo_Equipo;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
@@ -53,6 +57,54 @@ public class SincronizacionGetInformacionController {
         }
         return _instance;
     }
+
+
+    //register History Sincronizacion
+
+    public  Sincronizacion registerHistorySinconization(Sincronizacion sincronizacionNew){
+
+        Sincronizacion sincronizacion= new Sincronizacion();
+        sincronizacion.setHora(sincronizacionNew.getHora());
+        sincronizacion.setFecha(sincronizacionNew.getFecha());
+        sincronizacion.setCuenta(sincronizacionNew.getCuenta());
+        sincronizacion.setUsuario(sincronizacionNew.getUsuario());
+        sincronizacion.setUsuario_Id(sincronizacionNew.getUsuario_Id());
+        sincronizacion.setCodigos_Elementos_Sync(sincronizacionNew.getCodigos_Elementos_Sync());
+
+        sincronizacion.save();
+
+        return getLastSincronizacion();
+    }
+
+    public Sincronizacion getLastSincronizacion() {
+
+        //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
+        Sincronizacion sincronizacion = new Select().from(Sincronizacion.class).where().orderBy(Sincronizacion_Table.Sincronizacion_Id, false).querySingle();
+        return sincronizacion;
+    }
+
+    //Elementos completados
+    public List<Elemento> getAllElementsFinished() {
+        //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(true)).queryList();
+        return elementoList;
+    }
+
+    //Por sincronizar
+    public  List<Elemento>  getAllElementsWithuotSync() {
+        //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(false)).queryList();
+        return elementoList;
+    }
+
+    //Sincronizados
+    public List<Elemento> getAllElementsSyncronized() {
+        //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(true)).queryList();
+        return elementoList;
+    }
+
+
 
 
     ///Eliminar Usuarios bd

@@ -95,6 +95,7 @@
 
 
     <!--GLOBALS STRING-->
+
     <string name="results_global_search">Mostrando %d Resultados</string>
     <string name="prompt_buscar_global">Buscar...</string>
 
@@ -111,6 +112,8 @@
     <string name="confirm">Aceptar</string>
 
     <string name="start_sync">Iniciar Sincronizacion</string>
+    <string name="on_connectividad">Conectado</string>
+    <string name="off_connectividad">Desconectado</string>
 
 
 </resources>

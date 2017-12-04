@@ -30,8 +30,8 @@ public class Sincronizacion extends BaseModel {
 
     //Contructor
 
-    public Sincronizacion(long sincronizacion_Id, long usuario_Id, String fecha, String hora, String cuenta, String usuario, String codigos_Elementos_Sync) {
-        Sincronizacion_Id = sincronizacion_Id;
+    public Sincronizacion(long usuario_Id, String fecha, String hora, String cuenta, String usuario, String codigos_Elementos_Sync) {
+
         Usuario_Id = usuario_Id;
         Fecha = fecha;
         Hora = hora;
