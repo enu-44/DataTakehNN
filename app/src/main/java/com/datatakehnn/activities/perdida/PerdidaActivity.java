@@ -183,6 +183,10 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
             edtCantidad.setError(getString(R.string.error_field_required));
             focusView = edtCantidad;
             cancel = true;
+        } else if (perdidaController.getPerdidaByElementoIdAndTipo(Elemento_Id, Tipo_Perdida_Id) != null) {
+            spinnerTipoPerdida.setError(getString(R.string.perdida_registrada));
+            focusView = spinnerTipoPerdida;
+            cancel = true;
         }
 
         if (cancel) {
@@ -214,7 +218,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
         //TODO Registrar Novedad.
         Intent i = new Intent(this, NovedadActivity.class);
         i.putExtra("Nombre", Nombre_Tipo_Perdida);
-        i.putExtra("Tipo_Perdida_Id",Tipo_Perdida_Id);
+        i.putExtra("Tipo_Perdida_Id", Tipo_Perdida_Id);
         i.putExtra("perdida", "1");
         i.putExtra("Elemento_Id", Elemento_Id);
         startActivityForResult(i, 100);
@@ -223,6 +227,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
     }
 
     private void loadListPerdidas() {
+        edtCantidad.setText("1");
         adapter.clear();
         perdidaList.clear();
         perdidaList = perdidaController.getListPerdida(Elemento_Id);

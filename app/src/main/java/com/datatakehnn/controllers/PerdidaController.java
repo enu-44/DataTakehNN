@@ -71,6 +71,12 @@ public class PerdidaController {
         return lisFilter;
     }
 
+    public Perdida getPerdidaByElementoIdAndTipo(long element_Id,long tipo_perdida_id){
+        Perdida perdida = SQLite.select().from(Perdida.class).where(Perdida_Table.Elemento_Id.eq(element_Id))
+                .and(Perdida_Table.Tipo_Perdida_Id.eq(tipo_perdida_id)).querySingle();
+        return perdida;
+    }
+
     public Response DeletePerdidaById(long perdida_id) {
         Response response = new Response();
         ///Elemento_Cable elementoCable= new Elemento_Cable();
