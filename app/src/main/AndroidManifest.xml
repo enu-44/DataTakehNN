@@ -119,6 +119,12 @@
 
         <service android:name=".services.coords.CoordsService" />
 
+        <service
+            android:name=".services.progress_sync_service.ProgressSyncIntentService"
+            android:exported="false" >
+        </service>
+
+
     </application>
 
 </manifest>

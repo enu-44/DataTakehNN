@@ -1,10 +1,8 @@
-package com.datatakehnn.services.loginservice;
+package com.datatakehnn.services.api_services.loginservice;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.datatakehnn.models.reponse_generic.Response;
-import com.datatakehnn.models.reponse_generic.login.Response_Login;
 import com.datatakehnn.models.reponse_generic.login.Response_Request_Login;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.api_client.retrofit.ApiClient;

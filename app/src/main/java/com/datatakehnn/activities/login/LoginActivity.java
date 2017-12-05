@@ -12,7 +12,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -28,8 +27,8 @@ import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.aplication.DataTakeApp;
 import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 import com.datatakehnn.services.data_arrays.Usuario_List;
-import com.datatakehnn.services.loginservice.ILogin;
-import com.datatakehnn.services.loginservice.LoginApiService;
+import com.datatakehnn.services.api_services.loginservice.ILogin;
+import com.datatakehnn.services.api_services.loginservice.LoginApiService;
 
 import java.util.List;
 

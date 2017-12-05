@@ -1,6 +1,9 @@
 package com.datatakehnn.activities.sync.post_sync_activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -9,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -52,6 +56,8 @@ import com.datatakehnn.services.api_services.data_async_services.IPostDataSync;
 import com.datatakehnn.services.api_services.data_async_services.PostDataSyncApiService;
 import com.datatakehnn.services.aplication.DataTakeApp;
 import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
+import com.datatakehnn.services.progress_sync_service.Constants;
+import com.datatakehnn.services.progress_sync_service.ProgressSyncIntentService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -102,6 +108,9 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
     @BindView(R.id.txt_count_all_without_sincronize)
     TextView txt_count_all_without_sincronize;
 
+    @BindView(R.id.progress_text)
+    TextView progress_text;
+
     //Instances
     PostDataSyncApiService postDataSyncApiService;
     EquipoController equipoController;
@@ -115,7 +124,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
     //Variables
     static  boolean History_Sincronizacion_Register =true;
-    Sincronizacion sincronizacionGlobal;
+    Sincronizacion sincronizacionGlobal= new Sincronizacion();
 
     //Api
     ApiClientInterFace apiService = ApiClient.getClientAmazon().create(ApiClientInterFace.class);
@@ -128,6 +137,21 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         ButterKnife.bind(this);
         setToolbarInjection();
         setupInjection();
+
+
+
+        // Filtro de acciones que serán alertadas
+        IntentFilter filter = new IntentFilter(
+                Constants.ACTION_RUN_ISERVICE);
+        filter.addAction(Constants.ACTION_PROGRESS_EXIT);
+
+        // Crear un nuevo ResponseReceiver
+        ResponseReceiver receiver =
+                new ResponseReceiver();
+        // Registrar el receiver y su filtro
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                receiver,
+                filter);
 
     }
 
@@ -193,12 +217,17 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
 
     public void verificateDataSync(){
-        Elemento elemento= elementoController.getElementoByIdAndBySync(false);
-        if(elemento!=null){
-            syncData(elemento);
+        if(checkConnection()){
+            Elemento elemento= elementoController.getElementoByIdAndBySync(true);
+            if(elemento!=null){
+                syncData(elemento);
+            }else{
+                hideProgress();
+                onMessageOk(R.color.orange,"Toda la informacion se ha sincronizado correctamente");
+            }
         }else{
             hideProgress();
-            onMessageOk(R.color.orange,"Toda la informacion se ha sincronizado correctamente");
+            onMessageOk(R.color.orange,"Sin conexion a internet!");
         }
     }
 
@@ -258,6 +287,36 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         showProgresss();
         verificateDataSync();
     }
+
+    @OnClick(R.id.btnSyncDataService)
+    public void onViewClickedService() {
+        Intent intent = new Intent(this, ProgressSyncIntentService.class);
+        intent.setAction(Constants.ACTION_RUN_ISERVICE);
+        startService(intent);
+    }
+
+
+    // Broadcast receiver que recibe las emisiones desde los servicios
+    private class ResponseReceiver extends BroadcastReceiver {
+        // Sin instancias
+        private ResponseReceiver() {
+        }
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case Constants.ACTION_RUN_ISERVICE:
+
+                    progress_text.setText(intent.getExtras().getString("hora")+" - "+intent.getIntExtra(Constants.EXTRA_PROGRESS, -1) + "");
+                    break;
+                case Constants.ACTION_PROGRESS_EXIT:
+                    progress_text.setText("Progreso");
+                    break;
+            }
+        }
+    }
+
+
+
 
     //endregion
 
@@ -365,8 +424,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
 
 
-
-
+            /*
             Call<Response_Post_Data_Sync> call;
             call = apiService.postDataSync(request_post_data_sync);
             call.enqueue(new Callback<Response_Post_Data_Sync>() {
@@ -390,6 +448,8 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                     Toast.makeText(UploadDataActivity.this,t.toString(),Toast.LENGTH_SHORT).show();
                 }
             });
+
+            */
            /*
             Call<Material> call;   call = apiService.postMaterial(new Material(
                     0,
@@ -535,7 +595,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
     private void registerSincronizacion(Response_Post_Data_Sync response) {
 
-
         //Obtener Fecha
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         Date date = new Date();
@@ -554,15 +613,12 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
             sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
             if (sincronizacionGlobal == null) {
-                sincronizacionGlobal = new Sincronizacion();
                 sincronizacionGlobal.setSincronizacion_Id(1);
                 History_Sincronizacion_Register=false;
             } else {
                 sincronizacionGlobal.setSincronizacion_Id(sincronizacionGlobal.getSincronizacion_Id()+1);
                 History_Sincronizacion_Register=false;
             }
-
-
 
             sincronizacionGlobal.setUsuario_Id( usuarioLogued.getUsuario_Id());
             sincronizacionGlobal.setFecha( fecha);
@@ -587,7 +643,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
 
         Elemento elemento = elementoController.getElementoById(response.getResult().getElemento_Id());
-        elemento.setIs_Sync(true);
+        elemento.setIs_Sync(false);
         elementoController.update(elemento);
         checkLastSincronizacion();
         verificateDataSync();
