@@ -1,20 +1,30 @@
 package com.datatakehnn.activities.sync.post_sync_activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.datatakehnn.R;
+import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
+import com.datatakehnn.activities.equipos_elemento.EquipoActivity;
+import com.datatakehnn.activities.fotos.FotosActivity;
+import com.datatakehnn.activities.perdida.PerdidaActivity;
+import com.datatakehnn.activities.poste.PosteActivity;
 import com.datatakehnn.controllers.CablesController;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.EquipoController;
@@ -121,6 +131,8 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
     }
 
+    //region SETUP INJECTION
+
     private void setupInjection() {
         this.postDataSyncApiService= PostDataSyncApiService.getInstance(this);
         this.equipoController= EquipoController.getInstance(this);
@@ -135,6 +147,18 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
     }
 
+
+    private void setToolbarInjection() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle(getString(R.string.title_sincronizacion));
+        if (getSupportActionBar() != null)// Habilitar Up Button
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    //endregion
+
+    //region METHODS
     public void checkLastSincronizacion(){
 
         if(checkConnection()){
@@ -167,23 +191,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
     }
 
-    private void setToolbarInjection() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitle(getString(R.string.title_sincronizacion));
-        if (getSupportActionBar() != null)// Habilitar Up Button
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-
-
-    //region EVENTS
-
-    @OnClick(R.id.btnSyncData)
-    public void onViewClicked() {
-        showProgresss();
-        verificateDataSync();
-    }
 
     public void verificateDataSync(){
         Elemento elemento= elementoController.getElementoByIdAndBySync(false);
@@ -194,6 +201,65 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             onMessageOk(R.color.orange,"Toda la informacion se ha sincronizado correctamente");
         }
     }
+
+
+
+    //endregion
+
+    //region MENU
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+
+            ///Metodo que permite no recargar la pagina al devolverse
+            case android.R.id.home:
+                // Obtener intent de la actividad padre
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                // Comprobar si DetailActivity no se creó desde CourseActivity
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)
+                        || this.isTaskRoot()) {
+
+                    // Construir de nuevo la tarea para ligar ambas actividades
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        TaskStackBuilder.create(this)
+                                .addNextIntentWithParentStack(upIntent)
+                                .startActivities();
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    this.finishAfterTransition();
+                    return true;
+                }
+
+                //Para versiones anterios a 5.x
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    // Terminar con el método correspondiente para Android 5.x
+                    onBackPressed();
+                    return true;
+                }
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //endregion
+
+    //region EVENTS
+
+    @OnClick(R.id.btnSyncData)
+    public void onViewClicked() {
+        showProgresss();
+        verificateDataSync();
+    }
+
+    //endregion
 
     //region Api Service
     /*-----------------------------------------------------------------------------------------------*/
@@ -376,7 +442,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
     //endregion
 
-
     //region Implements Methods Interface UploadDataMainView
     @Override
     public void showProgresss() {
@@ -420,7 +485,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
     }
 
     //endregion
-
 
     //region CHECK CONNECTION INTERNET
     // Method to manually check connection status
