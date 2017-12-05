@@ -89,10 +89,11 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
             }
         } else {
             //Cargar datos de prueba
-            LoadUserFake();
+            //LoadUserFake();
         }
     }
 
+    /*
     //Datos de prueba
     private void LoadUserFake() {
         usuarioController.deleteUsuarios();
@@ -100,7 +101,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
         for (Usuario item : usuarios) {
             usuarioController.register(item);
         }
-    }
+    }*/
 
 
     //Ingresar
