@@ -149,8 +149,10 @@ public class MainMenuActivity extends AppCompatActivity {
         headerViewHolder.tvNombreUsuario.setText(usuarioLogued.getNombre() + " " + usuarioLogued.getApellido());
         headerViewHolder.tvCCUsuario.setText("C.C " + usuarioLogued.getCedula());
         headerViewHolder.tvEmpresaUsuario.setText(usuarioController.getEmpresaById(empresaId).getNombre());
-        headerViewHolder.tvCiudadUsuario.setText(usuarioController.getCiudadById(ciudadId).getNombre() + ","
-                + usuarioController.getDepartamentoById(departamentoId).getNombre());
+        if (ciudadId != 0 && departamentoId != 0) {
+            headerViewHolder.tvCiudadUsuario.setText(usuarioController.getCiudadById(ciudadId).getNombre() + ","
+                    + usuarioController.getDepartamentoById(departamentoId).getNombre());
+        }
     }
     //endregion
 
