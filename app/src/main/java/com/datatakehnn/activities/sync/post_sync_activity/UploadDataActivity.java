@@ -47,6 +47,10 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -60,6 +64,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -215,6 +221,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                 if(imgFile.exists()){
                     Bitmap bitmap = BitmapFactory.decodeFile(novedad.getRuta_Foto());
                     novedad_request.setImageArray(getEncoded64ImageStringFromBitmap(bitmap));
+
                 }else{
                     byte[] data = novedad.getImage_Novedad().getBlob();
                     Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -290,7 +297,10 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             );
             postDataSyncApiService.postDataAsync(this,request_post_data_sync);
 
-            /*
+
+
+
+
             Call<Response_Post_Data_Sync> call;
             call = apiService.postDataSync(request_post_data_sync);
             call.enqueue(new Callback<Response_Post_Data_Sync>() {
@@ -313,7 +323,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                     hideProgress();
                     Toast.makeText(UploadDataActivity.this,t.toString(),Toast.LENGTH_SHORT).show();
                 }
-            });*/
+            });
            /*
             Call<Material> call;   call = apiService.postMaterial(new Material(
                     0,
@@ -348,15 +358,13 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             onMessageOk(R.color.colorPrimary,"Verifique su conexion a Internet !");
             hideProgress();
         }
-
-
         //postDataAsync();
         //postDataSyncApiService.postDataAsync(this,post_data_sync);
     }
 
     public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
         byte[] byteFormat = stream.toByteArray();
         // get the base 64 string
         String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
