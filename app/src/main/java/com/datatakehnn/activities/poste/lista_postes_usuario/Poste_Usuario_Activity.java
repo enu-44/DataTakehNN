@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 
 public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemClickListenerElemento, MainViewPoste, SwipeRefreshLayout.OnRefreshListener {
 
@@ -58,6 +60,9 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.spinner_poste_usuario)
     Spinner spinnerPosteUsuario;
+
+
+    private boolean List_Is_Finished=true;
 
 
     //Instances
@@ -144,15 +149,33 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         adapter.clear();
         elementosList.clear();
         if (positionSpinner == 1) {
-            elementosList = elementoController.getListElementsByUserLogued(usuarioLogued.getUsuario_Id());
+            elementosList = elementoController.getListElementsByUserLogued(usuarioLogued.getUsuario_Id(),List_Is_Finished);
         } else if (positionSpinner == 2) {
-            elementosList = elementoController.getElementosByUserAndSync(usuarioLogued.getUsuario_Id(), true);
+            elementosList = elementoController.getElementosByUserAndSync(usuarioLogued.getUsuario_Id(), true,List_Is_Finished);
         } else if (positionSpinner == 3) {
-            elementosList = elementoController.getElementosByUserAndSync(usuarioLogued.getUsuario_Id(), false);
+            elementosList = elementoController.getElementosByUserAndSync(usuarioLogued.getUsuario_Id(), false,List_Is_Finished);
         }
         setContent(elementosList);
         resultsList(elementosList);
         hideProgress();
+    }
+
+    //endregion
+
+    //region EVENTS
+
+    @OnCheckedChanged(R.id.switchElementFinished)
+    public  void onGenderSelectedAsistantWorkshop(CompoundButton button, boolean isChecked){
+        //do your stuff.
+        if (isChecked) {
+            List_Is_Finished=true;
+            loadListElementsRegister();
+            //showSnakBar(R.color.colorPrimary," Asistant: "+ String.valueOf(Is_Asistant_Workshop));
+        } else {
+            List_Is_Finished=false;
+            loadListElementsRegister();
+            //showSnakBar(R.color.colorPrimary," Asistant: "+ String.valueOf(Is_Asistant_Workshop));
+        }
     }
 
     //endregion

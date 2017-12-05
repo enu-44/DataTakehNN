@@ -558,6 +558,7 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setUsuario_Id(id_usuario);
         elemento.setFecha_Levantamiento(fecha);
         elemento.setHora_Inicio(hora);
+        elemento.setHora_Fin(hora);
         elemento.setCodigo_Apoyo(edtCodigoApoyo.getText().toString());
         elemento.setNumero_Apoyo(elemento_id);
         elemento.setMaterial_Id(Material_Id);

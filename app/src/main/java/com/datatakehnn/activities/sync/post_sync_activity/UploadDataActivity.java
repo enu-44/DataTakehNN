@@ -139,13 +139,14 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             txtconectividad.setText(getString(R.string.off_connectividad));
         }
 
-
         txt_count_all_elements.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsFinished().size())+" Elementos");
         txt_count_all_elements_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsSyncronized().size())+" Elementos");
         txt_count_all_without_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsWithuotSync().size())+" Elementos");
 
 
-        //Si ya no existe mas informacion por sincronizar se registra datos de la ultima sincronizacion completada
+        List<Sincronizacion> list = sincronizacionGetInformacionController.getAllHistorySincronizacion();
+
+        //Si ya no exist e mas informacion por sincronizar se registra datos de la ultima sincronizacion completada
         Sincronizacion sincronizacion = sincronizacionGetInformacionController.getLastSincronizacion();
         if (sincronizacion != null) {
             try {
