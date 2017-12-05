@@ -2,7 +2,12 @@ package com.datatakehnn.controllers;
 
 import android.content.Context;
 
+import com.datatakehnn.models.ciudades_model.Ciudad;
+import com.datatakehnn.models.ciudades_model.Ciudad_Table;
+import com.datatakehnn.models.departmentos_model.Departamento;
+import com.datatakehnn.models.departmentos_model.Departamento_Table;
 import com.datatakehnn.models.empresa_model.Empresa;
+import com.datatakehnn.models.empresa_model.Empresa_Table;
 import com.datatakehnn.models.proyectos_model.Proyecto;
 import com.datatakehnn.models.tipo_usuario_model.Tipo_Usuario;
 import com.datatakehnn.models.usuario_model.Usuario;
@@ -190,6 +195,25 @@ public class UsuarioController {
     public Proyecto getFirstProyecto() {
         Proyecto proyecto = new Select().from(Proyecto.class).querySingle();
         return proyecto;
+    }
+
+    //Get Empresa por Id
+    public Empresa getEmpresaById(long empresa_id) {
+        Empresa empresa = SQLite.select().from(Empresa.class).where(Empresa_Table.Empresa_Id.eq(empresa_id)).querySingle();
+        return empresa;
+    }
+
+    //Get Ciudad por Id
+    public Ciudad getCiudadById(long ciudad_id) {
+        Ciudad ciudad = SQLite.select().from(Ciudad.class).where(Ciudad_Table.Ciudad_Id.eq(ciudad_id)).querySingle();
+        return ciudad;
+    }
+
+    //Get Departamento por Id
+    public Departamento getDepartamentoById(long departamento_id) {
+        Departamento departamento = SQLite.select().from(Departamento.class)
+                .where(Departamento_Table.Departamento_Id.eq(departamento_id)).querySingle();
+        return departamento;
     }
 
 

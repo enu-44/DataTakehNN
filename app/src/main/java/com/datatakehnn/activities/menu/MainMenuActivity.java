@@ -5,8 +5,11 @@ import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.datatakehnn.R;
@@ -39,6 +43,10 @@ public class MainMenuActivity extends AppCompatActivity {
     //UI Elements
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.navigationView)
+    NavigationView navigationView;
 
 
     //Instances
@@ -52,6 +60,7 @@ public class MainMenuActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setToolbarInjection();
         setupInjection();
+        setNavDrawerInjection();
     }
 
     private void setupInjection() {
@@ -128,6 +137,21 @@ public class MainMenuActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.title_menu));
     }
 
+    private void setNavDrawerInjection() {
+        long empresaId = usuarioLogued.getEmpresa_Id();
+        long ciudadId = usuarioLogued.getCiudad_Id();
+        long departamentoId = usuarioLogued.getDepartamento_Id();
+        ActionBarDrawerToggle mActionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_open, R.string.nav_close);
+        mActionBarDrawerToggle.syncState();
+        drawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        View header = navigationView.getHeaderView(0);
+        HeaderViewHolder headerViewHolder = new HeaderViewHolder(header);
+        headerViewHolder.tvNombreUsuario.setText(usuarioLogued.getNombre() + " " + usuarioLogued.getApellido());
+        headerViewHolder.tvCCUsuario.setText("C.C " + usuarioLogued.getCedula());
+        headerViewHolder.tvEmpresaUsuario.setText(usuarioController.getEmpresaById(empresaId).getNombre());
+        headerViewHolder.tvCiudadUsuario.setText(usuarioController.getCiudadById(ciudadId).getNombre() + ","
+                + usuarioController.getDepartamentoById(departamentoId).getNombre());
+    }
     //endregion
 
 
@@ -186,6 +210,27 @@ public class MainMenuActivity extends AppCompatActivity {
         });
         builder.setIcon(R.drawable.logo_datatakeh);
         return builder.show();
+    }
+
+    //endregion
+
+    //region Binding Drawer Layout
+    protected static class HeaderViewHolder {
+
+        @BindView(R.id.tvNombreUsuario)
+        TextView tvNombreUsuario;
+        @BindView(R.id.tvCCUsuario)
+        TextView tvCCUsuario;
+        @BindView(R.id.tvEmpresaUsuario)
+        TextView tvEmpresaUsuario;
+        @BindView(R.id.tvProyectoUsuario)
+        TextView tvProyectoUsuario;
+        @BindView(R.id.tvCiudadUsuario)
+        TextView tvCiudadUsuario;
+
+        HeaderViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     //endregion

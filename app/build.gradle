@@ -62,6 +62,8 @@ dependencies {
     //CAMARA COMPRESOR
     compile "id.zelory:compressor:$rootProject.ext.compresor_image"
 
+    //CIRCLE IMAGE VIEW
+    compile "de.hdodenhof:circleimageview:$rootProject.ext.circleImageViewVersion"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

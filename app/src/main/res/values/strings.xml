@@ -115,5 +115,7 @@
     <string name="on_connectividad">Conectado</string>
     <string name="off_connectividad">Desconectado</string>
 
-
+    <!-- Nav Drawer-->
+    <string name="nav_open">Abierto</string>
+    <string name="nav_close">Cerrado</string>
 </resources>

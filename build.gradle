@@ -59,4 +59,7 @@ ext {
 
     //Comprimir Imagenes
     compresor_image='2.1.0'
+
+    //Circle Image View
+    circleImageViewVersion = '2.2.0'
 }
