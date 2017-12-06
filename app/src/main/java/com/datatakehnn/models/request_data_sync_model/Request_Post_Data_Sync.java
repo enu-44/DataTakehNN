@@ -53,6 +53,28 @@ public class Request_Post_Data_Sync {
     @SerializedName("Ciudad_Id")
     public long Ciudad_Id;
 
+    //Localizacion
+    @SerializedName("Coordenadas")
+    public String Coordenadas;
+    @SerializedName("Latitud")
+    public double Latitud;
+    @SerializedName("Longitud")
+    public double Longitud;
+    @SerializedName("Direccion")
+    public String Direccion;
+    @SerializedName("DireccionAproximadaGps")
+    public String DireccionAproximadaGps;
+    @SerializedName("Barrio")
+    public String Barrio;
+    @SerializedName("Localidad")
+    public String Localidad;
+    @SerializedName("Sector")
+    public String Sector;
+    @SerializedName("ReferenciaLocalizacion")
+    public String ReferenciaLocalizacion;
+
+
+
     @SerializedName("Cables")
     public List<Elemento_Cable> Cables;
 
@@ -94,7 +116,7 @@ public class Request_Post_Data_Sync {
         Fotos = fotos;
     }*/
 
-    public Request_Post_Data_Sync(long elemento_Id, String codigoApoyo, long numeroApoyo, String fechaLevantamiento, String horaInicio, String horaFin, String resistenciaMecanica, long retenidas, double alturaDisponible, long usuario_Id, long estado_id, long longitud_Elemento_Id, long material_Id, long proyecto_Id, long nivel_Tension_Id, long ciudad_Id, List<Elemento_Cable> cables, List<Equipo_Elemento> equipos, List<Perdida> perdidas, List<Novedad_Request> novedades, List<Foto_Request> fotos) {
+    public Request_Post_Data_Sync(long elemento_Id, String codigoApoyo, long numeroApoyo, String fechaLevantamiento, String horaInicio, String horaFin, String resistenciaMecanica, long retenidas, double alturaDisponible, long usuario_Id, long estado_id, long longitud_Elemento_Id, long material_Id, long proyecto_Id, long nivel_Tension_Id, long ciudad_Id, String coordenadas, double latitud, double longitud, String direccion, String direccionAproximadaGps, String barrio, String localidad, String sector, String referenciaLocalizacion, List<Elemento_Cable> cables, List<Equipo_Elemento> equipos, List<Perdida> perdidas, List<Novedad_Request> novedades, List<Foto_Request> fotos) {
         Elemento_Id = elemento_Id;
         CodigoApoyo = codigoApoyo;
         NumeroApoyo = numeroApoyo;
@@ -111,13 +133,23 @@ public class Request_Post_Data_Sync {
         Proyecto_Id = proyecto_Id;
         Nivel_Tension_Id = nivel_Tension_Id;
         Ciudad_Id = ciudad_Id;
+        Coordenadas = coordenadas;
+        Latitud = latitud;
+        Longitud = longitud;
+        Direccion = direccion;
+        DireccionAproximadaGps = direccionAproximadaGps;
+        Barrio = barrio;
+        Localidad = localidad;
+        Sector = sector;
+        ReferenciaLocalizacion = referenciaLocalizacion;
         Cables = cables;
         Equipos = equipos;
         Perdidas = perdidas;
         Novedades = novedades;
         Fotos = fotos;
     }
-//Methods
+
+    //Methods
 
 
     public long getElemento_Id() {
@@ -248,7 +280,77 @@ public class Request_Post_Data_Sync {
         Ciudad_Id = ciudad_Id;
     }
 
+    public String getCoordenadas() {
+        return Coordenadas;
+    }
 
+    public void setCoordenadas(String coordenadas) {
+        Coordenadas = coordenadas;
+    }
+
+    public double getLatitud() {
+        return Latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        Latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return Longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        Longitud = longitud;
+    }
+
+    public String getDireccion() {
+        return Direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        Direccion = direccion;
+    }
+
+    public String getDireccionAproximadaGps() {
+        return DireccionAproximadaGps;
+    }
+
+    public void setDireccionAproximadaGps(String direccionAproximadaGps) {
+        DireccionAproximadaGps = direccionAproximadaGps;
+    }
+
+    public String getBarrio() {
+        return Barrio;
+    }
+
+    public void setBarrio(String barrio) {
+        Barrio = barrio;
+    }
+
+    public String getLocalidad() {
+        return Localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        Localidad = localidad;
+    }
+
+    public String getSector() {
+        return Sector;
+    }
+
+    public void setSector(String sector) {
+        Sector = sector;
+    }
+
+    public String getReferenciaLocalizacion() {
+        return ReferenciaLocalizacion;
+    }
+
+    public void setReferenciaLocalizacion(String referenciaLocalizacion) {
+        ReferenciaLocalizacion = referenciaLocalizacion;
+    }
 
     public List<Elemento_Cable> getCables() {
         return Cables;

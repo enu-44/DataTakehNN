@@ -94,6 +94,16 @@ public class SincronizacionGetInformacionController {
     }
 
 
+    //Elementos completados
+    public List<Elemento> getAllElementsNotFinished() {
+        //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(false)).queryList();
+        // List<Elemento> elementoList = new Select().from(Elemento.class).queryList();
+        return elementoList;
+    }
+
+
+
     //Lista de historial d sincronizacion
     public List<Sincronizacion> getAllHistorySincronizacion() {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();

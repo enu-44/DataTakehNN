@@ -6,6 +6,9 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
@@ -41,12 +44,14 @@ import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by usuario on 5/12/2017.
@@ -162,7 +167,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
     public void verificateDataSync(){
         if(checkConnection()){
             Usuario usuarioLogued= usuarioController.getLoggedUser();
-            Elemento elemento= elementoController.getElementoByIdAndBySync(false,usuarioLogued.getUsuario_Id(),true);
+            Elemento elemento= elementoController.getElementoByIdAndBySync(true,usuarioLogued.getUsuario_Id(),true);
             if(elemento!=null){
                 syncData(elemento);
             }else{
@@ -272,6 +277,15 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
                     elemento.getProyecto_Id(),
                     elemento.getNivel_Tension_Elemento_Id(),
                     elemento.getCiudad_Id(),
+                    String.format(elemento.getLatitud()+","+elemento.getLongitud()),
+                    elemento.getLatitud(),
+                    elemento.getLongitud(),
+                    elemento.getDireccion(),
+                    getAddressGps(elemento.getLatitud(),elemento.getLongitud()),
+                    "",
+                    "",
+                    "",
+                    elemento.getReferencia_Localizacion(),
                     Cables,
                     Equipos,
                     Perdidas,
@@ -279,13 +293,41 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
                     Fotos
             );
 
-            startForeground(1, builder.build());
+
             postDataSyncApiService.postDataAsync(this,request_post_data_sync);
 
         }
         else{
             restartVariuablesGloablService("Verifique su conexion a Internet !");
         }
+    }
+
+
+    public String getAddressGps(double latitud, double longitud) {
+        //Obtener la direccion de la calle a partir de la latitud y la longitud
+        String direccion_gps="";
+        if (latitud != 0.0 && longitud != 0.0) {
+            try {
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                List<Address> list = geocoder.getFromLocation(
+                        latitud, longitud, 1);
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+                    direccion_gps=DirCalle.getAddressLine(0);
+
+                    //String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                   // String city = addresses.get(0).getLocality();
+                    //String state = addresses.get(0).getAdminArea();
+                    //String country = addresses.get(0).getCountryName();
+                   // String postalCode = addresses.get(0).getPostalCode();
+                   // String knownName = addresses.get(0).getFeatureName();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return  direccion_gps;
     }
 
     public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
@@ -327,7 +369,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
     //region Sync Post
     @Override
     public void processFinishPostDataAsync(Response_Post_Data_Sync response) {
-        startForeground(1, builder.build());
+
         if(response.isSuccess()){
             registerSincronizacion(response);
             //onMessageOk(R.color.orange,"Sincronizado: "+String.valueOf(response.getResult().getElemento_Id()));
@@ -386,7 +428,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
 
 
         Elemento elemento = elementoController.getElementoById(response.getResult().getElemento_Id());
-        elemento.setIs_Sync(true);
+        elemento.setIs_Sync(false);
         elementoController.update(elemento);
 
 
@@ -396,7 +438,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
        // builder.setProgress(FilesAllCount, CurrentFile, false);
        // startForeground(1, builder.build());
         Intent localIntent = new Intent(Constants.ACTION_RUN_ISERVICE)
-                .putExtra("MESSAGE_RUN","Sincronizados: ")
+                .putExtra("MESSAGE_RUN","Sincronizados:")
                 .putExtra(Constants.EXTRA_PROGRESS, CurrentFile);
 
         // Emisión de {@code localIntent}

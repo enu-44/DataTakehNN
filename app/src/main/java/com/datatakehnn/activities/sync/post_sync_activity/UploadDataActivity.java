@@ -102,11 +102,19 @@ public class UploadDataActivity extends AppCompatActivity implements UploadDataM
     @BindView(R.id.txt_count_all_elements)
     TextView txt_count_all_elements;
 
+    @BindView(R.id.tittle_count_all_datos_not_finished)
+    TextView tittle_count_all_datos_not_finished;
+
+    @BindView(R.id.txt_count_all_elements_not_finished)
+    TextView txt_count_all_elements_not_finished;
+
     @BindView(R.id.txt_count_all_elements_sincronize)
     TextView txt_count_all_elements_sincronize;
 
     @BindView(R.id.txt_count_all_without_sincronize)
     TextView txt_count_all_without_sincronize;
+
+
 
     @BindView(R.id.progress_text)
     TextView progress_text;
@@ -185,6 +193,9 @@ public class UploadDataActivity extends AppCompatActivity implements UploadDataM
         txt_count_all_elements.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsFinished().size())+" Elementos");
         txt_count_all_elements_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsSyncronized().size())+" Elementos");
         txt_count_all_without_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsWithuotSync().size())+" Elementos");
+        txt_count_all_elements_not_finished.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsNotFinished().size())+" Elementos");
+
+
 
         List<Sincronizacion> list = sincronizacionGetInformacionController.getAllHistorySincronizacion();
 
@@ -280,7 +291,7 @@ public class UploadDataActivity extends AppCompatActivity implements UploadDataM
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case Constants.ACTION_RUN_ISERVICE:
-                    progress_text.setText(intent.getExtras().getString("MESSAGE_RUN")+" - "+intent.getIntExtra(Constants.EXTRA_PROGRESS, -1) + "");
+                    progress_text.setText(intent.getExtras().getString("MESSAGE_RUN")+" "+intent.getIntExtra(Constants.EXTRA_PROGRESS, -1) + "");
                     checkLastSincronizacion();
                     if (progressBar.getVisibility() != View.VISIBLE) {
                         showProgresss();
@@ -297,7 +308,9 @@ public class UploadDataActivity extends AppCompatActivity implements UploadDataM
                         hideProgress();
                     }
 
-                    onMessageOk(R.color.orange,intent.getExtras().getString("MESSAGE_EXIT"));
+                    String message=intent.getExtras().getString("MESSAGE_EXIT");
+
+                    onMessageOk(R.color.orange,message);
 
                     break;
             }
