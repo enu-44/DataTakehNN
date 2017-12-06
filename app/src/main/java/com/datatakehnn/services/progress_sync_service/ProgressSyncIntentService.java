@@ -161,13 +161,12 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
       //  LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
     }
 
-
-
+    
     //region METHODS
     public void verificateDataSync(){
         if(checkConnection()){
             Usuario usuarioLogued= usuarioController.getLoggedUser();
-            Elemento elemento= elementoController.getElementoByIdAndBySync(true,usuarioLogued.getUsuario_Id(),true);
+            Elemento elemento= elementoController.getElementoByIdAndBySync(false,usuarioLogued.getUsuario_Id(),true);
             if(elemento!=null){
                 syncData(elemento);
             }else{
@@ -428,7 +427,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
 
 
         Elemento elemento = elementoController.getElementoById(response.getResult().getElemento_Id());
-        elemento.setIs_Sync(false);
+        elemento.setIs_Sync(true);
         elementoController.update(elemento);
 
 
