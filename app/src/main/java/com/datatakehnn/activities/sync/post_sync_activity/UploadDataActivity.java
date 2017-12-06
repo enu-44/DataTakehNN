@@ -85,7 +85,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class UploadDataActivity extends AppCompatActivity implements IPostDataSync,UploadDataMainView,ConnectivityReceiver.ConnectivityReceiverListener  {
+public class UploadDataActivity extends AppCompatActivity implements UploadDataMainView,ConnectivityReceiver.ConnectivityReceiverListener  {
     //UI Elements
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -122,14 +122,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
     UsuarioController usuarioController;
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
 
-    //Variables
-    static  boolean History_Sincronizacion_Register =true;
-    Sincronizacion sincronizacionGlobal= new Sincronizacion();
-
-    //Api
-    ApiClientInterFace apiService = ApiClient.getClientAmazon().create(ApiClientInterFace.class);
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,8 +129,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         ButterKnife.bind(this);
         setToolbarInjection();
         setupInjection();
-
-
 
         // Filtro de acciones que serán alertadas
         IntentFilter filter = new IntentFilter(
@@ -184,7 +174,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
     //region METHODS
     public void checkLastSincronizacion(){
-
         if(checkConnection()){
             viewEstateConect.setBackgroundResource(R.drawable.circle);
             txtconectividad.setText(getString(R.string.on_connectividad));
@@ -196,7 +185,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         txt_count_all_elements.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsFinished().size())+" Elementos");
         txt_count_all_elements_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsSyncronized().size())+" Elementos");
         txt_count_all_without_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsWithuotSync().size())+" Elementos");
-
 
         List<Sincronizacion> list = sincronizacionGetInformacionController.getAllHistorySincronizacion();
 
@@ -215,16 +203,11 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
     }
 
-
     public void verificateDataSync(){
         if(checkConnection()){
-            Elemento elemento= elementoController.getElementoByIdAndBySync(true);
-            if(elemento!=null){
-                syncData(elemento);
-            }else{
-                hideProgress();
-                onMessageOk(R.color.orange,"Toda la informacion se ha sincronizado correctamente");
-            }
+            Intent intent = new Intent(this, ProgressSyncIntentService.class);
+            intent.setAction(Constants.ACTION_RUN_ISERVICE);
+            startService(intent);
         }else{
             hideProgress();
             onMessageOk(R.color.orange,"Sin conexion a internet!");
@@ -232,9 +215,7 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
     }
 
 
-
     //endregion
-
     //region MENU
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -287,16 +268,10 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         showProgresss();
         verificateDataSync();
     }
+    //endregion
 
-    @OnClick(R.id.btnSyncDataService)
-    public void onViewClickedService() {
-        Intent intent = new Intent(this, ProgressSyncIntentService.class);
-        intent.setAction(Constants.ACTION_RUN_ISERVICE);
-        startService(intent);
-    }
+    //region  Broadcast receiver que recibe las emisiones desde los servicios
 
-
-    // Broadcast receiver que recibe las emisiones desde los servicios
     private class ResponseReceiver extends BroadcastReceiver {
         // Sin instancias
         private ResponseReceiver() {
@@ -305,23 +280,33 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case Constants.ACTION_RUN_ISERVICE:
+                    progress_text.setText(intent.getExtras().getString("MESSAGE_RUN")+" - "+intent.getIntExtra(Constants.EXTRA_PROGRESS, -1) + "");
+                    checkLastSincronizacion();
+                    if (progressBar.getVisibility() != View.VISIBLE) {
+                        showProgresss();
+                    }
 
-                    progress_text.setText(intent.getExtras().getString("hora")+" - "+intent.getIntExtra(Constants.EXTRA_PROGRESS, -1) + "");
+
+                   // onMessageOk(R.color.orange,"Sincronizado: "+String.valueOf(response.getResult().getElemento_Id()));
+
                     break;
+
                 case Constants.ACTION_PROGRESS_EXIT:
                     progress_text.setText("Progreso");
+                    if (progressBar.getVisibility() == View.VISIBLE) {
+                        hideProgress();
+                    }
+
+                    onMessageOk(R.color.orange,intent.getExtras().getString("MESSAGE_EXIT"));
+
                     break;
             }
         }
     }
-
-
-
-
     //endregion
 
     //region Api Service
-    /*-----------------------------------------------------------------------------------------------*/
+    /*-----------------------------------------------------------------------------------------------
     private void syncData(Elemento elemento) {
 
 
@@ -354,13 +339,13 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                 }
                 //byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
                 //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                /*
-                byte[] foto= null;
-                foto=novedad.getImage_Novedad().getBlob();
-                Gson gson = new Gson();
-                String festmengeStr = gson.toJson(foto);
-                Type collectionType = new TypeToken<byte[]>(){}.getType();
-                byte[] festmengeNew = gson.fromJson(festmengeStr, collectionType);*/
+
+                //byte[] foto= null;
+               // foto=novedad.getImage_Novedad().getBlob();
+               // Gson gson = new Gson();
+               // String festmengeStr = gson.toJson(foto);
+              //  Type collectionType = new TypeToken<byte[]>(){}.getType();
+               // byte[] festmengeNew = gson.fromJson(festmengeStr, collectionType);
             }else{
                 novedad_request.setImageArray(null);
             }
@@ -424,7 +409,18 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
 
 
 
-            /*
+
+        }
+
+        else{
+            onMessageOk(R.color.colorPrimary,"Verifique su conexion a Internet !");
+            hideProgress();
+        }
+     }*/
+
+
+
+         /*
             Call<Response_Post_Data_Sync> call;
             call = apiService.postDataSync(request_post_data_sync);
             call.enqueue(new Callback<Response_Post_Data_Sync>() {
@@ -478,35 +474,14 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
                 }
             });
             */
-        }
-
-        else{
-            onMessageOk(R.color.colorPrimary,"Verifique su conexion a Internet !");
-            hideProgress();
-        }
         //postDataAsync();
         //postDataSyncApiService.postDataAsync(this,post_data_sync);
-    }
-
-    public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-        byte[] byteFormat = stream.toByteArray();
-        // get the base 64 string
-        String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
-        //String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return imgString;
-    }
-
-
-
     //endregion
 
     //region Implements Methods Interface UploadDataMainView
     @Override
     public void showProgresss() {
         progressBar.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -514,17 +489,12 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         progressBar.setVisibility(View.GONE);
     }
 
-
     @Override
     public void showUIElements() {
-
     }
-
     @Override
     public void hideUIElements() {
-
     }
-
     @Override
     public void onMessageOk(int colorPrimary, String message) {
         int color = Color.WHITE;
@@ -560,7 +530,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
         // register connection status listener
         DataTakeApp.getInstance().setConnectivityListener(this);
     }
-
     /**
      * Callback will be triggered when there is change in
      * network connection
@@ -574,80 +543,6 @@ public class UploadDataActivity extends AppCompatActivity implements IPostDataSy
             onMessageError(R.color.orange, getString(R.string.message_not_connection));
             checkLastSincronizacion();
         }
-    }
-
-
-    //endregion
-
-    //region Sync Post
-    @Override
-    public void processFinishPostDataAsync(Response_Post_Data_Sync response) {
-        if(response.isSuccess()){
-            registerSincronizacion(response);
-            onMessageOk(R.color.orange,"Sincronizado: "+String.valueOf(response.getResult().getElemento_Id()));
-
-        }else{
-            onMessageOk(R.color.orange,response.getMessage());
-            hideProgress();
-        }
-    }
-
-
-    private void registerSincronizacion(Response_Post_Data_Sync response) {
-
-        //Obtener Fecha
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        Date date = new Date();
-        String fecha = dateFormat.format(date);
-
-        //Obtener Hora
-        Calendar cal = Calendar.getInstance();
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String hora = timeFormat.format(cal.getTime());
-
-        Usuario usuarioLogued= usuarioController.getLoggedUser();
-        String poste_id_local= String.valueOf(response.getResult().getElemento_Id());
-
-
-        if(History_Sincronizacion_Register==true) {
-
-            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
-            if (sincronizacionGlobal == null) {
-                sincronizacionGlobal.setSincronizacion_Id(1);
-                History_Sincronizacion_Register=false;
-            } else {
-                sincronizacionGlobal.setSincronizacion_Id(sincronizacionGlobal.getSincronizacion_Id()+1);
-                History_Sincronizacion_Register=false;
-            }
-
-            sincronizacionGlobal.setUsuario_Id( usuarioLogued.getUsuario_Id());
-            sincronizacionGlobal.setFecha( fecha);
-            sincronizacionGlobal.setHora( hora);
-            sincronizacionGlobal.setCuenta(  usuarioLogued.getCorreo_Electronico());
-            sincronizacionGlobal.setUsuario( usuarioLogued.getNombre()+" "+usuarioLogued.getApellido());
-            sincronizacionGlobal.setCodigos_Elementos_Sync(poste_id_local);
-
-            sincronizacionGetInformacionController.registerUpdateHistorySinconization(sincronizacionGlobal);
-            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
-
-        }else{
-            sincronizacionGlobal.setUsuario_Id( usuarioLogued.getUsuario_Id());
-            sincronizacionGlobal.setFecha( fecha);
-            sincronizacionGlobal.setHora( hora);
-            sincronizacionGlobal.setCuenta(  usuarioLogued.getCorreo_Electronico());
-            sincronizacionGlobal.setUsuario( usuarioLogued.getNombre()+" "+usuarioLogued.getApellido());
-            sincronizacionGlobal.setCodigos_Elementos_Sync(sincronizacionGlobal.getCodigos_Elementos_Sync()+","+poste_id_local);
-            sincronizacionGetInformacionController.registerUpdateHistorySinconization(sincronizacionGlobal);
-            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
-        }
-
-
-        Elemento elemento = elementoController.getElementoById(response.getResult().getElemento_Id());
-        elemento.setIs_Sync(false);
-        elementoController.update(elemento);
-        checkLastSincronizacion();
-        verificateDataSync();
-
     }
 
 

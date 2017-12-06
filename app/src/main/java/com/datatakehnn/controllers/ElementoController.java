@@ -137,11 +137,24 @@ public class ElementoController {
         return elemento;
     }
 
-    public Elemento getElementoByIdAndBySync(boolean Is_Sync) {
+    public Elemento getElementoByIdAndBySync(boolean Is_Sync, long user_id,boolean is_Finished) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-        Elemento elemento = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(Is_Sync)).querySingle();
+        Elemento elemento = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(Is_Sync))
+                .and(Elemento_Table.Usuario_Id.eq(user_id))
+                .and(Elemento_Table.Is_Finished.eq(is_Finished)).querySingle();
         return elemento;
     }
+
+    public List<Elemento> getListElementoSync(boolean Is_Sync, long user_id,boolean is_Finished) {
+        //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(Is_Sync))
+                .and(Elemento_Table.Usuario_Id.eq(user_id))
+                .and(Elemento_Table.Is_Finished.eq(is_Finished)).queryList();
+
+        return elementoList;
+    }
+
+
 
     public List<Elemento> getElementosByUserAndSync(long user_id, boolean is_sync,boolean is_Finished) {
         List<Elemento> elementos = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(user_id))

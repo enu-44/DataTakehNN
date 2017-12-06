@@ -77,7 +77,7 @@ public class SincronizacionGetInformacionController {
     }
 
 
-
+    //Ultima sincronizacion
     public Sincronizacion getLastSincronizacion() {
 
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
@@ -88,31 +88,31 @@ public class SincronizacionGetInformacionController {
     //Elementos completados
     public List<Elemento> getAllElementsFinished() {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-      //  List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(true)).queryList();
-        List<Elemento> elementoList = new Select().from(Elemento.class).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(true)).queryList();
+       // List<Elemento> elementoList = new Select().from(Elemento.class).queryList();
         return elementoList;
     }
 
 
-    //Elementos completados
+    //Lista de historial d sincronizacion
     public List<Sincronizacion> getAllHistorySincronizacion() {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-        //  List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(true)).queryList();
+        ///List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(true)).queryList();
         List<Sincronizacion> sincronizacions = new Select().from(Sincronizacion.class).queryList();
         return sincronizacions;
     }
 
-    //Por sincronizar
+    //Por sincronizar con estado finalizado
     public  List<Elemento>  getAllElementsWithuotSync() {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(false)).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(false)).and(Elemento_Table.Is_Finished.eq(true)).queryList();
         return elementoList;
     }
 
-    //Sincronizados
+    //Sincronizados con estado finalizado
     public List<Elemento> getAllElementsSyncronized() {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(true)).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(true)).and(Elemento_Table.Is_Finished.eq(true)).queryList();
         return elementoList;
     }
 

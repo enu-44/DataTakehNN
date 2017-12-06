@@ -176,6 +176,12 @@ public class PosteActivity extends AppCompatActivity {
     Date dateFecha;
     String hora;
     Double Altura_Disponible;
+    boolean Is_Finished=false;
+    boolean Is_Sync=false;
+
+
+
+
     //Accion
     boolean ACCION_ADD;
     boolean ACCION_UPDATE;
@@ -289,6 +295,10 @@ public class PosteActivity extends AppCompatActivity {
             //Altura Disponible
             Double altura_disponible = elementoUpdate.getAltura_Disponible();
             edtAlturaDisponible.setText(String.valueOf(altura_disponible));
+
+
+            Is_Finished=elementoUpdate.isIs_Finished();
+            Is_Sync=elementoUpdate.isIs_Sync();
 
         }
     }
@@ -570,7 +580,7 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setRetenidas(Cantidad_Retenidas);
         elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
         elemento.setAltura_Disponible(Altura_Disponible);
-        elemento.setIs_Sync(false);
+        elemento.setIs_Sync(Is_Sync);
         elemento.setDireccion(Nombre_Tipo_Direccion + " " + edtTipoDireccion.getText().toString() + " " + Nombre_Detalle_Tipo_Direccion + " " + edtDetalleTipoDireccion.getText().toString());
         elemento.setNombre_Direccion(Nombre_Tipo_Direccion);
         elemento.setVia(edtTipoDireccion.getText().toString());
@@ -584,7 +594,8 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setNombre_Ciudad(usuario.getNombre_Ciudad());
         elemento.setNombre_Departamento(usuario.getNombre_Departamento());
         elemento.setProyecto_Id(usuario.getProyecto_Id());
-        elemento.setIs_Finished(false);
+
+        elemento.setIs_Finished(Is_Finished);
         elementoController.register(elemento);
         //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();
         final AlertDialog.Builder builder = new AlertDialog.Builder(PosteActivity.this);
