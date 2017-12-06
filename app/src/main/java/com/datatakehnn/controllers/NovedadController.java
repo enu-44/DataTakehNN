@@ -6,6 +6,7 @@ import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad;
 import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad_Table;
 import com.datatakehnn.models.novedad_model.Novedad;
 import com.datatakehnn.models.novedad_model.Novedad_Table;
+import com.datatakehnn.models.reponse_generic.Response;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad_Table;
 import com.raizlabs.android.dbflow.sql.language.Delete;
@@ -123,6 +124,16 @@ public class NovedadController {
         Tipo_Novedad tipo_novedad = SQLite.select().from(Tipo_Novedad.class).where(Tipo_Novedad_Table.Tipo_Novedad_Id.eq(tipo_novedad_id))
                 .querySingle();
         return tipo_novedad;
+    }
+
+    public Response DeleteNovedadById(long novedad_id) {
+        Response response = new Response();
+        ///Elemento_Cable elementoCable= new Elemento_Cable();
+        SQLite.delete(Novedad.class).where(Novedad_Table.Novedad_Id.eq(novedad_id)).async().execute();
+        ///Elemento_Cable listee= new Select().from(Elemento_Cable.class).where(Elemento_Cable_Table.Elemento_Cable_Id.eq(elemento_cable_id)).querySingle();
+        response.setMessage("Ok");
+        response.setSuccess(true);
+        return response;
     }
 
 

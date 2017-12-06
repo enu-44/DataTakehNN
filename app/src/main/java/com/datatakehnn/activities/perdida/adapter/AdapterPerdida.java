@@ -51,11 +51,22 @@ public class AdapterPerdida extends RecyclerView.Adapter<AdapterPerdida.PerdidaV
 
     @Override
     public void onBindViewHolder(AdapterPerdida.PerdidaViewHolder holder, final int position) {
+        String isPerdida;
         Perdida list = dataset.get(position);
         holder.txtTipoPerdida.setText(list.getConcepto());
         holder.txtCantidad.setText(String.valueOf(list.getCantidad()));
-        holder.txtDescripcion.setText(list.getDescripcion());
+        if (!list.getDescripcion().equals("")) {
+            holder.txtDescripcion.setText(list.getDescripcion());
+        } else {
+            holder.txtDescripcion.setText("Sin Descripción");
+        }
 
+        if (list.isResponse_Checked()) {
+            isPerdida = "SI";
+        } else {
+            isPerdida = "NO";
+        }
+        holder.txtIsPerdida.setText(isPerdida);
         holder.setOnItemClickListener(list, onItemClickListener);
     }
 
@@ -75,6 +86,8 @@ public class AdapterPerdida extends RecyclerView.Adapter<AdapterPerdida.PerdidaV
         TextView txtDescripcion;
         @BindView(R.id.btnDeletePerdida)
         ImageButton btnDeletePerdida;
+        @BindView(R.id.txtIsPerdida)
+        TextView txtIsPerdida;
 
         private View view;
 

@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,8 +38,10 @@ import com.datatakehnn.activities.novedad.NovedadActivity;
 import com.datatakehnn.activities.perdida.adapter.AdapterPerdida;
 import com.datatakehnn.activities.perdida.adapter.OnItemClickListenerPerdida;
 import com.datatakehnn.controllers.ElementoController;
+import com.datatakehnn.controllers.NovedadController;
 import com.datatakehnn.controllers.PerdidaController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
+import com.datatakehnn.models.novedad_model.Novedad;
 import com.datatakehnn.models.perdida_model.Perdida;
 import com.datatakehnn.models.reponse_generic.Response;
 import com.datatakehnn.models.tipo_perdida_model.Tipo_Perdida;
@@ -74,6 +77,10 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.container)
     RelativeLayout container;
+    @BindView(R.id.radioButtonNoPerdida)
+    RadioButton radioButtonNoPerdida;
+    @BindView(R.id.radioButtonSiPerdida)
+    RadioButton radioButtonSiPerdida;
 
     //Declaracion Arrays
     List<Tipo_Perdida> tipoPerdidaList = new ArrayList<>();
@@ -86,6 +93,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
     PerdidaController perdidaController;
     ElementoController elementoController;
+    NovedadController novedadController;
 
     //Adapter
     AdapterPerdida adapter;
@@ -98,6 +106,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
     long Elemento_Id;
     long Tipo_Perdida_Id;
     String Nombre_Tipo_Perdida;
+    public boolean isPerdida = true;
 
 
     @Override
@@ -124,6 +133,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.perdidaController = PerdidaController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
+        this.novedadController = NovedadController.getInstance(this);
 
     }
 
@@ -171,6 +181,14 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
         });
     }
 
+    private boolean validarCantidadPerdidas() {
+        if (perdidaList.size() < tipoPerdidaList.size()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private void validarRegistrarPerdida() {
         //VALIDACION
         boolean cancel = false;
@@ -204,7 +222,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
                 Long.parseLong(edtCantidad.getText().toString()),
                 edtDescripcion.getText().toString(),
                 0.0,
-                true,
+                isPerdida,
                 Elemento_Id,
                 Tipo_Perdida_Id
         );
@@ -216,12 +234,14 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
         hideKeyboard();
 
         //TODO Registrar Novedad.
-        Intent i = new Intent(this, NovedadActivity.class);
-        i.putExtra("Nombre", Nombre_Tipo_Perdida);
-        i.putExtra("Tipo_Perdida_Id", Tipo_Perdida_Id);
-        i.putExtra("perdida", "1");
-        i.putExtra("Elemento_Id", Elemento_Id);
-        startActivityForResult(i, 100);
+        if (isPerdida) {
+            Intent i = new Intent(this, NovedadActivity.class);
+            i.putExtra("Nombre", Nombre_Tipo_Perdida);
+            i.putExtra("Tipo_Perdida_Id", Tipo_Perdida_Id);
+            i.putExtra("perdida", "1");
+            i.putExtra("Elemento_Id", Elemento_Id);
+            startActivityForResult(i, 100);
+        }
 
 
     }
@@ -353,6 +373,10 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
     @Override
     public void onClickDelete(Perdida perdida) {
         Response response = perdidaController.DeletePerdidaById(perdida.getPerdida_Id());
+        long tipo_perdida_id = perdida.getTipo_Perdida_Id();
+        String nombre_tipo_perdida = perdidaController.getTipoPerdida(tipo_perdida_id).getNombre();
+        Novedad novedad = novedadController.getNovedadByTipoNombreAndElementoId(nombre_tipo_perdida, Elemento_Id);
+        Response responseNovedad = novedadController.DeleteNovedadById(novedad.getNovedad_Id());
         onMessageOk(R.color.orange, getString(R.string.message_delete_global));
         loadListPerdidas();
     }
@@ -383,21 +407,25 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_done:
-                final AlertDialog.Builder builder = new AlertDialog.Builder(PerdidaActivity.this);
-                builder.setTitle("Notificación");
-                builder.setMessage("¿Confirma todos los datos?");
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
-                        i.putExtra("ACCION_ADD", true);
-                        i.putExtra("ACCION_UPDATE", false);
-                        i.putExtra("Elemento_Id", Elemento_Id);
-                        startActivity(i);
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                if (validarCantidadPerdidas()) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(PerdidaActivity.this);
+                    builder.setTitle("Notificación");
+                    builder.setMessage("¿Confirma todos los datos?");
+                    builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent i = new Intent(getApplicationContext(), CablesElementoActivity.class);
+                            i.putExtra("ACCION_ADD", true);
+                            i.putExtra("ACCION_UPDATE", false);
+                            i.putExtra("Elemento_Id", Elemento_Id);
+                            startActivity(i);
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    Snackbar.make(container, "Debe Registrar todas las pérdidas del Listado", Snackbar.LENGTH_SHORT).show();
+                }
                 break;
 
             ///Metodo que permite no recargar la pagina al devolverse
@@ -438,11 +466,17 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
     }
     //endregion
 
-    @OnClick({R.id.btnAddPerdidas})
+    @OnClick({R.id.btnAddPerdidas, R.id.radioButtonSiPerdida, R.id.radioButtonNoPerdida})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnAddPerdidas:
                 validarRegistrarPerdida();
+                break;
+            case R.id.radioButtonSiPerdida:
+                isPerdida = true;
+                break;
+            case R.id.radioButtonNoPerdida:
+                isPerdida = false;
                 break;
         }
     }

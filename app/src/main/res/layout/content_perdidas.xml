@@ -47,24 +47,71 @@
             android:layout_marginTop="10dp"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/edtCantidad"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/cantidad"
-                    android:inputType="number"
-                    android:padding="8dp" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_weight="0.5"
+                    app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+
+                    <EditText
+                        android:id="@+id/edtCantidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/cantidad"
+                        android:inputType="number"
+                        android:padding="8dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <RadioGroup
+                    android:id="@+id/radioGroupPerdida"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/gray_out_line"
+                    android:checkedButton="@+id/radioButtonSiPerdida"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButtonNoPerdida"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/toggle_selector_red"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="@string/no"
+                        android:textColor="@color/white" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonSiPerdida"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/toggle_selector_green"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="@string/si"
+                        android:textColor="@color/white" />
+                </RadioGroup>
+
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textInputLayoutDescripcion"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="100dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"

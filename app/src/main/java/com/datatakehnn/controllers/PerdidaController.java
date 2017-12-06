@@ -5,6 +5,8 @@ import android.content.Context;
 import com.datatakehnn.models.perdida_model.Perdida;
 import com.datatakehnn.models.perdida_model.Perdida_Table;
 import com.datatakehnn.models.reponse_generic.Response;
+import com.datatakehnn.models.tipo_perdida_model.Tipo_Perdida;
+import com.datatakehnn.models.tipo_perdida_model.Tipo_Perdida_Table;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -71,7 +73,7 @@ public class PerdidaController {
         return lisFilter;
     }
 
-    public Perdida getPerdidaByElementoIdAndTipo(long element_Id,long tipo_perdida_id){
+    public Perdida getPerdidaByElementoIdAndTipo(long element_Id, long tipo_perdida_id) {
         Perdida perdida = SQLite.select().from(Perdida.class).where(Perdida_Table.Elemento_Id.eq(element_Id))
                 .and(Perdida_Table.Tipo_Perdida_Id.eq(tipo_perdida_id)).querySingle();
         return perdida;
@@ -86,6 +88,14 @@ public class PerdidaController {
         response.setSuccess(true);
         return response;
     }
+
+    public Tipo_Perdida getTipoPerdida(long tipo_perdida_id) {
+        Tipo_Perdida tipo_perdida = SQLite.select().from(Tipo_Perdida.class)
+                .where(Tipo_Perdida_Table.Tipo_Perdida_Id.eq(tipo_perdida_id)).querySingle();
+        return tipo_perdida;
+    }
+
+
     /*
     ///Actualizar
     public Perdida update(Perdida perdidaUpdate){
