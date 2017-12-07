@@ -159,7 +159,9 @@ public class ElementoController {
     public List<Elemento> getElementosByUserAndSync(long user_id, boolean is_sync,boolean is_Finished) {
         List<Elemento> elementos = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(user_id))
                 .and(Elemento_Table.Is_Sync.eq(is_sync))
-                .and(Elemento_Table.Is_Finished.eq(is_Finished)).queryList();
+                .and(Elemento_Table.Is_Finished.eq(is_Finished))
+                .orderBy(Elemento_Table.Elemento_Id, false)
+                .queryList();
         return elementos;
     }
 

@@ -182,6 +182,8 @@ public class UploadDataActivity extends AppCompatActivity implements UploadDataM
 
     //region METHODS
     public void checkLastSincronizacion(){
+
+
         if(checkConnection()){
             viewEstateConect.setBackgroundResource(R.drawable.circle);
             txtconectividad.setText(getString(R.string.on_connectividad));
@@ -190,17 +192,19 @@ public class UploadDataActivity extends AppCompatActivity implements UploadDataM
             txtconectividad.setText(getString(R.string.off_connectividad));
         }
 
-        txt_count_all_elements.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsFinished().size())+" Elementos");
-        txt_count_all_elements_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsSyncronized().size())+" Elementos");
-        txt_count_all_without_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsWithuotSync().size())+" Elementos");
-        txt_count_all_elements_not_finished.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsNotFinished().size())+" Elementos");
+        Usuario usuarioLogued= usuarioController.getLoggedUser();
+
+        txt_count_all_elements.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsFinished(usuarioLogued.getUsuario_Id()).size())+" Elementos");
+        txt_count_all_elements_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsSyncronized(usuarioLogued.getUsuario_Id()).size())+" Elementos");
+        txt_count_all_without_sincronize.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsWithuotSync(usuarioLogued.getUsuario_Id()).size())+" Elementos");
+        txt_count_all_elements_not_finished.setText(String.valueOf(sincronizacionGetInformacionController.getAllElementsNotFinished(usuarioLogued.getUsuario_Id()).size())+" Elementos");
 
 
 
-        List<Sincronizacion> list = sincronizacionGetInformacionController.getAllHistorySincronizacion();
+        List<Sincronizacion> list = sincronizacionGetInformacionController.getAllHistorySincronizacion(usuarioLogued.getUsuario_Id());
 
         //Si ya no exist e mas informacion por sincronizar se registra datos de la ultima sincronizacion completada
-        Sincronizacion sincronizacion = sincronizacionGetInformacionController.getLastSincronizacion();
+        Sincronizacion sincronizacion = sincronizacionGetInformacionController.getLastSincronizacion(usuarioLogued.getUsuario_Id());
         if (sincronizacion != null) {
             try {
                 SimpleDateFormat sdfStart = new SimpleDateFormat("H:mm");
@@ -216,9 +220,11 @@ public class UploadDataActivity extends AppCompatActivity implements UploadDataM
 
     public void verificateDataSync(){
         if(checkConnection()){
+
             Intent intent = new Intent(this, ProgressSyncIntentService.class);
             intent.setAction(Constants.ACTION_RUN_ISERVICE);
             startService(intent);
+            progress_text.setText("Iniciando Sincronizacion");
         }else{
             hideProgress();
             onMessageOk(R.color.orange,"Sin conexion a internet!");
@@ -296,10 +302,7 @@ public class UploadDataActivity extends AppCompatActivity implements UploadDataM
                     if (progressBar.getVisibility() != View.VISIBLE) {
                         showProgresss();
                     }
-
-
                    // onMessageOk(R.color.orange,"Sincronizado: "+String.valueOf(response.getResult().getElemento_Id()));
-
                     break;
 
                 case Constants.ACTION_PROGRESS_EXIT:

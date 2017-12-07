@@ -198,6 +198,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
     private void sendMenu(Usuario usuario) {
 
         Intent i = new Intent(this, SyncActivity.class);
+        i.putExtra("FROM_LOGIN",true);
+        i.putExtra("FROM_MENU",false);
         startActivity(i);
     }
 

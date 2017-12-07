@@ -64,7 +64,14 @@
         </item>
 
         <!-- inactive track color (30% transparency) -->
-        <item name="android:colorForeground">#42393939</item>
+        <item name="android:colorForeground">#c9393939</item>
+    </style>
+
+
+    <style name="ThemeMenuWhite" parent="@style/MiTema">
+        <item name="actionMenuTextColor">@color/white</item>
+
+        <item name="android:actionMenuTextColor">@color/white</item>
     </style>
 
 

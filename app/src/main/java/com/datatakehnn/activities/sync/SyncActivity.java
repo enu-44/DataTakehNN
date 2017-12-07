@@ -25,8 +25,10 @@ import android.widget.TextView;
 import com.datatakehnn.R;
 import com.datatakehnn.activities.menu.MainMenuActivity;
 import com.datatakehnn.activities.poste.PosteActivity;
+import com.datatakehnn.controllers.SettingController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.models.ciudades_model.Ciudad;
+import com.datatakehnn.models.configuracion_model.Setting;
 import com.datatakehnn.models.departmentos_model.Departamento;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad;
@@ -57,7 +59,11 @@ import com.datatakehnn.services.data_arrays.Tipo_Equipo_List;
 import com.datatakehnn.services.data_arrays.Tipo_Novedad_List;
 import com.datatakehnn.services.data_arrays.Tipo_Perdida_List;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -84,6 +90,8 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
 
     // Instances
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
+    SettingController settingController;
+
     public CoordsService coordsService;
     private static Context ourcontext;
     private static SyncActivity _instance;
@@ -91,6 +99,15 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
 
     //Item Menu
     Menu menuGlobal;
+
+    //Navigation From
+
+    boolean FROM_LOGIN =true;
+    boolean FROM_MENU= false;
+    String fecha="";
+    String hora="";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +121,38 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     }
 
     private void loadInformation() {
-        if(checkConnection()){
-            showUIElements();
-            loadDataAsync();
+        //Obtener Fecha
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        fecha = dateFormat.format(date);
 
+        //Obtener Hora
+        Calendar cal = Calendar.getInstance();
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        hora = timeFormat.format(cal.getTime());
 
+        if(FROM_LOGIN){
+            //Ya se sincronizo la informacion en la fecha actual
+            Setting settingByDate =settingController.getByDate(fecha);
+            if(settingByDate!=null){
+                Intent i = new Intent(this, MainMenuActivity.class);
+                startActivity(i);
+            }else{
+                if(checkConnection()){
+                    showUIElements();
+                    loadDataAsync();
+                }
+            }
+        }///FROM_MENU
+        else{
+            if(checkConnection()){
+                showUIElements();
+                loadDataAsync();
+            }
         }
     }
+
+
 
     //region API SERIVICE
     private void loadDataAsync() {
@@ -187,12 +229,32 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
             );
 
 
+
             showSnakBar(R.color.colorAccent, getString(R.string.message_information_sync));
             MenuItem item = menuGlobal.findItem(R.id.action_done);
             item.setVisible(true);
             sync = true;
            hideUIElements();
             ivSync.setImageResource(R.drawable.ic_botonsincronizado);
+
+
+            //Configuracion
+            Setting setting= settingController.getFirst();
+            if(setting!=null){
+                setting.setFecha(fecha);
+                setting.setHora(hora);
+                settingController.registerUpdate(setting);
+            }else{
+                Setting newSetting= new Setting();
+                newSetting.setFecha(fecha);
+                newSetting.setHora(hora);
+                newSetting.setSetting_Id(1);
+                newSetting.setAvailable_Wifi(true);
+                newSetting.setAvailable_Mobile_Data(true);
+                newSetting.setDescripcion_Storage_Phone("Almacenamiento Interno");
+                newSetting.setSigla_Storage("Interno"); //Opciones son (Interno o Externo)
+                settingController.registerUpdate(newSetting);
+            }
 
         } else {
             showSnakBar(R.color.colorAccent, response.getMessage());
@@ -221,7 +283,10 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     private void setupInjection() {
         this.dataSyncApiService = DataSyncApiService.getInstance(this);
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
+        this.settingController= SettingController.getInstance(this);
 
+        FROM_LOGIN= getIntent().getExtras().getBoolean("FROM_LOGIN");
+        FROM_MENU=getIntent().getExtras().getBoolean("FROM_MENU");
 
         this.coordsService = new CoordsService(this);
     }
@@ -339,7 +404,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
                     hideUIElements();
                 } else {
                     showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
-                   hideUIElements();
+                    hideUIElements();
                     sync = false;
                 }
             } else {

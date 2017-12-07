@@ -118,4 +118,6 @@
     <!-- Nav Drawer-->
     <string name="nav_open">Abierto</string>
     <string name="nav_close">Cerrado</string>
+    <string name="title_activity_settings">Settings</string>
+
 </resources>

@@ -73,31 +73,39 @@ public class SincronizacionGetInformacionController {
         sincronizacion.setCodigos_Elementos_Sync(sincronizacionNew.getCodigos_Elementos_Sync());
         sincronizacion.save();
 
-        return getLastSincronizacion();
+        return getLastSincronizacion(sincronizacionNew.getUsuario_Id());
     }
 
 
     //Ultima sincronizacion
-    public Sincronizacion getLastSincronizacion() {
+    public Sincronizacion getLastSincronizacion(long Usuario_Id) {
 
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-        Sincronizacion sincronizacion = new Select().from(Sincronizacion.class).where().orderBy(Sincronizacion_Table.Sincronizacion_Id, false).querySingle();
+        Sincronizacion sincronizacion = new Select().from(Sincronizacion.class)
+                .where(Sincronizacion_Table.Usuario_Id.eq(Usuario_Id))
+                .orderBy(Sincronizacion_Table.Sincronizacion_Id, false)
+                .querySingle();
+
         return sincronizacion;
     }
 
     //Elementos completados
-    public List<Elemento> getAllElementsFinished() {
+    public List<Elemento> getAllElementsFinished(long Usuario_Id) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(true)).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(true))
+                .and(Elemento_Table.Usuario_Id.eq(Usuario_Id))
+                .queryList();
        // List<Elemento> elementoList = new Select().from(Elemento.class).queryList();
         return elementoList;
     }
 
 
     //Elementos completados
-    public List<Elemento> getAllElementsNotFinished() {
+    public List<Elemento> getAllElementsNotFinished(long Usuario_Id) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(false)).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(false))
+                .and(Elemento_Table.Usuario_Id.eq(Usuario_Id))
+                .queryList();
         // List<Elemento> elementoList = new Select().from(Elemento.class).queryList();
         return elementoList;
     }
@@ -105,24 +113,35 @@ public class SincronizacionGetInformacionController {
 
 
     //Lista de historial d sincronizacion
-    public List<Sincronizacion> getAllHistorySincronizacion() {
+    public List<Sincronizacion> getAllHistorySincronizacion(long Usuario_Id) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
         ///List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(true)).queryList();
-        List<Sincronizacion> sincronizacions = new Select().from(Sincronizacion.class).queryList();
+        List<Sincronizacion> sincronizacions = new Select().from(Sincronizacion.class)
+                .where(Elemento_Table.Usuario_Id.eq(Usuario_Id))
+                .queryList();
         return sincronizacions;
     }
 
     //Por sincronizar con estado finalizado
-    public  List<Elemento>  getAllElementsWithuotSync() {
+    public  List<Elemento>  getAllElementsWithuotSync(long Usuario_Id) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(false)).and(Elemento_Table.Is_Finished.eq(true)).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class)
+                .where(Elemento_Table.Is_Sync.eq(false))
+                .and(Elemento_Table.Is_Finished.eq(true))
+                .and(Elemento_Table.Usuario_Id.eq(Usuario_Id))
+                .queryList();
+
         return elementoList;
     }
 
     //Sincronizados con estado finalizado
-    public List<Elemento> getAllElementsSyncronized() {
+    public List<Elemento> getAllElementsSyncronized(long Usuario_Id) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
-        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(true)).and(Elemento_Table.Is_Finished.eq(true)).queryList();
+        List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(true))
+                .and(Elemento_Table.Is_Finished.eq(true))
+                .and(Elemento_Table.Usuario_Id.eq(Usuario_Id))
+                .queryList();
+
         return elementoList;
     }
 
@@ -141,6 +160,9 @@ public class SincronizacionGetInformacionController {
         Delete.table(Tipo_Cable.class);
         Delete.table(Detalle_Tipo_Cable.class);
         Delete.table(Empresa.class);
+        Delete.table(Tipo_Equipo.class);
+        Delete.table(Departamento.class);
+        Delete.table(Ciudad.class);
     }
 
     ////Login Usuario_List

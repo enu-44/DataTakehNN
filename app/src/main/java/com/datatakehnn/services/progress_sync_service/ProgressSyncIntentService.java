@@ -128,21 +128,23 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
 
        // mBuilder.setContentIntent(contentIntent);
         ////mNotificationManager.notify(1, mBuilder.build());
+        FilesAllCount=0;
 
 
         Usuario usuarioLogued= usuarioController.getLoggedUser();
-        FilesAllCount= elementoController.getListElementoSync(true,usuarioLogued.getUsuario_Id(),true).size();
+        FilesAllCount= elementoController.getListElementoSync(false,usuarioLogued.getUsuario_Id(),true).size();
 
         //register Progress
         // Poner en primer plano
        /* builder.setProgress(FilesAllCount, CurrentFile, false);
         startForeground(1, builder.build());*/
 
-        Intent localIntent = new Intent(Constants.ACTION_RUN_ISERVICE)
+        /*Intent localIntent = new Intent(Constants.ACTION_RUN_ISERVICE)
                 .putExtra("MESSAGE_RUN","Iniciando Sincronizacion");
-
         // Emisión de {@code localIntent}
-        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);*/
+
+
         // Retardo de 1 segundo en la iteración
         verificateDataSync();
 
@@ -161,7 +163,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
       //  LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
     }
 
-    
+
     //region METHODS
     public void verificateDataSync(){
         if(checkConnection()){
@@ -395,8 +397,9 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
 
         if(History_Sincronizacion_Register==true) {
 
-            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
+            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion(usuarioLogued.getUsuario_Id());
             if (sincronizacionGlobal == null) {
+                sincronizacionGlobal=new Sincronizacion();
                 sincronizacionGlobal.setSincronizacion_Id(1);
                 History_Sincronizacion_Register=false;
             } else {
@@ -412,7 +415,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
             sincronizacionGlobal.setCodigos_Elementos_Sync(poste_id_local);
 
             sincronizacionGetInformacionController.registerUpdateHistorySinconization(sincronizacionGlobal);
-            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
+            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion(usuarioLogued.getUsuario_Id());
 
         }else{
             sincronizacionGlobal.setUsuario_Id( usuarioLogued.getUsuario_Id());
@@ -422,7 +425,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
             sincronizacionGlobal.setUsuario( usuarioLogued.getNombre()+" "+usuarioLogued.getApellido());
             sincronizacionGlobal.setCodigos_Elementos_Sync(sincronizacionGlobal.getCodigos_Elementos_Sync()+","+poste_id_local);
             sincronizacionGetInformacionController.registerUpdateHistorySinconization(sincronizacionGlobal);
-            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion();
+            sincronizacionGlobal= sincronizacionGetInformacionController.getLastSincronizacion(usuarioLogued.getUsuario_Id());
         }
 
 
