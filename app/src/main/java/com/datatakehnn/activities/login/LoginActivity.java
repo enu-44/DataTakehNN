@@ -136,8 +136,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-
             if (checkConnection()) {
+                progressBar.setVisibility(View.VISIBLE);
                 ///Verificate en servicio rest
                 Usuario user = usuarioController.getUsuario(usuario, password);
                 if (user != null) {
@@ -272,7 +272,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
             user.setRemembered(true);
             user.setProyecto_Id(usuarioController.getFirstProyecto().getId());
             usuarioController.register(user);
-
+            progressBar.setVisibility(View.GONE);
             sendMenu(user);
         } else {
             Snackbar.make(container, "Usuario o Contraseña Incorrectos", Snackbar.LENGTH_SHORT).show();
