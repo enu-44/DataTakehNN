@@ -48,6 +48,8 @@ import com.datatakehnn.models.reponse_generic.data_async.Response_Request_Data_S
 import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.api_services.data_async_services.IDataAsync;
+import com.datatakehnn.services.aplication.DataTakeApp;
+import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CablesElementoActivity extends AppCompatActivity implements IDataAsync,OnItemClickListenerCable, MainViewCablesElemento, SwipeRefreshLayout.OnRefreshListener {
+public class CablesElementoActivity extends AppCompatActivity implements IDataAsync,OnItemClickListenerCable, MainViewCablesElemento, SwipeRefreshLayout.OnRefreshListener,ConnectivityReceiver.ConnectivityReceiverListener {
 
     //UI Elements
     @BindView(R.id.toolbar)
@@ -221,8 +223,14 @@ public class CablesElementoActivity extends AppCompatActivity implements IDataAs
 
             case R.id.action_update:
 
-                syncActivity.loadDataAsync(this);
-                showProgresss();
+                if(checkConnection()){
+                    showProgresss();
+                    syncActivity.loadDataAsync(this);
+
+                }else{
+                    onMessageError(R.color.orange, getString(R.string.message_not_connection));
+                }
+
                 break;
 
 
@@ -577,9 +585,7 @@ public class CablesElementoActivity extends AppCompatActivity implements IDataAs
 
     //endregion
 
-
-
-    //regioon IMPLEMENT METHODS API SERVICE IDATASYNC
+    //region IMPLEMENT METHODS API SERVICE IDATASYNC
 
     @Override
     public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
@@ -589,5 +595,36 @@ public class CablesElementoActivity extends AppCompatActivity implements IDataAs
         loadListSpinners();
         loadListCablesElementos();
     }
-    //endrefion
+    //endregion
+
+    //region CHECK CONNECTION INTERNET
+    // Method to manually check connection status
+    private boolean checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        return isConnected;
+        //showSnack(isConnected);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register connection status listener
+        DataTakeApp.getInstance().setConnectivityListener(this);
+    }
+
+    /**
+     * Callback will be triggered when there is change in
+     * network connection
+     */
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected) {
+            onMessageOk(R.color.colorAccent, getString(R.string.message_connection));
+        } else {
+            onMessageError(R.color.colorAccent, getString(R.string.message_not_connection));
+        }
+    }
+
+
+    //endregion
 }
