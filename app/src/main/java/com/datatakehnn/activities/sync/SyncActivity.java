@@ -160,6 +160,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
         dataSyncApiService.loadDataAsync(idataAsync);
     }
 
+    @Override
     public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
         if (response.isSuccess()) {
 
@@ -238,7 +239,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
             MenuItem item = menuGlobal.findItem(R.id.action_done);
             item.setVisible(true);
             sync = true;
-           hideUIElements();
+            hideUIElements();
             ivSync.setImageResource(R.drawable.ic_botonsincronizado);
 
 
@@ -263,9 +264,10 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
         } else {
             showSnakBar(R.color.colorAccent, response.getMessage());
             sync = false;
-           hideUIElements();
+            hideUIElements();
         }
     }
+
 
     //endregion
 

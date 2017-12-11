@@ -514,9 +514,9 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
     //endregion
 
     //regioon IMPLEMENT METHODS API SERVICE IDATASYNC
-
     @Override
     public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
+        syncActivity.processFinishGetDataAsync(response);
         hideProgress();
         onMessageOk(R.color.orange,"Datos actualizados");
         loadListSpinners();

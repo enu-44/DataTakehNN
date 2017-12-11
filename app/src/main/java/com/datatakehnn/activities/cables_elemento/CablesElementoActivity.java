@@ -583,6 +583,7 @@ public class CablesElementoActivity extends AppCompatActivity implements IDataAs
 
     @Override
     public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
+        syncActivity.processFinishGetDataAsync(response);
         hideProgress();
         onMessageOk(R.color.orange,"Datos actualizados");
         loadListSpinners();
