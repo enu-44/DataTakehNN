@@ -25,7 +25,7 @@ public class Tipo_Perdida_List {
             ),
             new Tipo_Perdida(
                     4,
-                    "Poda"
+                    "Requiere Poda"
             )
 
     };

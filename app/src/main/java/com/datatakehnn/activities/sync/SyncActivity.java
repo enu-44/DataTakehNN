@@ -27,6 +27,7 @@ import com.datatakehnn.activities.menu.MainMenuActivity;
 import com.datatakehnn.activities.poste.PosteActivity;
 import com.datatakehnn.controllers.SettingController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
+import com.datatakehnn.models.ciudad_empresa.Ciudad_Empresa;
 import com.datatakehnn.models.ciudades_model.Ciudad;
 import com.datatakehnn.models.configuracion_model.Setting;
 import com.datatakehnn.models.departmentos_model.Departamento;
@@ -212,6 +213,8 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
             //Tipo Perdidas
             List<Tipo_Perdida> tipo_perdidas = response.getResult().getTipo_Perdidas();
 
+            List<Ciudad_Empresa> ciudad_empresas = response.getResult().getCiudad_Empresas();
+
             sincronizacionGetInformacionController.deleteInformacionMaster();
             sincronizacionGetInformacionController.registerDataGetInformacion(estado_lists,
                     detalle_tipo_novedadList,
@@ -225,7 +228,8 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
                     tipo_equipos,
                     departamentoList,
                     ciudadList,
-                    tipo_perdidas
+                    tipo_perdidas,
+                    ciudad_empresas
             );
 
 

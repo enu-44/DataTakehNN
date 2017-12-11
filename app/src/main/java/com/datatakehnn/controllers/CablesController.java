@@ -53,6 +53,9 @@ public class CablesController {
             elementoCable.setNombre_Empresa(elemento_cable.getNombre_Empresa());
             elementoCable.setSobre_Rbt(elemento_cable.isSobre_Rbt());
             elementoCable.setIs_Marquilla(elemento_cable.isIs_Marquilla());
+
+            elementoCable.setCiudad_Id(elemento_cable.getCiudad_Id());
+            elementoCable.setCiudad_Empresa_Id(elemento_cable.getCiudad_Empresa_Id());
             elementoCable.save();
 
             response.setMessage("Ok");

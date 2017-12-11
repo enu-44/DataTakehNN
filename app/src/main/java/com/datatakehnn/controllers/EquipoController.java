@@ -46,6 +46,10 @@ public class EquipoController {
             equipo_elemento.setMedidor_Red(tipo_equipo.isMedidor_Red());
             equipo_elemento.setNombre_Empresa(tipo_equipo.getNombre_Empresa());
             equipo_elemento.setNombre_Tipo_Equipo(tipo_equipo.getNombre_Tipo_Equipo());
+
+            equipo_elemento.setCiudad_Id(tipo_equipo.getCiudad_Id());
+            equipo_elemento.setCiudad_Empresa_Id(tipo_equipo.getCiudad_Empresa_Id());
+
             equipo_elemento.save();
             response.setMessage("Ok");
             response.setResult(equipo_elemento);

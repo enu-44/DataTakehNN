@@ -2,6 +2,8 @@ package com.datatakehnn.controllers;
 
 import android.content.Context;
 
+import com.datatakehnn.models.ciudad_empresa.Ciudad_Empresa;
+import com.datatakehnn.models.ciudad_empresa.Ciudad_Empresa_Table;
 import com.datatakehnn.models.ciudades_model.Ciudad;
 import com.datatakehnn.models.ciudades_model.Ciudad_Table;
 import com.datatakehnn.models.departmentos_model.Departamento;
@@ -163,6 +165,7 @@ public class SincronizacionGetInformacionController {
         Delete.table(Tipo_Equipo.class);
         Delete.table(Departamento.class);
         Delete.table(Ciudad.class);
+        Delete.table(Ciudad_Empresa.class);
     }
 
     ////Login Usuario_List
@@ -178,7 +181,8 @@ public class SincronizacionGetInformacionController {
                                                List<Tipo_Equipo> tipo_equipos,
                                                List<Departamento> departamentos,
                                                List<Ciudad> ciudades,
-                                               List<Tipo_Perdida> perdidas) {
+                                               List<Tipo_Perdida> perdidas,
+                                               List<Ciudad_Empresa> ciudad_empresas) {
 
         Response response = new Response();
         try {
@@ -307,6 +311,20 @@ public class SincronizacionGetInformacionController {
                 tipo_perdida.save();
             }
 
+            //CIUDAD EMPRESAS
+            for (Ciudad_Empresa items : ciudad_empresas){
+                Ciudad_Empresa ciudad_empresa = new Ciudad_Empresa();
+                ciudad_empresa.setCiudad_Empresa_Id(items.getCiudad_Empresa_Id());
+                ciudad_empresa.setCiudad_Id(items.getCiudad_Id());
+                ciudad_empresa.setDireccion(items.getDireccion());
+                ciudad_empresa.setEmpresa_Id(items.getEmpresa_Id());
+                ciudad_empresa.setNit(items.getNit());
+                ciudad_empresa.setNombre_Ciudad(items.getNombre_Ciudad());
+                ciudad_empresa.setNombre_Empresa(items.getNombre_Empresa());
+                ciudad_empresa.setTelefono(items.getTelefono());
+                ciudad_empresa.save();
+            }
+
 
             response.setMessage("Informacion registrada");
             response.setSuccess(true);
@@ -357,6 +375,11 @@ public class SincronizacionGetInformacionController {
     ///CABLES
     public List<Empresa> getListEmpresas() {
         List<Empresa> lis = SQLite.select().from(Empresa.class).queryList();
+        return lis;
+    }
+
+    public List<Ciudad_Empresa> getListEmpresasByCiudad(long Ciudad_Id) {
+        List<Ciudad_Empresa> lis = SQLite.select().from(Ciudad_Empresa.class).where(Ciudad_Empresa_Table.Ciudad_Id.eq(Ciudad_Id)).queryList();
         return lis;
     }
 

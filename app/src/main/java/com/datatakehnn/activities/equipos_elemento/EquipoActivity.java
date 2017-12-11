@@ -38,6 +38,8 @@ import com.datatakehnn.controllers.CablesController;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.EquipoController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
+import com.datatakehnn.controllers.UsuarioController;
+import com.datatakehnn.models.ciudad_empresa.Ciudad_Empresa;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.element_model.Elemento;
 import com.datatakehnn.models.elemento_cable.Elemento_Cable;
@@ -46,6 +48,7 @@ import com.datatakehnn.models.equipo_elemento_model.Equipo_Elemento;
 import com.datatakehnn.models.reponse_generic.Response;
 import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.tipo_equipo_model.Tipo_Equipo;
+import com.datatakehnn.models.usuario_model.Usuario;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -79,6 +82,9 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     private boolean Conectado_Red_Electrica = true;
     private boolean Medidor_Red = true;
     private long Empresa_Id;
+    private long Ciudad_Empresa_Id;
+    private long Ciudad_Id;
+
     private long Tipo_Equipo_Id;
 
 
@@ -86,20 +92,21 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     public String Nombre_Empresa;
 
     //Declaracion Arrays
-    List<Empresa> empresaList = new ArrayList<>();
+    List<Ciudad_Empresa> empresaList = new ArrayList<>();
     List<Tipo_Equipo> tipo_equipos = new ArrayList<>();
 
     //Listas
     List<Equipo_Elemento> equipo_elementoList = new ArrayList<>();
 
     //Adapters
-    ArrayAdapter<Empresa> empresaArrayAdapter;
+    ArrayAdapter<Ciudad_Empresa> empresaArrayAdapter;
     ArrayAdapter<Tipo_Equipo> tipo_equipoArrayAdapter;
 
     //Instances
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
     EquipoController equipoController;
     ElementoController elementoController;
+    UsuarioController usuarioController;
 
     //Adapter
     AdapterEquipo adapter;
@@ -137,6 +144,7 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.equipoController = EquipoController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
+        this.usuarioController= UsuarioController.getInstance(this);
 
     }
 
@@ -192,11 +200,15 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
     }
 
     private void registerEquipos() {
+
+
         Equipo_Elemento equipo_elemento = new Equipo_Elemento(
                 "",
                 "",
                 1,
                 Empresa_Id,
+                Ciudad_Id,
+                Ciudad_Empresa_Id,
                 Conectado_Red_Electrica,
                 Medidor_Red,
                 0,
@@ -237,8 +249,11 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
 
     private void loadListSpinners() {
 
+
+        Usuario userLogued= usuarioController.getLoggedUser();
+
         //Listas
-        empresaList = sincronizacionGetInformacionController.getListEmpresas();
+        empresaList = sincronizacionGetInformacionController.getListEmpresasByCiudad(userLogued.getCiudad_Id());
         tipo_equipos = sincronizacionGetInformacionController.getListTipoEquipo();
 
         //Spinner
@@ -246,13 +261,15 @@ public class EquipoActivity extends AppCompatActivity implements MainViewEquipo,
          /*--------------------------------------------------------------------------------------------*/
         spinnerOperador.setAdapter(null);
         empresaArrayAdapter =
-                new ArrayAdapter<Empresa>(this, android.R.layout.simple_spinner_dropdown_item, empresaList);
+                new ArrayAdapter<Ciudad_Empresa>(this, android.R.layout.simple_spinner_dropdown_item, empresaList);
         spinnerOperador.setAdapter(empresaArrayAdapter);
         spinnerOperador.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Empresa_Id = empresaList.get(position).getEmpresa_Id();
-                Nombre_Empresa = empresaList.get(position).getNombre();
+                Nombre_Empresa = empresaList.get(position).getNombre_Empresa();
+                Ciudad_Empresa_Id= empresaList.get(position).getCiudad_Empresa_Id();
+                Ciudad_Id= empresaList.get(position).getCiudad_Id();
             }
         });
 

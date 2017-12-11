@@ -90,7 +90,7 @@ public class Detalle_Tipo_Novedad_List {
             ),
             new Detalle_Tipo_Novedad(
                     13,
-                    "Poda",
+                    "Requiere Poda",
                     "",
                     7
             )

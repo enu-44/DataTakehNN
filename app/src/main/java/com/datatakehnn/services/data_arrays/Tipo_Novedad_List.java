@@ -37,7 +37,7 @@ public class Tipo_Novedad_List {
             ),
             new Tipo_Novedad(
                     7,
-                    "Poda"
+                    "Requiere Poda"
             )
 
     };

@@ -37,11 +37,14 @@ import com.datatakehnn.activities.equipos_elemento.EquipoActivity;
 import com.datatakehnn.controllers.CablesController;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
+import com.datatakehnn.controllers.UsuarioController;
+import com.datatakehnn.models.ciudad_empresa.Ciudad_Empresa;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.elemento_cable.Elemento_Cable;
 import com.datatakehnn.models.empresa_model.Empresa;
 import com.datatakehnn.models.reponse_generic.Response;
 import com.datatakehnn.models.tipo_cable.Tipo_Cable;
+import com.datatakehnn.models.usuario_model.Usuario;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -81,7 +84,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
 
 
     //Declaracion Arrays
-    List<Empresa> empresaList = new ArrayList<>();
+    List<Ciudad_Empresa> empresaList = new ArrayList<>();
     List<Tipo_Cable> tipo_cables = new ArrayList<>();
     List<Detalle_Tipo_Cable> detalle_tipo_cables = new ArrayList<>();
     //Variables Gloabals
@@ -89,6 +92,8 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     private boolean TIENE_MARQUILLA = true;
     private long Detalle_Tipo_Cable_Id;
     private long Empresa_Id;
+    private long Ciudad_Empresa_Id;
+    private long Ciudad_Id;
 
     public String Nombre_Detalle_Tipo_Cable;
     public String Nombre_Tipo_Cable;
@@ -100,13 +105,14 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
 
     //Adapters
     ArrayAdapter<Detalle_Tipo_Cable> detalle_tipo_cableArrayAdapter;
-    ArrayAdapter<Empresa> empresaArrayAdapter;
+    ArrayAdapter<Ciudad_Empresa> empresaArrayAdapter;
     ArrayAdapter<Tipo_Cable> tipo_cableArrayAdapter;
 
     //Instances
     SincronizacionGetInformacionController sincronizacionGetInformacionController;
     CablesController cablesController;
     ElementoController elementoController;
+    UsuarioController usuarioController;
 
     //Accion
     boolean ACCION_ADD;
@@ -156,6 +162,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.cablesController = CablesController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
+        this.usuarioController= UsuarioController.getInstance(this);
 
         //Elemento elemento = elementoController.getLast();
         ///Elemento_Id = elemento.getElemento_Id();
@@ -263,8 +270,11 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
 
     private void loadListSpinners() {
 
+
+        Usuario userLogued= usuarioController.getLoggedUser();
+
         //Listas
-        empresaList = sincronizacionGetInformacionController.getListEmpresas();
+        empresaList = sincronizacionGetInformacionController.getListEmpresasByCiudad(userLogued.getCiudad_Id());
         tipo_cables = sincronizacionGetInformacionController.getListTipo_Cable();
 
         //Spinner
@@ -272,14 +282,15 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
          /*--------------------------------------------------------------------------------------------*/
         spinnerOperador.setAdapter(null);
         empresaArrayAdapter =
-                new ArrayAdapter<Empresa>(this, android.R.layout.simple_spinner_dropdown_item, empresaList);
+                new ArrayAdapter<Ciudad_Empresa>(this, android.R.layout.simple_spinner_dropdown_item, empresaList);
         spinnerOperador.setAdapter(empresaArrayAdapter);
         spinnerOperador.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Empresa_Id = empresaList.get(position).getEmpresa_Id();
-                Nombre_Empresa = empresaList.get(position).getNombre();
-
+                Nombre_Empresa = empresaList.get(position).getNombre_Empresa();
+                Ciudad_Empresa_Id= empresaList.get(position).getCiudad_Empresa_Id();
+                Ciudad_Id= empresaList.get(position).getCiudad_Id();
             }
         });
 
@@ -370,18 +381,22 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     private void registerCables() {
 
         long cantidad = Long.parseLong(edtCantidad.getText().toString());
+
         Elemento_Cable elementoCable = new Elemento_Cable(
-                Detalle_Tipo_Cable_Id,
-                Elemento_Id,
-                "Codigo",
-                Empresa_Id,
+               "Codigo",
                 cantidad,
                 SOBRE_REDES_BT,
+                TIENE_MARQUILLA,
+                Empresa_Id,
+                Ciudad_Id,
+                Ciudad_Empresa_Id,
+                Detalle_Tipo_Cable_Id,
+                Elemento_Id,
                 Nombre_Detalle_Tipo_Cable,
                 Nombre_Tipo_Cable,
-                Nombre_Empresa,
-                TIENE_MARQUILLA
+                Nombre_Empresa
         );
+
         cablesController.register(elementoCable);
 
 

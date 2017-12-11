@@ -34,6 +34,14 @@ public class Equipo_Elemento  extends BaseModel {
     @Column
     public long EmpresaId;
 
+    @SerializedName("Ciudad_Id")
+    @Column
+    public long Ciudad_Id;
+
+    @SerializedName("Ciudad_Empresa_Id")
+    @Column
+    public long Ciudad_Empresa_Id;
+
     @SerializedName("ConectadoRbt")
     @Column
     public boolean ConectadoRbt;
@@ -74,6 +82,24 @@ public class Equipo_Elemento  extends BaseModel {
         Descripcion = descripcion;
         Cantidad = cantidad;
         EmpresaId = empresaId;
+        ConectadoRbt = conectadoRbt;
+        MedidorBt = medidorBt;
+        Consumo = consumo;
+        UnidadMedida = unidadMedida;
+        TipoEquipo_Id = tipoEquipo_Id;
+        Elemento_Id = elemento_Id;
+        Nombre_Tipo_Equipo = nombre_Tipo_Equipo;
+        Nombre_Empresa = nombre_Empresa;
+    }
+
+    public Equipo_Elemento( String codigo, String descripcion, long cantidad, long empresaId, long ciudad_Id, long ciudad_Empresa_Id, boolean conectadoRbt, boolean medidorBt, long consumo, String unidadMedida, long tipoEquipo_Id, long elemento_Id, String nombre_Tipo_Equipo, String nombre_Empresa) {
+
+        Codigo = codigo;
+        Descripcion = descripcion;
+        Cantidad = cantidad;
+        EmpresaId = empresaId;
+        Ciudad_Id = ciudad_Id;
+        Ciudad_Empresa_Id = ciudad_Empresa_Id;
         ConectadoRbt = conectadoRbt;
         MedidorBt = medidorBt;
         Consumo = consumo;
@@ -226,4 +252,19 @@ public class Equipo_Elemento  extends BaseModel {
     }
 
 
+    public long getCiudad_Id() {
+        return Ciudad_Id;
+    }
+
+    public void setCiudad_Id(long ciudad_Id) {
+        Ciudad_Id = ciudad_Id;
+    }
+
+    public long getCiudad_Empresa_Id() {
+        return Ciudad_Empresa_Id;
+    }
+
+    public void setCiudad_Empresa_Id(long ciudad_Empresa_Id) {
+        Ciudad_Empresa_Id = ciudad_Empresa_Id;
+    }
 }

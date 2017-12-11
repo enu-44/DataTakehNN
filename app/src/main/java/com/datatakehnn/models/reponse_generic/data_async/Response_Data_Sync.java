@@ -1,5 +1,6 @@
 package com.datatakehnn.models.reponse_generic.data_async;
 
+import com.datatakehnn.models.ciudad_empresa.Ciudad_Empresa;
 import com.datatakehnn.models.departmentos_model.Departamento;
 import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.detalle_tipo_novedad.Detalle_Tipo_Novedad;
@@ -58,6 +59,9 @@ public class Response_Data_Sync {
 
     @SerializedName("departCiudades")
     public List<Departamento> Departamento;
+
+    @SerializedName("ciudad_empresas")
+    public List<Ciudad_Empresa> Ciudad_Empresas;
 
     //Constructor
     public Response_Data_Sync(){
@@ -161,5 +165,13 @@ public class Response_Data_Sync {
 
     public void setDepartamento(List<Departamento> departamento) {
         Departamento = departamento;
+    }
+
+    public List<Ciudad_Empresa> getCiudad_Empresas() {
+        return Ciudad_Empresas;
+    }
+
+    public void setCiudad_Empresas(List<Ciudad_Empresa> ciudad_Empresas) {
+        Ciudad_Empresas = ciudad_Empresas;
     }
 }

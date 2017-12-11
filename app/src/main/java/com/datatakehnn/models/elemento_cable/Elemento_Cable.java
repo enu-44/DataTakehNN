@@ -38,6 +38,14 @@ public class Elemento_Cable extends BaseModel {
     @Column
     public long Empresa_Id;
 
+    @SerializedName("Ciudad_Id")
+    @Column
+    public long Ciudad_Id;
+
+    @SerializedName("Ciudad_Empresa_Id")
+    @Column
+    public long Ciudad_Empresa_Id;
+
     @SerializedName("DetalleTipocable_Id")
     @Column
     public long DetalleTipocable_Id;
@@ -45,6 +53,9 @@ public class Elemento_Cable extends BaseModel {
     @SerializedName("Elemento_Id")
     @Column
     public long Elemento_Id;
+
+
+
 
     //Externos
     @Column
@@ -56,23 +67,22 @@ public class Elemento_Cable extends BaseModel {
 
 
     ///Constructor
-    public Elemento_Cable(long detalle_Tipo_Cable_Id, long elemento_Id, String codigo, long empresa_Id, long cantidad, boolean sobre_Rbt, String nombre_Detalle_Tipo_Cable, String nombre_Tipo_Cable, String nombre_Empresa, boolean is_Marquilla) {
 
-        DetalleTipocable_Id = detalle_Tipo_Cable_Id;
-        Elemento_Id = elemento_Id;
+    public Elemento_Cable( String codigo, long cantidad, boolean sobreRbt, boolean tiene_Marquilla, long empresa_Id, long ciudad_Id, long ciudad_Empresa_Id, long detalleTipocable_Id, long elemento_Id, String nombre_Detalle_Tipo_Cable, String nombre_Tipo_Cable, String nombre_Empresa) {
+
         Codigo = codigo;
-        Empresa_Id = empresa_Id;
         Cantidad = cantidad;
-        SobreRbt = sobre_Rbt;
+        SobreRbt = sobreRbt;
+        Tiene_Marquilla = tiene_Marquilla;
+        Empresa_Id = empresa_Id;
+        Ciudad_Id = ciudad_Id;
+        Ciudad_Empresa_Id = ciudad_Empresa_Id;
+        DetalleTipocable_Id = detalleTipocable_Id;
+        Elemento_Id = elemento_Id;
         Nombre_Detalle_Tipo_Cable = nombre_Detalle_Tipo_Cable;
         Nombre_Tipo_Cable = nombre_Tipo_Cable;
         Nombre_Empresa = nombre_Empresa;
-        Tiene_Marquilla = is_Marquilla;
     }
-
-
-
-
 
     public Elemento_Cable() {
 
@@ -170,5 +180,22 @@ public class Elemento_Cable extends BaseModel {
 
     public void setIs_Marquilla(boolean is_Marquilla) {
         Tiene_Marquilla = is_Marquilla;
+    }
+
+
+    public long getCiudad_Id() {
+        return Ciudad_Id;
+    }
+
+    public void setCiudad_Id(long ciudad_Id) {
+        Ciudad_Id = ciudad_Id;
+    }
+
+    public long getCiudad_Empresa_Id() {
+        return Ciudad_Empresa_Id;
+    }
+
+    public void setCiudad_Empresa_Id(long ciudad_Empresa_Id) {
+        Ciudad_Empresa_Id = ciudad_Empresa_Id;
     }
 }
