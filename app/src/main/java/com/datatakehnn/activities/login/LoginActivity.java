@@ -249,11 +249,9 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
             showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
         }
     }
-
     //endregion
 
     //region API SERVICE
-
     @Override
     public void processFinishGetLogin(Response_Request_Login response) {
         if (response.isSuccess()) {
@@ -278,9 +276,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
             sendMenu(user);
         } else {
             Snackbar.make(container, "Usuario o Contraseña Incorrectos", Snackbar.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
         }
-
     }
     //endregion
-
 }

@@ -34,6 +34,7 @@ import com.datatakehnn.R;
 import com.datatakehnn.activities.cables_elemento.adapter.AdapterCablesElemento;
 import com.datatakehnn.activities.cables_elemento.adapter.OnItemClickListenerCable;
 import com.datatakehnn.activities.equipos_elemento.EquipoActivity;
+import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.controllers.CablesController;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
@@ -43,8 +44,10 @@ import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
 import com.datatakehnn.models.elemento_cable.Elemento_Cable;
 import com.datatakehnn.models.empresa_model.Empresa;
 import com.datatakehnn.models.reponse_generic.Response;
+import com.datatakehnn.models.reponse_generic.data_async.Response_Request_Data_Sync;
 import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.usuario_model.Usuario;
+import com.datatakehnn.services.api_services.data_async_services.IDataAsync;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -54,7 +57,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CablesElementoActivity extends AppCompatActivity implements OnItemClickListenerCable, MainViewCablesElemento, SwipeRefreshLayout.OnRefreshListener {
+public class CablesElementoActivity extends AppCompatActivity implements IDataAsync,OnItemClickListenerCable, MainViewCablesElemento, SwipeRefreshLayout.OnRefreshListener {
 
     //UI Elements
     @BindView(R.id.toolbar)
@@ -113,6 +116,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
     CablesController cablesController;
     ElementoController elementoController;
     UsuarioController usuarioController;
+    SyncActivity syncActivity;
 
     //Accion
     boolean ACCION_ADD;
@@ -163,6 +167,7 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
         this.cablesController = CablesController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
         this.usuarioController= UsuarioController.getInstance(this);
+        this.syncActivity= SyncActivity.getInstance(this);
 
         //Elemento elemento = elementoController.getLast();
         ///Elemento_Id = elemento.getElemento_Id();
@@ -213,6 +218,14 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 break;
+
+            case R.id.action_update:
+
+                syncActivity.loadDataAsync(this);
+                showProgresss();
+                break;
+
+
 
             ///Metodo que permite no recargar la pagina al devolverse
             case android.R.id.home:
@@ -560,5 +573,20 @@ public class CablesElementoActivity extends AppCompatActivity implements OnItemC
                 break;
         }
     }
+
+
     //endregion
+
+
+
+    //regioon IMPLEMENT METHODS API SERVICE IDATASYNC
+
+    @Override
+    public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
+        hideProgress();
+        onMessageOk(R.color.orange,"Datos actualizados");
+        loadListSpinners();
+        loadListCablesElementos();
+    }
+    //endrefion
 }

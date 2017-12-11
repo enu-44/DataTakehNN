@@ -141,14 +141,14 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
             }else{
                 if(checkConnection()){
                     showUIElements();
-                    loadDataAsync();
+                    loadDataAsync(this);
                 }
             }
         }///FROM_MENU
         else{
             if(checkConnection()){
                 showUIElements();
-                loadDataAsync();
+                loadDataAsync(this);
             }
         }
     }
@@ -156,8 +156,8 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
 
 
     //region API SERIVICE
-    private void loadDataAsync() {
-        dataSyncApiService.loadDataAsync(this);
+    public void loadDataAsync(IDataAsync idataAsync) {
+        dataSyncApiService.loadDataAsync(idataAsync);
     }
 
     public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
@@ -394,7 +394,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     // Sincronizar Informacion
     public void getInformationSync() {
         if (checkConnection()) {
-            loadDataAsync();
+            loadDataAsync(this);
 
         } else {
             //Verificar si existe informacion sincronizada(si no hay conexion a internet, se validad la sincronizacion de datos)
