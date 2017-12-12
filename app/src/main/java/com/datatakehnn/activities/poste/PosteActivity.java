@@ -573,7 +573,13 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setNumero_Apoyo(elemento_id);
         elemento.setMaterial_Id(Material_Id);
         elemento.setLongitud_Elemento_Id(Longitud_Elemento_Id);
+
+        if(edtResistenciaMecanica.getText().toString().equals("")){
+            edtResistenciaMecanica.setText("Sin resistencia mecanica");
+        }
+
         elemento.setResistencia_Mecanica(edtResistenciaMecanica.getText().toString());
+
         if (ACCION_ADD) {
             elemento.setEstado_Id(Estado_Id);
         }
