@@ -135,7 +135,7 @@
                 </RelativeLayout>
 
 
-
+<!--
                 <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                     android:id="@+id/spinner_almacenamiento"
                     android:layout_width="match_parent"
@@ -143,11 +143,27 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="0.5"
+                    android:clickable="false"
+                    android:enabled="false"
                     android:textSize="13dp"
                     android:hint="Almacenamiento"
                     android:textColor="@color/colorAccent"
                     android:textColorHint="#CFD8DC"
-                    app:met_floatingLabel="normal"/>
+                    app:met_floatingLabel="normal"/> -->
+
+                <Spinner
+                    android:id="@+id/spinner_almacenamiento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="0.5"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:textSize="13dp"
+                    android:hint="Almacenamiento"
+                    android:textColor="@color/colorAccent"
+                    android:textColorHint="#CFD8DC"></Spinner>
 
             </LinearLayout>
 

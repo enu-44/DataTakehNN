@@ -11,10 +11,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.provider.DocumentFile;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +44,7 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -59,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     @BindView(R.id.spinner_almacenamiento)
-    MaterialBetterSpinner spinner_almacenamiento;
+    Spinner spinner_almacenamiento;
 
 
     @BindView(R.id.switchWifi)
@@ -74,14 +77,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     SettingController settingController;
 
-    Setting setting= new Setting();
+    Setting setting = new Setting();
 
     //Variables
-    String Sigla_Storage="";
-    String Descripcion_Storage="";
+    String Sigla_Storage = "";
+    String Descripcion_Storage = "";
     boolean Available_Wifi;
     boolean Available_Datos;
-
 
 
     private final static String NOMBRE_DIRECTORIO = "/INMUNIZADOR";
@@ -99,10 +101,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setupInjection() {
 
-        this.settingController=SettingController.getInstance(this);
+        this.settingController = SettingController.getInstance(this);
 
 
-        final List<Storage> list_spinner_almacenamiento= Storage_List.getListStorage();
+        spinner_almacenamiento.setEnabled(false);
+        spinner_almacenamiento.setClickable(false);
+
+        final List<Storage> list_spinner_almacenamiento = Storage_List.getListStorage();
         ArrayAdapter<Storage> arrayAdapter;
         spinner_almacenamiento.setAdapter(null);
         arrayAdapter =
@@ -110,64 +115,67 @@ public class SettingsActivity extends AppCompatActivity {
         spinner_almacenamiento.setAdapter(arrayAdapter);
 
 
+        setting = settingController.getFirst();
 
-        setting= settingController.getFirst();
-
-        if(setting!=null){
+        if (setting != null) {
             switchWifi.setChecked(setting.isAvailable_Wifi());
             switchDatos.setChecked(setting.isAvailable_Mobile_Data());
             txtFechaUpdate.setText(setting.getFecha());
-            Available_Wifi=setting.isAvailable_Wifi();
-            Available_Datos=setting.isAvailable_Mobile_Data();
-            Sigla_Storage=setting.getSigla_Storage();
-            Descripcion_Storage= setting.getDescripcion_Storage_Phone();
-            spinner_almacenamiento.setText(setting.getDescripcion_Storage_Phone());
+            Available_Wifi = setting.isAvailable_Wifi();
+            Available_Datos = setting.isAvailable_Mobile_Data();
+            //Sigla_Storage = setting.getSigla_Storage();
+            //Descripcion_Storage = setting.getDescripcion_Storage_Phone();
+            //spinner_almacenamiento.setText(setting.getDescripcion_Storage_Phone());
         }
 
         //Spinner
+        /*
         spinner_almacenamiento.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                if(list_spinner_almacenamiento.get(position).getSigla().equals("Externo")){
-                    Sigla_Storage= list_spinner_almacenamiento.get(position).getSigla();
-                    Descripcion_Storage=list_spinner_almacenamiento.get(position).getDescripcion();
-
-                  // boolean sdDisponible = false;
-                  //  boolean sdAccesoEscritura = false;
-                    //Comprobamos el estado de la memoria externa (tarjeta SD)
-                   // String estado = Environment.getExternalStorageState();
+                if (list_spinner_almacenamiento.get(position).getSigla().equals("Externo")) {
+                    Sigla_Storage = list_spinner_almacenamiento.get(position).getSigla();
+                    Descripcion_Storage = list_spinner_almacenamiento.get(position).getDescripcion();
 
 
 
-
-                  ////  boolean sd= hasStorage(true);
-                  //  triggerStorageAccessFramework();
-
-
-
-
-                   /// handleExternalStorageState(mExternalStorageAvailable,mExternalStorageWriteable);
-                    /*
-                    if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))   {
-                        Log.i("SDCARDINFO","SD Card se encuentra presente.");
-
-                    } else {
-                        Log.i("SDCARDINFO","No se encuentra SD Card.");
+                    if (isExternalStorageWritable()) {
+                        //grabar();
+                        startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), 42);
                     }
-                    */
 
-                    /*
-                    String extStore = System.getenv("EXTERNAL_STORAGE");
-                    File f_exts = new File(extStore);
-
-                    String strSDCardPathgg = System.getenv("EXTERNAL_SDCARD_STORAGE");
+                    // boolean sdDisponible = false;
+                    //  boolean sdAccesoEscritura = false;
+                    //Comprobamos el estado de la memoria externa (tarjeta SD)
+                    // String estado = Environment.getExternalStorageState();
 
 
-                    String secStore = System.getenv("SECONDARY_STORAGE");
-                    File f_secs = new File(secStore);
-                    */
-                   /* if (estado.equals(Environment.MEDIA_MOUNTED))
+                    ////  boolean sd= hasStorage(true);
+                    //  triggerStorageAccessFramework();
+
+
+                    /// handleExternalStorageState(mExternalStorageAvailable,mExternalStorageWriteable);
+
+                   // if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))   {
+                       // Log.i("SDCARDINFO","SD Card se encuentra presente.");
+
+                    //} else {
+                        //Log.i("SDCARDINFO","No se encuentra SD Card.");
+                    //}
+
+
+
+                    //String extStore = System.getenv("EXTERNAL_STORAGE");
+                    //File f_exts = new File(extStore);
+
+                    //String strSDCardPathgg = System.getenv("EXTERNAL_SDCARD_STORAGE");
+
+
+                    //String secStore = System.getenv("SECONDARY_STORAGE");
+                    //File f_secs = new File(secStore);
+
+                   if (estado.equals(Environment.MEDIA_MOUNTED))
                     {
                         sdDisponible = true;
                         sdAccesoEscritura = true;
@@ -194,17 +202,38 @@ public class SettingsActivity extends AppCompatActivity {
                         Sigla_Storage= "Interno";
                         Descripcion_Storage="Interno";
                     }
-*/
-                }else{
-                    Sigla_Storage= list_spinner_almacenamiento.get(position).getSigla();
-                    Descripcion_Storage=list_spinner_almacenamiento.get(position).getDescripcion();
+
+                } else {
+                    Sigla_Storage = list_spinner_almacenamiento.get(position).getSigla();
+                    Descripcion_Storage = list_spinner_almacenamiento.get(position).getDescripcion();
                 }
             }
-        });
+        }); */
     }
 
+    /* Checks if external storage is available for read and write */
     /*
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    } */
 
+    /* Checks if external storage is available to at least read */
+    /*
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    } */
+
+
+/*
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
@@ -223,10 +252,67 @@ public class SettingsActivity extends AppCompatActivity {
                         & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 this.getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
 
-                grabar(treeUri.toString());
+                //grabar(treeUri.toString());
+            }
+        }
+    }*/
+
+
+    /* ///ALMACENAMIENTO
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (resultCode != RESULT_OK)
+            return;
+        Uri treeUri = resultData.getData();
+        DocumentFile pickedDir = DocumentFile.fromTreeUri(this, treeUri);
+        grantUriPermission(getPackageName(), treeUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        writeFile(pickedDir);
+    }
+
+    public void writeFile(DocumentFile pickedDir) {
+        try {
+            DocumentFile file = pickedDir.createFile("image/jpeg", "try2.jpg");
+            OutputStream out = getContentResolver().openOutputStream(file.getUri());
+            try {
+
+                // write the image content
+
+            } finally {
+                out.close();
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Something went wrong : " + e.getMessage(), e);
+        }
+    } */
+
+
+/*
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public final void onActivityResult(final int requestCode, final int resultCode, final Intent resultData) {
+        if (requestCode == 1) {
+            Uri treeUri = null;
+            if (resultCode == Activity.RESULT_OK) {
+                // Get Uri from Storage Access Framework.
+                treeUri = resultData.getData();
+
+                // Persist URI in shared preference so that you can use it later.
+                // Use your own framework here instead of PreferenceUtil.
+                //PreferenceUtil.setSharedPreferenceUri(R.string.key_internal_uri_extsdcard, treeUri);
+
+                // Persist access permissions.
+                final int takeFlags = resultData.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                this.getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
+
+                //grabar(treeUri.toString());
             }
         }
     }
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void triggerStorageAccessFramework() {
@@ -254,9 +340,10 @@ public class SettingsActivity extends AppCompatActivity {
         }
         return rv.toArray(new String[rv.size()]);
     }
-*/
+
+
     /*
-    public void grabar(String ruta) {
+    public void grabar() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -302,6 +389,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /*
 
 
     static public boolean hasStorage(boolean requireWriteAccess) {
@@ -352,29 +440,28 @@ public class SettingsActivity extends AppCompatActivity {
  */
 
     @OnCheckedChanged(R.id.switchWifi)
-    public  void onWifiSelected(CompoundButton button, boolean isChecked){
+    public void onWifiSelected(CompoundButton button, boolean isChecked) {
         //do your stuff.
         if (isChecked) {
-            Available_Wifi=true;
+            Available_Wifi = true;
             //showSnakBar(R.color.colorPrimary," Asistant: "+ String.valueOf(Is_Asistant_Workshop));
         } else {
-            Available_Wifi=false;
+            Available_Wifi = false;
             //showSnakBar(R.color.colorPrimary," Asistant: "+ String.valueOf(Is_Asistant_Workshop));
         }
     }
 
     @OnCheckedChanged(R.id.switchDatos)
-    public  void onDatosSelected(CompoundButton button, boolean isChecked){
+    public void onDatosSelected(CompoundButton button, boolean isChecked) {
         //do your stuff.
         if (isChecked) {
-            Available_Datos=true;
+            Available_Datos = true;
             //showSnakBar(R.color.colorPrimary," Asistant: "+ String.valueOf(Is_Asistant_Workshop));
         } else {
-            Available_Datos=false;
+            Available_Datos = false;
             //showSnakBar(R.color.colorPrimary," Asistant: "+ String.valueOf(Is_Asistant_Workshop));
         }
     }
-
 
 
     //region SETUP INJECTION
@@ -405,17 +492,16 @@ public class SettingsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_done:
 
-                if(setting!= null){
+                if (setting != null) {
                     setting.setDescripcion_Storage_Phone(Descripcion_Storage);
                     setting.setSigla_Storage(Sigla_Storage);
                     setting.setAvailable_Mobile_Data(Available_Datos);
                     setting.setAvailable_Wifi(Available_Wifi);
                     settingController.registerUpdate(setting);
-                    onMessageOk(R.color.orange,"Guardado Correctamente");
+                    onMessageOk(R.color.orange, "Guardado Correctamente");
                     onReturnActivity();
 
                 }
-
 
 
                 break;
