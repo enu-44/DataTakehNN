@@ -1,12 +1,17 @@
 package com.datatakehnn.activities.login;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,13 +19,16 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.datatakehnn.R;
+import com.datatakehnn.activities.master.DeviceMasterActivity;
 import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.controllers.UsuarioController;
 import com.datatakehnn.models.empresa_model.Empresa;
 import com.datatakehnn.models.proyectos_model.Proyecto;
 import com.datatakehnn.models.reponse_generic.Response;
+import com.datatakehnn.models.reponse_generic.login.Request_Login;
 import com.datatakehnn.models.reponse_generic.login.Response_Request_Login;
 import com.datatakehnn.models.tipo_usuario_model.Tipo_Usuario;
 import com.datatakehnn.models.usuario_model.Usuario;
@@ -29,6 +37,7 @@ import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 import com.datatakehnn.services.data_arrays.Usuario_List;
 import com.datatakehnn.services.api_services.loginservice.ILogin;
 import com.datatakehnn.services.api_services.loginservice.LoginApiService;
+import com.datatakehnn.services.device_information.Equipment_Identifier;
 
 import java.util.List;
 
@@ -54,6 +63,22 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
     //Instances
     UsuarioController usuarioController;
     LoginApiService loginApiService;
+    Equipment_Identifier equipment_Identifier;
+
+    //Device
+    private String Imei;
+    private String Phone_Type_Device;
+    private String Android_Id;
+    private String Software_Version;
+    private String Local_Ip_Address;
+    private String Android_Version;
+    private String MacAddr;
+    private String Device_Name;
+    private String Direccion_Ip;
+    private boolean Estado;
+
+    //Permission
+    public static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +86,14 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         setupInjection();
-
         verificateLoginIsRemembered();
     }
 
     //region INJECTION
     private void setupInjection() {
         this.usuarioController = UsuarioController.getInstance(this);
-
         this.loginApiService = LoginApiService.getInstance(this);
+        this.equipment_Identifier = new Equipment_Identifier(this);
     }
 
 
@@ -143,7 +167,22 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
                 if (user != null) {
                     loginSqlite(edtUsuario.getText().toString(), edtContrasena.getText().toString());
                 } else {
-                    loginApiService.getLoginAsync(this, usuario, password);
+
+                    Request_Login request_login=new Request_Login(
+                            usuario,
+                            password,
+                            Imei,
+                            Phone_Type_Device,
+                            Android_Id,
+                            Software_Version,
+                            Local_Ip_Address,
+                            Android_Version,
+                            MacAddr,
+                            Device_Name,
+                            Direccion_Ip,
+                            Estado
+                    );
+                    loginApiService.postLoginAsync(this,request_login);
                 }
                 //loginSqlite(edtUsuario.getText().toString(), edtContrasena.getText().toString());
             } else {
@@ -217,8 +256,101 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
 
     @OnClick(R.id.fabLogin)
     public void onViewClicked() {
-        attemptLogin();
+
+        checkPermission();
     }
+
+    private void checkPermission() {
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.READ_PHONE_STATE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_PHONE_STATE}, MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }else{
+            doPermissionGrantedStuffs();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_PHONE_STATE : {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    //Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
+                    doPermissionGrantedStuffs();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    public void doPermissionGrantedStuffs() {
+        //Have an  object of TelephonyManager
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        // Now read the desired content to a textview.
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+        /// String SIMSerialNumber=tm.getSimSerialNumber();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            return;
+        }
+        String Device_Id = equipment_Identifier.getDeviceID(telephonyManager, LoginActivity.this);
+        String AndroidId = equipment_Identifier.getDeviceUniqueID(LoginActivity.this);
+
+        String Software_V = tm.getDeviceSoftwareVersion();
+
+        /*
+        String SIMCountryISO=tm.getSimCountryIso();*/
+        String Remote_Ip_Address=equipment_Identifier.NetwordDetect();
+        String Local_Ip_Addrss=equipment_Identifier.getLocalIpAddress();
+        String Android_Ver=equipment_Identifier.getAndroidVersion();
+        String MacAdd=equipment_Identifier.getMacAddr();
+        String DeviceName=equipment_Identifier.getDeviceName();
+        ////Insertar Datos Equipo Maestro (Equipment master)
+
+        Imei=telephonyManager.getDeviceId();
+        Phone_Type_Device=Device_Id;
+        Android_Id=AndroidId;
+        Software_Version=Software_V;
+        Local_Ip_Address=Local_Ip_Addrss;
+        Android_Version=Android_Ver;
+        MacAddr=MacAdd;
+        Device_Name=DeviceName;
+        Direccion_Ip=Remote_Ip_Address;
+        Estado=false;
+
+        if(Imei.equals("") || Imei==null){
+            Snackbar.make(container, "El dispositivo no cuenta con IMEI, Contacte a su proveedor", Snackbar.LENGTH_SHORT).show();
+        }else{
+            attemptLogin();
+        }
+    }
+
+
 
     //endregion
 
@@ -267,6 +399,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
             for (Proyecto items : list_proyectos_response) {
                 usuarioController.registerProyecto(items);
             }
+
+            usuarioController.registerUpdateDevice(response.getResult().getDevice_master());
 
             Usuario user = response.getResult();
             user.setRemembered(true);

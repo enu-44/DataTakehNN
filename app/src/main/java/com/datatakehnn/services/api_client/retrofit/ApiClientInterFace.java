@@ -2,6 +2,7 @@ package com.datatakehnn.services.api_client.retrofit;
 
 import com.datatakehnn.models.material_model.Material;
 import com.datatakehnn.models.reponse_generic.data_async.Response_Data_Sync;
+import com.datatakehnn.models.reponse_generic.login.Request_Login;
 import com.datatakehnn.models.reponse_generic.login.Response_Request_Login;
 import com.datatakehnn.models.request_data_sync_model.Request_Post_Data_Sync;
 import com.datatakehnn.models.request_data_sync_model.Response_Post_Data_Sync;
@@ -29,6 +30,9 @@ public interface ApiClientInterFace {
     @GET("api/Usuario/GetLoginUser/{Cedula}/{Password}")
     Call<Response_Request_Login> getLoginUser(@Path("Cedula") String cedula, @Path("Password") String password);
 
+    @Headers("Content-Type: application/json")
+    @POST("api/Usuario/PostLoginUser")
+    Call<Response_Request_Login> postLoginUser(@Body Request_Login body);
 /*
     @Headers({
             "Content-Type: application/json",

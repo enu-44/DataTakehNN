@@ -8,6 +8,7 @@ import com.datatakehnn.models.departmentos_model.Departamento;
 import com.datatakehnn.models.departmentos_model.Departamento_Table;
 import com.datatakehnn.models.empresa_model.Empresa;
 import com.datatakehnn.models.empresa_model.Empresa_Table;
+import com.datatakehnn.models.master.Device_Master;
 import com.datatakehnn.models.proyectos_model.Proyecto;
 import com.datatakehnn.models.tipo_usuario_model.Tipo_Usuario;
 import com.datatakehnn.models.usuario_model.Usuario;
@@ -215,6 +216,34 @@ public class UsuarioController {
                 .where(Departamento_Table.Departamento_Id.eq(departamento_id)).querySingle();
         return departamento;
     }
+
+
+
+
+    //Device Master
+    public Device_Master registerUpdateDevice(Device_Master device_masterNew) {
+        Device_Master device_master1 = new Device_Master();
+        device_master1.setId_Device_Master(device_masterNew.getId_Device_Master());
+        device_master1.setImei(device_masterNew.getImei());
+        device_master1.setPhone_Type_Device(device_masterNew.getPhone_Type_Device());
+        device_master1.setAndroid_Id(device_masterNew.getAndroid_Id());
+        device_master1.setSoftware_Version(device_masterNew.getSoftware_Version());
+        device_master1.setLocal_Ip_Address(device_masterNew.getLocal_Ip_Address());
+        device_master1.setAndroid_Version(device_masterNew.getAndroid_Version());
+        device_master1.setMacAddr(device_masterNew.getMacAddr());
+        device_master1.setDevice_Name(device_masterNew.getDevice_Name());
+        device_master1.setDireccion_Ip(device_masterNew.getDireccion_Ip());
+        device_master1.setEstado_Device(device_masterNew.isEstado_Device());
+
+        device_master1.save();
+        return device_master1;
+    }
+
+    public Device_Master getFirstDeveiceMaster() {
+        Device_Master device_master = new Select().from(Device_Master.class).querySingle();
+        return device_master;
+    }
+
 
 
 }

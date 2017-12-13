@@ -73,6 +73,11 @@ public class Request_Post_Data_Sync {
     @SerializedName("ReferenciaLocalizacion")
     public String ReferenciaLocalizacion;
 
+    @SerializedName("Imei_Device")
+    public String Imei_Device;
+
+    @SerializedName("Token_Elemento")
+    public String Token_Elemento;
 
 
     @SerializedName("Cables")
@@ -116,7 +121,9 @@ public class Request_Post_Data_Sync {
         Fotos = fotos;
     }*/
 
-    public Request_Post_Data_Sync(long elemento_Id, String codigoApoyo, long numeroApoyo, String fechaLevantamiento, String horaInicio, String horaFin, String resistenciaMecanica, long retenidas, double alturaDisponible, long usuario_Id, long estado_id, long longitud_Elemento_Id, long material_Id, long proyecto_Id, long nivel_Tension_Id, long ciudad_Id, String coordenadas, double latitud, double longitud, String direccion, String direccionAproximadaGps, String barrio, String localidad, String sector, String referenciaLocalizacion, List<Elemento_Cable> cables, List<Equipo_Elemento> equipos, List<Perdida> perdidas, List<Novedad_Request> novedades, List<Foto_Request> fotos) {
+
+
+    public Request_Post_Data_Sync(long elemento_Id, String codigoApoyo, long numeroApoyo, String fechaLevantamiento, String horaInicio, String horaFin, String resistenciaMecanica, long retenidas, double alturaDisponible, long usuario_Id, long estado_id, long longitud_Elemento_Id, long material_Id, long proyecto_Id, long nivel_Tension_Id, long ciudad_Id, String coordenadas, double latitud, double longitud, String direccion, String direccionAproximadaGps, String barrio, String localidad, String sector, String referenciaLocalizacion, String imei_Device, String token_Elemento, List<Elemento_Cable> cables, List<Equipo_Elemento> equipos, List<Perdida> perdidas, List<Novedad_Request> novedades, List<Foto_Request> fotos) {
         Elemento_Id = elemento_Id;
         CodigoApoyo = codigoApoyo;
         NumeroApoyo = numeroApoyo;
@@ -142,6 +149,8 @@ public class Request_Post_Data_Sync {
         Localidad = localidad;
         Sector = sector;
         ReferenciaLocalizacion = referenciaLocalizacion;
+        Imei_Device = imei_Device;
+        Token_Elemento = token_Elemento;
         Cables = cables;
         Equipos = equipos;
         Perdidas = perdidas;
@@ -149,7 +158,8 @@ public class Request_Post_Data_Sync {
         Fotos = fotos;
     }
 
-    //Methods
+
+//Methods
 
 
     public long getElemento_Id() {
@@ -350,6 +360,23 @@ public class Request_Post_Data_Sync {
 
     public void setReferenciaLocalizacion(String referenciaLocalizacion) {
         ReferenciaLocalizacion = referenciaLocalizacion;
+    }
+
+    public String getImei_Device() {
+        return Imei_Device;
+    }
+
+    public void setImei_Device(String imei_Device) {
+        Imei_Device = imei_Device;
+    }
+
+
+    public String getToken_Elemento() {
+        return Token_Elemento;
+    }
+
+    public void setToken_Elemento(String token_Elemento) {
+        Token_Elemento = token_Elemento;
     }
 
     public List<Elemento_Cable> getCables() {

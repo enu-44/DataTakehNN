@@ -75,6 +75,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -178,8 +179,8 @@ public class PosteActivity extends AppCompatActivity {
     Double Altura_Disponible;
     boolean Is_Finished=false;
     boolean Is_Sync=false;
-
-
+    String Token_Elemento;
+    String Imei_Device;
 
 
     //Accion
@@ -299,6 +300,8 @@ public class PosteActivity extends AppCompatActivity {
 
             Is_Finished=elementoUpdate.isIs_Finished();
             Is_Sync=elementoUpdate.isIs_Sync();
+            Token_Elemento= elementoUpdate.getToken_Elemento();
+            Imei_Device= elementoUpdate.getImei_Device();
 
         }
     }
@@ -546,6 +549,7 @@ public class PosteActivity extends AppCompatActivity {
     //Register
     public void registerElemento() {
         //TODO Registrar el poste
+
         Elemento elemento = new Elemento();
         long elemento_id = 0;
         if (ACCION_ADD) {
@@ -556,6 +560,11 @@ public class PosteActivity extends AppCompatActivity {
             } else {
                 elemento_id = elemento.getElemento_Id() + 1;
             }
+
+            Token_Elemento = UUID.randomUUID().toString()+"-"+fecha+"-"+hora;
+            Imei_Device=usuarioController.getFirstDeveiceMaster().getImei();
+
+
         } else if (ACCION_UPDATE) {
             elemento_id = Elemento_Id;
             elemento = elementoController.getElementoById(elemento_id);
@@ -583,6 +592,7 @@ public class PosteActivity extends AppCompatActivity {
         if (ACCION_ADD) {
             elemento.setEstado_Id(Estado_Id);
         }
+
         elemento.setRetenidas(Cantidad_Retenidas);
         elemento.setNivel_Tension_Elemento_Id(Nivel_Tension_Elemento_Id);
         elemento.setAltura_Disponible(Altura_Disponible);
@@ -600,7 +610,8 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setNombre_Ciudad(usuario.getNombre_Ciudad());
         elemento.setNombre_Departamento(usuario.getNombre_Departamento());
         elemento.setProyecto_Id(usuario.getProyecto_Id());
-
+        elemento.setImei_Device(Imei_Device);
+        elemento.setToken_Elemento(Token_Elemento);
         elemento.setIs_Finished(Is_Finished);
         elementoController.register(elemento);
         //Snackbar.make(container, "Poste registrado", Snackbar.LENGTH_SHORT).show();

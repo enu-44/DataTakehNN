@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -102,13 +104,19 @@
             android:parentActivityName=".activities.menu.MainMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MiTema.NoActionBar" />
+        <activity
+            android:name=".activities.configuration.SettingsActivity"
+            android:configChanges="screenSize|orientation"
+            android:parentActivityName=".activities.menu.MainMenuActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MiTema.NoActionBar" />
 
         <activity
             android:configChanges="screenSize|orientation"
             android:parentActivityName=".activities.menu.MainMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MiTema.NoActionBar"
-            android:name=".activities.configuration.SettingsActivity"></activity>
+            android:name=".activities.master.DeviceMasterActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

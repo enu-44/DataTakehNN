@@ -29,6 +29,7 @@ import com.datatakehnn.activities.ciudad.CiudadActivity;
 import com.datatakehnn.activities.configuration.SettingsActivity;
 import com.datatakehnn.activities.fotos.CamaraActivity;
 import com.datatakehnn.activities.login.LoginActivity;
+import com.datatakehnn.activities.master.DeviceMasterActivity;
 import com.datatakehnn.activities.novedad.NovedadActivity;
 import com.datatakehnn.activities.poste.PosteActivity;
 import com.datatakehnn.activities.poste.lista_postes_usuario.Poste_Usuario_Activity;
@@ -146,6 +147,10 @@ public class MainMenuActivity extends AppCompatActivity  implements NavigationVi
                     .putExtra("FROM_MENU",true)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish();
+        }else if(id == R.id.nav_device){
+
+            Intent i = new Intent(this, DeviceMasterActivity.class);
+            startActivity(i);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

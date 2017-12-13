@@ -287,13 +287,14 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
                     "",
                     "",
                     elemento.getReferencia_Localizacion(),
+                    elemento.getImei_Device(),
+                    elemento.getToken_Elemento(),
                     Cables,
                     Equipos,
                     Perdidas,
                     Novedades,
                     Fotos
             );
-
 
             postDataSyncApiService.postDataAsync(this,request_post_data_sync);
 

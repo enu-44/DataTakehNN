@@ -2,6 +2,7 @@ package com.datatakehnn.models.usuario_model;
 
 import com.datatakehnn.config.DataSource;
 import com.datatakehnn.models.empresa_model.Empresa;
+import com.datatakehnn.models.master.Device_Master;
 import com.datatakehnn.models.proyectos_model.Proyecto;
 import com.datatakehnn.models.tipo_usuario_model.Tipo_Usuario;
 import com.google.gson.JsonObject;
@@ -81,6 +82,7 @@ public class Usuario extends BaseModel {
     public String Nombre_Departamento;
 
 
+
     ///Contructor
 
 
@@ -116,6 +118,10 @@ public class Usuario extends BaseModel {
     //Empresa
     @SerializedName("Empresa")
     public Empresa empresa;
+
+    //Empresa
+    @SerializedName("Dispositivo")
+    public Device_Master device_master;
 
     //Proyectos
     @SerializedName("Proyectos")
@@ -270,6 +276,17 @@ public class Usuario extends BaseModel {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
+
+    //Dispositivo
+
+    public Device_Master getDevice_master() {
+        return device_master;
+    }
+
+    public void setDevice_master(Device_Master device_master) {
+        this.device_master = device_master;
+    }
+
 
     //Proyectos
 

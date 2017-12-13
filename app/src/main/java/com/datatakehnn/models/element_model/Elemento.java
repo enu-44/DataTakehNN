@@ -104,6 +104,11 @@ public class Elemento extends BaseModel implements Parcelable {
     @Column
     public boolean Is_Finished; //registro de informacion del poste completa(true)
 
+    @Column
+    public String Imei_Device;
+
+    @Column
+    public String Token_Elemento;
 
     ///Contructor
 
@@ -366,6 +371,22 @@ public class Elemento extends BaseModel implements Parcelable {
         Is_Finished = is_Finished;
     }
 
+    public String getImei_Device() {
+        return Imei_Device;
+    }
+
+    public void setImei_Device(String imei_Device) {
+        Imei_Device = imei_Device;
+    }
+
+    public String getToken_Elemento() {
+        return Token_Elemento;
+    }
+
+    public void setToken_Elemento(String token_Elemento) {
+        Token_Elemento = token_Elemento;
+    }
+
     protected Elemento(Parcel in) {
         Elemento_Id = in.readLong();
         Usuario_Id = in.readLong();
@@ -398,6 +419,8 @@ public class Elemento extends BaseModel implements Parcelable {
         Departamento_Id = in.readLong();
         Nombre_Departamento = in.readString();
         Is_Finished = in.readByte() != 0x00;
+        Imei_Device = in.readString();
+        Token_Elemento = in.readString();
     }
 
     @Override
@@ -438,6 +461,8 @@ public class Elemento extends BaseModel implements Parcelable {
         dest.writeLong(Departamento_Id);
         dest.writeString(Nombre_Departamento);
         dest.writeByte((byte) (Is_Finished ? 0x01 : 0x00));
+        dest.writeString(Imei_Device);
+        dest.writeString(Token_Elemento);
     }
 
     @SuppressWarnings("unused")
