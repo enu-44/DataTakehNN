@@ -185,6 +185,10 @@ public class CoordsService extends Service implements LocationListener {
 
     //methods
 
+    public static Location serviceLocalizacionRun() {
+        return location;
+    }
+
     public static boolean isServiceLocalizacionRun() {
         return serviceLocalizacionRun;
     }

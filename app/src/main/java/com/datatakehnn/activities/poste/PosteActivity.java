@@ -673,6 +673,14 @@ public class PosteActivity extends AppCompatActivity {
 
             this.coordsService = new CoordsService(this);
             Toast.makeText(this, "Iniciando Servicio de Ubicacion", Toast.LENGTH_LONG).show();
+        }else{
+            //Toast.makeText(this, "Corriendo Servicio de Ubicacion", Toast.LENGTH_LONG).show();
+
+            Location localizacion=((SyncActivity) syncActivity).coordsService.serviceLocalizacionRun();
+
+            location.setLatitude(localizacion.getLatitude());
+            location.setLongitude(localizacion.getLongitude());
+            tvCoords.setText(String.valueOf(location.getLatitude()) + " , " + String.valueOf(location.getLongitude()));
         }
 
 

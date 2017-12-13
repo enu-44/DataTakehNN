@@ -16,6 +16,7 @@
     <application
         android:name=".services.aplication.DataTakeApp"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/logo_datatakeh"
         android:label="@string/app_name"
