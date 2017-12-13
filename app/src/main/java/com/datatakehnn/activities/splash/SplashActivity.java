@@ -55,7 +55,7 @@ public class SplashActivity extends AppCompatActivity {
             timer.start();
 
         }else{
-            Intent i = new Intent(this, SplashActivity.class);
+            Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
             finish();
         }
