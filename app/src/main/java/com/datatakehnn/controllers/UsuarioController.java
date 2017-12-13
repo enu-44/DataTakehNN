@@ -234,7 +234,6 @@ public class UsuarioController {
         device_master1.setDevice_Name(device_masterNew.getDevice_Name());
         device_master1.setDireccion_Ip(device_masterNew.getDireccion_Ip());
         device_master1.setEstado_Device(device_masterNew.isEstado_Device());
-
         device_master1.save();
         return device_master1;
     }
