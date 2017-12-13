@@ -94,8 +94,8 @@ public class CoordsService extends Service implements LocationListener {
             return;
         }
 
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, this);
 
         /*
         locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER

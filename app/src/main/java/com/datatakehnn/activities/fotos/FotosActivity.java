@@ -20,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -200,7 +201,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 if (i == 1) {
                     try {
                         if (item.getImage() != null) {
-                            yaTomoFoto1=true;
+                            yaTomoFoto1 = true;
                             byte[] foto = item.getImage().getBlob();
                             Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
                             ivFoto1.setImageBitmap(bitmap);
@@ -214,7 +215,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                 } else {
                     try {
                         if (item.getImage() != null) {
-                            yaTomoFoto2=true;
+                            yaTomoFoto2 = true;
                             byte[] foto = item.getImage().getBlob();
                             Bitmap bitmap = BitmapFactory.decodeByteArray(foto, 0, foto.length);
                             ivFoto2.setImageBitmap(bitmap);
@@ -373,11 +374,11 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
 
             //CALL THIS METHOD EVER
             //magicalCamera.setResizePhoto(100);
-            if(data==null ){
-              //  Snackbar.make(container, "data Null", Snackbar.LENGTH_SHORT).show();
+            if (data == null) {
+                //  Snackbar.make(container, "data Null", Snackbar.LENGTH_SHORT).show();
             }
 
-            if(magicalCamera==null ){
+            if (magicalCamera == null) {
                 Snackbar.make(container, "magicalCamera Null", Snackbar.LENGTH_SHORT).show();
                 return;
             }
@@ -411,6 +412,9 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                         .setQuality(100)
                         .compressToBitmap(file);
 
+                compressedImage = getEncoded64ImageStringFromBitmap(compressedImage);
+
+
                 if (tomarFoto1 == true) {
                     path = magicalCamera.savePhotoInMemoryDevice(compressedImage, "IMG_POSTE_" + "Lat:" + latitud + "_Lng:" + longitud + "_" + edtDescripcionFoto1.getText().toString(), "DataTakeCamara/" + Elemento_Id, MagicalCamera.JPEG, false);
                     registerFoto1(compressedImage, path);
@@ -442,6 +446,21 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         }
 
     }
+
+
+    public Bitmap getEncoded64ImageStringFromBitmap(Bitmap bitmapCompressed) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmapCompressed.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+        byte[] byteFormat = stream.toByteArray();
+        // let this be your byte array
+        Bitmap newBitmap = BitmapFactory.decodeByteArray(byteFormat, 0, byteFormat.length);
+        return newBitmap;
+        // get the base 64 string
+       /* String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+        //String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return imgString;*/
+    }
+
 
     private void updateFotoNovedad(Bitmap compressedImage, String path) {
         String fecha = obtenerFecha();
@@ -551,7 +570,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                     e.getMessage().toString();
                 }*/
 
-                if(ACCION_UPDATE){
+                if (ACCION_UPDATE) {
                     Elemento elemento = elementoController.getElementoById(Elemento_Id);
                     String horaFin = obtenerHora();
                     elemento.setHora_Fin(horaFin);
@@ -559,7 +578,7 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                     elementoController.update(elemento);
                     onReturnActivity();
 
-                }else{
+                } else {
 
                     Elemento elemento = elementoController.getElementoById(Elemento_Id);
                     String horaFin = obtenerHora();
@@ -570,7 +589,6 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                     finish();
                 }
-
 
 
             }
@@ -646,10 +664,10 @@ public class FotosActivity extends AppCompatActivity implements OnItemClickListe
         if (ACCION_UPDATE) {
 
             Elemento elemento = elementoController.getElementoById(Elemento_Id);
-            if(!elemento.isIs_Finished()){
+            if (!elemento.isIs_Finished()) {
                 MenuItem item = menu.findItem(R.id.action_done);
                 item.setVisible(true);
-            }else{
+            } else {
                 MenuItem item = menu.findItem(R.id.action_done);
                 item.setVisible(false);
             }
