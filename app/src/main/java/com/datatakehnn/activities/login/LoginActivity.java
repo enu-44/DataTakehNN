@@ -297,6 +297,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
                 } else {
                     doPermissionGrantedStuffs();
                 }
+            } else {
+                doPermissionGrantedStuffs();
             }
         }
     }
@@ -338,7 +340,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
                     i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                     getApplicationContext().startActivity(i);
 
-                } */else {
+                } */ else {
                     Toast.makeText(LoginActivity.this,
                             "Permiso denegado", Toast.LENGTH_LONG).show();
 
