@@ -47,6 +47,13 @@ public class Ciudad_Empresa extends BaseModel {
     @Column
     public String Nit;
 
+    @SerializedName("Is_Operadora")
+    @Column
+    public boolean Is_Operadora;
+
+
+
+
     //Constructor
     public Ciudad_Empresa() {
 
@@ -116,6 +123,15 @@ public class Ciudad_Empresa extends BaseModel {
 
     public void setNit(String nit) {
         Nit = nit;
+    }
+
+
+    public boolean getIs_Operadora() {
+        return Is_Operadora;
+    }
+
+    public void setIs_Operadora(boolean is_Operadora) {
+        Is_Operadora = is_Operadora;
     }
 
     @Override

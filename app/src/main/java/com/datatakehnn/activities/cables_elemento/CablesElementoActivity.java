@@ -294,8 +294,10 @@ public class CablesElementoActivity extends AppCompatActivity implements IDataAs
 
         Usuario userLogued= usuarioController.getLoggedUser();
 
+        List<Empresa>lis= sincronizacionGetInformacionController.getListEmpresas();
+
         //Listas
-        empresaList = sincronizacionGetInformacionController.getListEmpresasByCiudad(userLogued.getCiudad_Id());
+        empresaList = sincronizacionGetInformacionController.getListEmpresasByCiudad(userLogued.getCiudad_Id(),true);
         tipo_cables = sincronizacionGetInformacionController.getListTipo_Cable();
 
         //Spinner

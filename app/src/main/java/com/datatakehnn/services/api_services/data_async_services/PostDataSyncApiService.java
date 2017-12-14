@@ -61,8 +61,8 @@ public class PostDataSyncApiService {
                         response_request_data_sync.setResult(response.body().getResult());
                         IPostDataSync.processFinishPostDataAsync(response_request_data_sync);
                     }else{
-                        response_request_data_sync.setSuccess(false);
-                        response_request_data_sync.setMessage("Nulo");
+                        response_request_data_sync.setSuccess(response.body().isSuccess());
+                        response_request_data_sync.setMessage(response.body().getMessage());
                         response_request_data_sync.setResult(response.body().getResult());
                         IPostDataSync.processFinishPostDataAsync(response_request_data_sync);
                     }

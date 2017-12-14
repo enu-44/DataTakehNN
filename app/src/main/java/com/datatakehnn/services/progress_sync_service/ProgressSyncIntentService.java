@@ -132,7 +132,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
 
 
         Usuario usuarioLogued= usuarioController.getLoggedUser();
-        FilesAllCount= elementoController.getListElementoSync(false,usuarioLogued.getUsuario_Id(),true).size();
+        FilesAllCount= elementoController.getListElementoSync(true,usuarioLogued.getUsuario_Id(),true).size();
 
         //register Progress
         // Poner en primer plano
@@ -168,7 +168,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
     public void verificateDataSync(){
         if(checkConnection()){
             Usuario usuarioLogued= usuarioController.getLoggedUser();
-            Elemento elemento= elementoController.getElementoByIdAndBySync(false,usuarioLogued.getUsuario_Id(),true);
+            Elemento elemento= elementoController.getElementoByIdAndBySync(true,usuarioLogued.getUsuario_Id(),true);
             if(elemento!=null){
                 syncData(elemento);
             }else{
@@ -236,6 +236,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
             foto_request.setDescripcion(foto.getDescripcion());
             foto_request.setFechaCreacion(foto.getFecha_Creacion());
             foto_request.setHora(foto.getHora());
+            foto_request.setRuta("");
             foto_request.setTitulo(foto.getDescripcion());
             if(foto.getImage()!=null){
                 //foto_request.setImageArray(foto.getImage().getBlob());
@@ -431,7 +432,7 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
 
 
         Elemento elemento = elementoController.getElementoById(response.getResult().getElemento_Id());
-        elemento.setIs_Sync(true);
+        elemento.setIs_Sync(false);
         elementoController.update(elemento);
 
 
@@ -451,5 +452,4 @@ public class ProgressSyncIntentService extends IntentService implements IPostDat
 
     }
     //endregion
-
 }

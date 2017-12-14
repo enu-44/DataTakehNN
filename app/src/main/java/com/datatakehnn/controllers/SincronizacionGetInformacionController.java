@@ -322,6 +322,7 @@ public class SincronizacionGetInformacionController {
                 ciudad_empresa.setNombre_Ciudad(items.getNombre_Ciudad());
                 ciudad_empresa.setNombre_Empresa(items.getNombre_Empresa());
                 ciudad_empresa.setTelefono(items.getTelefono());
+                ciudad_empresa.setIs_Operadora(items.getIs_Operadora());
                 ciudad_empresa.save();
             }
 
@@ -378,8 +379,11 @@ public class SincronizacionGetInformacionController {
         return lis;
     }
 
-    public List<Ciudad_Empresa> getListEmpresasByCiudad(long Ciudad_Id) {
-        List<Ciudad_Empresa> lis = SQLite.select().from(Ciudad_Empresa.class).where(Ciudad_Empresa_Table.Ciudad_Id.eq(Ciudad_Id)).queryList();
+    public List<Ciudad_Empresa> getListEmpresasByCiudad(long Ciudad_Id, boolean is_Operadora) {
+        List<Ciudad_Empresa> lis = SQLite.select().from(Ciudad_Empresa.class)
+                .where(Ciudad_Empresa_Table.Ciudad_Id.eq(Ciudad_Id))
+                .and(Ciudad_Empresa_Table.Is_Operadora.eq(is_Operadora))
+                .queryList();
         return lis;
     }
 

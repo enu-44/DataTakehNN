@@ -260,7 +260,7 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
         Usuario userLogued= usuarioController.getLoggedUser();
 
         //Listas
-        empresaList = sincronizacionGetInformacionController.getListEmpresasByCiudad(userLogued.getCiudad_Id());
+        empresaList = sincronizacionGetInformacionController.getListEmpresasByCiudad(userLogued.getCiudad_Id(), true);
         tipo_equipos = sincronizacionGetInformacionController.getListTipoEquipo();
 
         //Spinner

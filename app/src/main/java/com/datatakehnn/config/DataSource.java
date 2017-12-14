@@ -11,5 +11,5 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 @Database(name = DataSource.NAME, version = DataSource.VERSION)
 public class DataSource extends BaseModel {
     public static final String NAME = "db_datatake";
-    public static final int VERSION = 10;
+    public static final int VERSION = 11;
 }
