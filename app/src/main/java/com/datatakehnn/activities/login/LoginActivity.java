@@ -170,27 +170,27 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
             if (checkConnection()) {
                 progressBar.setVisibility(View.VISIBLE);
                 ///Verificate en servicio rest
-                Usuario user = usuarioController.getUsuario(usuario, password);
+                /*Usuario user = usuarioController.getUsuario(usuario, password);
                 if (user != null) {
                     loginSqlite(edtUsuario.getText().toString(), edtContrasena.getText().toString());
-                } else {
+                } else { */
 
-                    Request_Login request_login = new Request_Login(
-                            usuario,
-                            password,
-                            Imei,
-                            Phone_Type_Device,
-                            Android_Id,
-                            Software_Version,
-                            Local_Ip_Address,
-                            Android_Version,
-                            MacAddr,
-                            Device_Name,
-                            Direccion_Ip,
-                            Estado
-                    );
-                    loginApiService.postLoginAsync(this, request_login);
-                }
+                Request_Login request_login = new Request_Login(
+                        usuario,
+                        password,
+                        Imei,
+                        Phone_Type_Device,
+                        Android_Id,
+                        Software_Version,
+                        Local_Ip_Address,
+                        Android_Version,
+                        MacAddr,
+                        Device_Name,
+                        Direccion_Ip,
+                        Estado
+                );
+                loginApiService.postLoginAsync(this, request_login);
+                // }
                 //loginSqlite(edtUsuario.getText().toString(), edtContrasena.getText().toString());
             } else {
                 loginSqlite(edtUsuario.getText().toString(), edtContrasena.getText().toString());
@@ -327,7 +327,9 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     doPermissionGrantedStuffs();
-                } /* else if ((Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(permissions[0])) ||
+                }
+
+                /* else if ((Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(permissions[0])) ||
                         (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(permissions[1]))) {
                     //Toast.makeText(MainActivity.this, "Go to Settings and Grant the permission to use this feature.", Toast.LENGTH_SHORT).show();
                     // User selected the Never Ask Again Option
@@ -340,7 +342,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
                     i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                     getApplicationContext().startActivity(i);
 
-                } */ else {
+                } */
+                else {
                     Toast.makeText(LoginActivity.this,
                             "Permiso denegado", Toast.LENGTH_LONG).show();
 
