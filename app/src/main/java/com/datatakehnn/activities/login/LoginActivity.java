@@ -220,19 +220,24 @@ public class LoginActivity extends AppCompatActivity implements ILogin, Connecti
         try {
             Usuario userFirts = new Usuario();
             userFirts = usuarioController.getFirst();
-            if (userFirts.getUsuario_Id() > 0) {
-                Response response = usuarioController.loginUsuario(Numero_Cedula, Password);
-                if (response.IsSuccess) {
-                    Usuario user = (Usuario) response.getResult();
-                    user.setRemembered(true);
-                    usuarioController.update(user);
-                    sendMenu(user);
+            if (userFirts != null) {
+                if (userFirts.getUsuario_Id() > 0) {
+                    Response response = usuarioController.loginUsuario(Numero_Cedula, Password);
+                    if (response.IsSuccess) {
+                        Usuario user = (Usuario) response.getResult();
+                        user.setRemembered(true);
+                        usuarioController.update(user);
+                        sendMenu(user);
+                    } else {
+                        showSnakBar(R.color.colorAccent, response.getMessage());
+                        progressBar.setVisibility(View.GONE);
+                    }
                 } else {
-                    showSnakBar(R.color.colorAccent, response.getMessage());
+                    showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
                     progressBar.setVisibility(View.GONE);
                 }
             } else {
-                showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
+                showSnakBar(R.color.colorAccent, getString(R.string.message_user_not_exist));
                 progressBar.setVisibility(View.GONE);
             }
         } catch (Exception ex) {

@@ -134,7 +134,7 @@ public class CoordsService extends Service implements LocationListener {
 
     @Override
     public void onProviderDisabled(String s) {
-        Toast.makeText(context,"GPS Desactivado",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context,"GPS Desactivado",Toast.LENGTH_SHORT).show();
     }
 
     public void setLocation(Location loc) {
@@ -147,6 +147,7 @@ public class CoordsService extends Service implements LocationListener {
         localizacion.setLongitud(loc.getLongitude());
         Intent retIntent = new Intent("LOCATION");
         retIntent.putExtra("localizacion", localizacion);
+        //retIntent.putExtra("initial", "" );
         context.sendBroadcast(retIntent);
      ///   Toast.makeText(context,""+String.valueOf(loc.getLatitude())+" , "+String.valueOf(loc.getLongitude()),Toast.LENGTH_SHORT).show();
         //Obtener la direccion de la calle a partir de la latitud y la longitud

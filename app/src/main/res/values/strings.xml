@@ -36,7 +36,7 @@
     <!--..............................................................................-->
 
     <string name="message_information_sync">Informacion Sincronizada</string>
-
+    <string name="message_user_not_exist">Usuario no Existe</string>
     <string name="message_not_connection">Verifique su Conexion a Internet</string>    <!--Connection-->
     <string name="message_connection">Conectado a Internet</string>
     <string name="message_novedad">Novedad Registrada</string> <!--Novedad-->

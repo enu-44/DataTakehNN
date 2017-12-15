@@ -93,7 +93,7 @@ public class CablesElementoActivity extends AppCompatActivity implements IDataAs
     List<Tipo_Cable> tipo_cables = new ArrayList<>();
     List<Detalle_Tipo_Cable> detalle_tipo_cables = new ArrayList<>();
     //Variables Gloabals
-    private boolean SOBRE_REDES_BT = true;
+    private boolean SOBRE_REDES_BT = false;
     private boolean TIENE_MARQUILLA = true;
     private long Detalle_Tipo_Cable_Id;
     private long Empresa_Id;

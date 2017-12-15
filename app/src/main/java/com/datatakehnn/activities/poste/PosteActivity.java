@@ -177,8 +177,8 @@ public class PosteActivity extends AppCompatActivity {
     Date dateFecha;
     String hora;
     Double Altura_Disponible;
-    boolean Is_Finished=false;
-    boolean Is_Sync=false;
+    boolean Is_Finished = false;
+    boolean Is_Sync = false;
     String Token_Elemento;
     String Imei_Device;
 
@@ -298,10 +298,10 @@ public class PosteActivity extends AppCompatActivity {
             edtAlturaDisponible.setText(String.valueOf(altura_disponible));
 
 
-            Is_Finished=elementoUpdate.isIs_Finished();
-            Is_Sync=elementoUpdate.isIs_Sync();
-            Token_Elemento= elementoUpdate.getToken_Elemento();
-            Imei_Device= elementoUpdate.getImei_Device();
+            Is_Finished = elementoUpdate.isIs_Finished();
+            Is_Sync = elementoUpdate.isIs_Sync();
+            Token_Elemento = elementoUpdate.getToken_Elemento();
+            Imei_Device = elementoUpdate.getImei_Device();
 
         }
     }
@@ -561,8 +561,8 @@ public class PosteActivity extends AppCompatActivity {
                 elemento_id = elemento.getElemento_Id() + 1;
             }
 
-            Token_Elemento = UUID.randomUUID().toString()+"-"+fecha+"-"+hora;
-            Imei_Device=usuarioController.getFirstDeveiceMaster().getImei();
+            Token_Elemento = UUID.randomUUID().toString() + "-" + fecha + "-" + hora;
+            Imei_Device = usuarioController.getFirstDeveiceMaster().getImei();
 
 
         } else if (ACCION_UPDATE) {
@@ -583,7 +583,7 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setMaterial_Id(Material_Id);
         elemento.setLongitud_Elemento_Id(Longitud_Elemento_Id);
 
-        if(edtResistenciaMecanica.getText().toString().equals("")){
+        if (edtResistenciaMecanica.getText().toString().equals("")) {
             edtResistenciaMecanica.setText("Sin resistencia mecanica");
         }
 
@@ -678,16 +678,17 @@ public class PosteActivity extends AppCompatActivity {
 
             if (((SyncActivity) syncActivity).coordsService != null) {
                 ((SyncActivity) syncActivity).coordsService.closeService();
-                Toast.makeText(this, "Cerrar Servicio", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Cerrar Servicio", Toast.LENGTH_LONG).show();
             }
 
 
             this.coordsService = new CoordsService(this);
-            Toast.makeText(this, "Iniciando Servicio de Ubicacion", Toast.LENGTH_LONG).show();
-        }else{
+            //Toast.makeText(this, "Iniciando Servicio de Ubicacion", Toast.LENGTH_LONG).show();
+            tvCoords.setText("Iniciando Servicio de Ubicacion");
+        } else {
             //Toast.makeText(this, "Corriendo Servicio de Ubicacion", Toast.LENGTH_LONG).show();
 
-            Location localizacion=((SyncActivity) syncActivity).coordsService.serviceLocalizacionRun();
+            Location localizacion = ((SyncActivity) syncActivity).coordsService.serviceLocalizacionRun();
 
             location.setLatitude(localizacion.getLatitude());
             location.setLongitude(localizacion.getLongitude());
@@ -879,7 +880,6 @@ public class PosteActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         registerReceiver(mNotificationReceiver, new IntentFilter("LOCATION"));
-
 
 
     }
