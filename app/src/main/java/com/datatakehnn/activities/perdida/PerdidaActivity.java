@@ -376,7 +376,10 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
         long tipo_perdida_id = perdida.getTipo_Perdida_Id();
         String nombre_tipo_perdida = perdidaController.getTipoPerdida(tipo_perdida_id).getNombre();
         Novedad novedad = novedadController.getNovedadByTipoNombreAndElementoId(nombre_tipo_perdida, Elemento_Id);
-        Response responseNovedad = novedadController.DeleteNovedadById(novedad.getNovedad_Id());
+
+        if(novedad!=null){
+           novedadController.DeleteNovedadById(novedad.getNovedad_Id());
+        }
         onMessageOk(R.color.orange, getString(R.string.message_delete_global));
         loadListPerdidas();
     }
