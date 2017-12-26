@@ -4,26 +4,14 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondo_main_menu_final"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <RelativeLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageViewLogo"
-            android:layout_width="200dp"
-            android:layout_height="80dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:contentDescription="@null"
-            app:srcCompat="@drawable/logo" />
-    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:background="@drawable/fondo_mapa_main_menu"
+        android:layout_height="match_parent"
+        android:layout_marginTop="90dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -42,17 +30,17 @@
 
                 <ImageView
                     android:id="@+id/imgAddElement"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:src="@drawable/ic_boton_poste_add" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textStyle="bold"
                     android:text="Nuevo"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
             </LinearLayout>
 
 
@@ -65,8 +53,8 @@
 
                 <ImageView
                     android:id="@+id/imgListElement"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_boton_poste_list" />
 
@@ -74,46 +62,53 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textStyle="bold"
                     android:text="Registrados"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
             </LinearLayout>
+
+
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:gravity="center|top"
                 android:layout_weight="0.5"
+                android:gravity="center|top"
                 android:orientation="vertical">
+
                 <ImageView
                     android:id="@+id/imgLogout"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:src="@drawable/ic_boton_logout" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Salir"
-                    android:textStyle="bold"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/imgCiudad"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_boton_cuidad" />
 
@@ -121,12 +116,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textStyle="bold"
                     android:text="Ciudad"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
             </LinearLayout>
 
 
         </LinearLayout>
+
     </LinearLayout>
+
+
 </RelativeLayout>
