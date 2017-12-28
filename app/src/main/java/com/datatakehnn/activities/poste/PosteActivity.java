@@ -107,12 +107,17 @@ public class PosteActivity extends AppCompatActivity {
     RadioButton radioButtonNoPlaca;
     @BindView(R.id.radioButtonSiPlaca)
     RadioButton radioButtonSiPlaca;
+    /*
     @BindView(R.id.edtResistenciaMecanica)
-    EditText edtResistenciaMecanica;
+    EditText edtResistenciaMecanica;*/
+    @BindView(R.id.spinnerResistenciaMecanica)
+    MaterialBetterSpinner spinnerResistenciaMecanica;
     @BindView(R.id.textInputLayoutCodigoApoyo)
     TextInputLayout textInputLayoutCodigoApoyo;
+
+    /*
     @BindView(R.id.textInputLayoutResistenciaMecanica)
-    TextInputLayout textInputLayoutResistenciaMecanica;
+    TextInputLayout textInputLayoutResistenciaMecanica;*/
 
     @BindView(R.id.spinnerMaterial)
     MaterialBetterSpinner spinnerMaterial;
@@ -165,6 +170,8 @@ public class PosteActivity extends AppCompatActivity {
     List<Cantidad_Retenidas> cantidad_retenidas = new ArrayList<>();
     List<Tipo_Direccion> tipo_direccions = new ArrayList<>();
     List<Detalle_Tipo_Direccion> detalle_tipo_direccions = new ArrayList<>();
+    List<String> resistenciaMecanicaList = new ArrayList<>();
+
 
     //Variables Globals
     long Material_Id;
@@ -269,11 +276,15 @@ public class PosteActivity extends AppCompatActivity {
             tvPlaca.setVisibility(View.GONE);
             radioGroupPlaca.setVisibility(View.GONE);
             if (!elementoUpdate.getResistencia_Mecanica().equals("")) {
-                edtResistenciaMecanica.setText(elementoUpdate.getResistencia_Mecanica());
-                edtResistenciaMecanica.setEnabled(true);
+                /*edtResistenciaMecanica.setText(elementoUpdate.getResistencia_Mecanica());
+                edtResistenciaMecanica.setEnabled(true);*/
+                spinnerResistenciaMecanica.setText(elementoUpdate.getResistencia_Mecanica());
+                spinnerResistenciaMecanica.setEnabled(true);
             } else {
-                edtResistenciaMecanica.setVisibility(View.GONE);
-                edtResistenciaMecanica.setEnabled(false);
+                /*edtResistenciaMecanica.setVisibility(View.GONE);
+                edtResistenciaMecanica.setEnabled(false);*/
+                spinnerResistenciaMecanica.setVisibility(View.GONE);
+                spinnerResistenciaMecanica.setEnabled(false);
                 tvPlaca.setVisibility(View.VISIBLE);
                 tvPlaca.setText("No tiene Resistencia Mecánica");
             }
@@ -433,6 +444,20 @@ public class PosteActivity extends AppCompatActivity {
             }
         });
 
+        //Resistencia Mecánica
+        String[] itemsResistenciaMecanica = {"510", "750", "1050", "1350"};
+        resistenciaMecanicaList.addAll(Arrays.asList(itemsResistenciaMecanica));
+        spinnerResistenciaMecanica.setAdapter(null);
+        ArrayAdapter<String> resistenciaMecanicaArrayAdapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, resistenciaMecanicaList);
+        spinnerResistenciaMecanica.setAdapter(resistenciaMecanicaArrayAdapter);
+        spinnerResistenciaMecanica.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+            }
+        });
+
         //Nivel de tension
         /*--------------------------------------------------------------------------------------------*/
         spinnerNivelTension.setAdapter(null);
@@ -515,9 +540,13 @@ public class PosteActivity extends AppCompatActivity {
             spinnerLongitudPoste.setError(getString(R.string.error_field_required));
             focusView = spinnerLongitudPoste;
             cancel = true;
-        } else if (edtResistenciaMecanica.isEnabled() == true && edtResistenciaMecanica.getText().toString().isEmpty()) {
+        } /*else if (edtResistenciaMecanica.isEnabled() == true && edtResistenciaMecanica.getText().toString().isEmpty()) {
             edtResistenciaMecanica.setError(getString(R.string.error_field_required));
             focusView = edtResistenciaMecanica;
+            cancel = true;
+        } */ else if (spinnerResistenciaMecanica.isEnabled() == true && spinnerResistenciaMecanica.getText().toString().isEmpty()) {
+            spinnerResistenciaMecanica.setError(getString(R.string.error_field_required));
+            focusView = spinnerResistenciaMecanica;
             cancel = true;
         } else if (spinnerEstado.getText().toString().isEmpty() && spinnerEstado.isEnabled()) {
             spinnerEstado.setError(getString(R.string.error_field_required));
@@ -576,18 +605,25 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setElemento_Id(elemento_id);
         elemento.setUsuario_Id(id_usuario);
         elemento.setFecha_Levantamiento(fecha);
-        elemento.setHora_Inicio(hora);
-        elemento.setHora_Fin(hora);
+        if (ACCION_ADD) {
+            elemento.setHora_Inicio(hora);
+            elemento.setHora_Fin(hora);
+        }
         elemento.setCodigo_Apoyo(edtCodigoApoyo.getText().toString());
         elemento.setNumero_Apoyo(elemento_id);
         elemento.setMaterial_Id(Material_Id);
         elemento.setLongitud_Elemento_Id(Longitud_Elemento_Id);
 
+        /*
         if (edtResistenciaMecanica.getText().toString().equals("")) {
             edtResistenciaMecanica.setText("Sin resistencia mecanica");
+        }*/
+        if (spinnerResistenciaMecanica.getText().toString().equals("")) {
+            spinnerResistenciaMecanica.setText("Sin resistencia mecanica");
         }
 
-        elemento.setResistencia_Mecanica(edtResistenciaMecanica.getText().toString());
+
+        elemento.setResistencia_Mecanica(spinnerResistenciaMecanica.getText().toString());
 
         if (ACCION_ADD) {
             elemento.setEstado_Id(Estado_Id);
@@ -735,15 +771,19 @@ public class PosteActivity extends AppCompatActivity {
                 Novedad novedad = novedadController.getNovedadByTipoAndElementoId(id_tipo_novedad,)*/
                 break;
             case R.id.radioButtonNoPlaca:
-                edtResistenciaMecanica.setEnabled(false);
+                //edtResistenciaMecanica.setEnabled(false);
+                spinnerResistenciaMecanica.setEnabled(false);
+                spinnerResistenciaMecanica.setVisibility(View.GONE);
                 Intent j = new Intent(this, NovedadActivity.class);
                 j.putExtra("Nombre", "Resistencia Mecanica");
                 startActivityForResult(j, 200);
-                edtResistenciaMecanica.getText().clear();
+                //edtResistenciaMecanica.getText().clear();
                 break;
             case R.id.radioButtonSiPlaca:
-                textInputLayoutResistenciaMecanica.setVisibility(View.VISIBLE);
-                edtResistenciaMecanica.setEnabled(true);
+                //textInputLayoutResistenciaMecanica.setVisibility(View.VISIBLE);
+                //edtResistenciaMecanica.setEnabled(true);
+                spinnerResistenciaMecanica.setEnabled(true);
+                spinnerResistenciaMecanica.setVisibility(View.VISIBLE);
                 getElementoId();
                 Novedad hayNovedadPlaca = novedadController.getNovedadByTipoNombreAndElementoId("Resistencia Mecanica", Elemento_Id);
                 if (hayNovedadPlaca != null) {
@@ -774,7 +814,7 @@ public class PosteActivity extends AppCompatActivity {
         }
         if ((requestCode == 200) && (resultCode == RESULT_OK)) {
             Snackbar.make(container, getString(R.string.message_novedad), Snackbar.LENGTH_SHORT).show();
-            textInputLayoutResistenciaMecanica.setVisibility(View.GONE);
+            //textInputLayoutResistenciaMecanica.setVisibility(View.GONE);
         }
         if ((requestCode == 300) && (resultCode == RESULT_OK)) {
             Snackbar.make(container, getString(R.string.message_novedad), Snackbar.LENGTH_SHORT).show();

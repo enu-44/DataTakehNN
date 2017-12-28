@@ -106,7 +106,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
     long Elemento_Id;
     long Tipo_Perdida_Id;
     String Nombre_Tipo_Perdida;
-    public boolean isPerdida = true;
+    public boolean isPerdida = false;
 
 
     @Override
@@ -247,7 +247,7 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
     }
 
     private void loadListPerdidas() {
-        edtCantidad.setText("1");
+        edtCantidad.setText("0");
         adapter.clear();
         perdidaList.clear();
         perdidaList = perdidaController.getListPerdida(Elemento_Id);
@@ -457,7 +457,8 @@ public class PerdidaActivity extends AppCompatActivity implements MainViewPerdid
 
                 //Para versiones anterios a 5.x
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    // Terminar con el método correspondiente para Android 5.x
+                    // Terminar con el método correspondiente p
+                    // ara Android 5.x+
                     onBackPressed();
                     return true;
                 }

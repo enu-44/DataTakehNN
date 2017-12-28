@@ -74,7 +74,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.5"
                     android:background="@drawable/gray_out_line"
-                    android:checkedButton="@+id/radioButtonSiPerdida"
+                    android:checkedButton="@+id/radioButtonNoPerdida"
                     android:orientation="horizontal">
 
                     <RadioButton
