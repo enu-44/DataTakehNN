@@ -25,6 +25,7 @@ public class EquipoController {
     public EquipoController() {
         _instance = this;
     }
+
     public static EquipoController getInstance(Context c) {
         if (_instance == null) {
             ourcontext = c;
@@ -34,10 +35,11 @@ public class EquipoController {
     }
 
     ////Registrar
-    public Response register(Equipo_Elemento tipo_equipo){
-        Response response= new Response();
-        try{
-            Equipo_Elemento equipo_elemento= new Equipo_Elemento();
+    public Response register(Equipo_Elemento tipo_equipo) {
+        Response response = new Response();
+        try {
+            Equipo_Elemento equipo_elemento = new Equipo_Elemento();
+            equipo_elemento.setDescripcion(tipo_equipo.getDescripcion());
             equipo_elemento.setCantidad(1);
             equipo_elemento.setTipo_Equipo_Id(tipo_equipo.getTipo_Equipo_Id());
             equipo_elemento.setConectado_Red_Electrica(tipo_equipo.isConectado_Red_Electrica());
@@ -54,22 +56,22 @@ public class EquipoController {
             response.setMessage("Ok");
             response.setResult(equipo_elemento);
             response.setSuccess(true);
-            return  response;
-        }catch (Exception ex){
+            return response;
+        } catch (Exception ex) {
             response.setMessage(ex.toString());
             response.setSuccess(false);
-            return  response;
+            return response;
         }
     }
 
     //Cables por elemento y usuario
     public List<Equipo_Elemento> getListEquipoElement(long element_Id) {
-        List<Equipo_Elemento> lisFilter= SQLite.select().from(Equipo_Elemento.class).where(Equipo_Elemento_Table.Elemento_Id.eq(element_Id)).queryList();
-        return  lisFilter;
+        List<Equipo_Elemento> lisFilter = SQLite.select().from(Equipo_Elemento.class).where(Equipo_Elemento_Table.Elemento_Id.eq(element_Id)).queryList();
+        return lisFilter;
     }
 
     public Response DeleteEquipoByElemento(long equipo_elemento_id) {
-        Response response= new Response();
+        Response response = new Response();
         ///Elemento_Cable elementoCable= new Elemento_Cable();
         SQLite.delete(Equipo_Elemento.class).where(Equipo_Elemento_Table.Equipo_Elemento_Id.eq(equipo_elemento_id)).async().execute();
         ///Elemento_Cable listee= new Select().from(Elemento_Cable.class).where(Elemento_Cable_Table.Elemento_Cable_Id.eq(elemento_cable_id)).querySingle();

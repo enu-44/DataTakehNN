@@ -22,18 +22,17 @@ import butterknife.ButterKnife;
  */
 
 
-public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElementViewHolder>
-{
+public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElementViewHolder> {
 
     public List<Equipo_Elemento> dataset;
     public OnItemClickListenerEquipo onItemClickListener;
     public Context context;
 
 
-    public AdapterEquipo(Context context,List<Equipo_Elemento> dataset, OnItemClickListenerEquipo onItemClickListener) {
+    public AdapterEquipo(Context context, List<Equipo_Elemento> dataset, OnItemClickListenerEquipo onItemClickListener) {
         this.dataset = dataset;
         this.onItemClickListener = onItemClickListener;
-        this.context= context;
+        this.context = context;
     }
 
     public void setItems(List<Equipo_Elemento> newItems) {
@@ -42,7 +41,7 @@ public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElem
 
     }
 
-    public void clear(){
+    public void clear() {
         dataset.clear();
         notifyDataSetChanged();
     }
@@ -58,24 +57,29 @@ public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElem
         Equipo_Elemento list = dataset.get(position);
         holder.txtOperador.setText(list.getNombre_Empresa());
         holder.txtTipo.setText(list.getNombre_Tipo_Equipo());
-        String conectadoRedElectrica= "";
-        if(list.isConectado_Red_Electrica()){
-            conectadoRedElectrica="SI";
-        }else{
-            conectadoRedElectrica="NO";
+        String conectadoRedElectrica = "";
+        if (list.isConectado_Red_Electrica()) {
+            conectadoRedElectrica = "SI";
+        } else {
+            conectadoRedElectrica = "NO";
         }
         holder.txtConectadoRedElectrica.setText(conectadoRedElectrica);
 
-        String medidor= "";
-        if(list.isMedidor_Red()){
-            medidor="SI";
-        }else{
-            medidor="NO";
+        String medidor = "";
+        if (list.isMedidor_Red()) {
+            medidor = "SI";
+        } else {
+            medidor = "NO";
         }
         holder.txtMedidor.setText(medidor);
-
+        if (list.getNombre_Tipo_Equipo().equals("Otros")) {
+            holder.txtDescripcionOtro.setVisibility(View.VISIBLE);
+            holder.txtDescripcionOtro.setText(list.getDescripcion());
+        } else {
+            holder.txtDescripcionOtro.setVisibility(View.GONE);
+        }
         //statusIndicator.setBackgroundResource(R.color.GreenColor);
-        holder.setOnItemClickListener(list,onItemClickListener);
+        holder.setOnItemClickListener(list, onItemClickListener);
     }
 
     @Override
@@ -84,7 +88,7 @@ public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElem
     }
 
 
-    public  class EquipoElementViewHolder extends RecyclerView.ViewHolder   {
+    public class EquipoElementViewHolder extends RecyclerView.ViewHolder {
         //se especifica lo que existe dentro del ViewHolder
         @BindView(R.id.txtOperador)
         TextView txtOperador;
@@ -94,6 +98,8 @@ public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElem
         TextView txtConectadoRedElectrica;
         @BindView(R.id.txtMedidor)
         TextView txtMedidor;
+        @BindView(R.id.txtDescripcionOtro)
+        TextView txtDescripcionOtro;
 
 
         //@BindView(R.id.btnEditCable)
@@ -106,12 +112,12 @@ public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElem
 
         public EquipoElementViewHolder(View v) {
             super(v);
-            this.view=v;
+            this.view = v;
             ButterKnife.bind(this, v);
         }
 
-        public  void setOnItemClickListener(final Equipo_Elemento responseNotify, final OnItemClickListenerEquipo onItemClickListener){
-            view.setOnClickListener(new View.OnClickListener(){
+        public void setOnItemClickListener(final Equipo_Elemento responseNotify, final OnItemClickListenerEquipo onItemClickListener) {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onItemClickListener.onItemClick(responseNotify);
@@ -119,7 +125,7 @@ public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElem
             });
 
 
-            btnDeleteEquipo.setOnClickListener(new View.OnClickListener(){
+            btnDeleteEquipo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onItemClickListener.onClickDelete(responseNotify);

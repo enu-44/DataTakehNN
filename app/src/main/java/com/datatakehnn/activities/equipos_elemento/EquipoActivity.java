@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -63,7 +65,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EquipoActivity extends AppCompatActivity implements IDataAsync,MainViewEquipo, OnItemClickListenerEquipo, SwipeRefreshLayout.OnRefreshListener,ConnectivityReceiver.ConnectivityReceiverListener {
+public class EquipoActivity extends AppCompatActivity implements IDataAsync, MainViewEquipo, OnItemClickListenerEquipo, SwipeRefreshLayout.OnRefreshListener, ConnectivityReceiver.ConnectivityReceiverListener {
 
     //UI Elements
     @BindView(R.id.toolbar)
@@ -83,6 +85,13 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
     @BindView(R.id.spinnerTipo)
     MaterialBetterSpinner spinnerTipo;
 
+    //Otros
+    @BindView(R.id.textInputLayoutDescripcionOtro)
+    TextInputLayout textInputLayoutDescripcionOtro;
+    @BindView(R.id.edtDescripcionOtro)
+    EditText edtDescripcionOtro;
+
+
     //Variables Gloabals
     private boolean Conectado_Red_Electrica = true;
     private boolean Medidor_Red = true;
@@ -91,7 +100,7 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
     private long Ciudad_Id;
 
     private long Tipo_Equipo_Id;
-
+    private String descripcion_register;
 
     public String Nombre_Tipo_Equipo;
     public String Nombre_Empresa;
@@ -144,14 +153,14 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
     //region SETUP INJECTION
     private void setupInjection() {
         //Actualizar o Eliminar
-        ACCION_ADD= getIntent().getExtras().getBoolean("ACCION_ADD");
-        ACCION_UPDATE= getIntent().getExtras().getBoolean("ACCION_UPDATE");
-        Elemento_Id=  getIntent().getExtras().getLong("Elemento_Id");
+        ACCION_ADD = getIntent().getExtras().getBoolean("ACCION_ADD");
+        ACCION_UPDATE = getIntent().getExtras().getBoolean("ACCION_UPDATE");
+        Elemento_Id = getIntent().getExtras().getLong("Elemento_Id");
         this.sincronizacionGetInformacionController = SincronizacionGetInformacionController.getInstance(this);
         this.equipoController = EquipoController.getInstance(this);
         this.elementoController = ElementoController.getInstance(this);
-        this.usuarioController= UsuarioController.getInstance(this);
-        this.syncActivity= SyncActivity.getInstance(this);
+        this.usuarioController = UsuarioController.getInstance(this);
+        this.syncActivity = SyncActivity.getInstance(this);
 
     }
 
@@ -159,10 +168,10 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if(ACCION_UPDATE){
+        if (ACCION_UPDATE) {
             if (getSupportActionBar() != null)// Habilitar Up Button
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }else{
+        } else {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);//devolver
         }
         toolbar.setTitle(getString(R.string.title_equipos));
@@ -195,6 +204,10 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
             spinnerTipo.setError(getString(R.string.error_field_required));
             focusView = spinnerTipo;
             cancel = true;
+        } else if (Nombre_Tipo_Equipo.equals("Otros") && edtDescripcionOtro.getText().toString().isEmpty()) {
+            edtDescripcionOtro.setError(getString(R.string.error_field_required));
+            focusView = edtDescripcionOtro;
+            cancel = true;
         }
 
         if (cancel) {
@@ -208,10 +221,16 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
 
     private void registerEquipos() {
 
+        if (Nombre_Tipo_Equipo.equals("Otros") && !edtDescripcionOtro.getText().toString().isEmpty()) {
+            descripcion_register = edtDescripcionOtro.getText().toString();
+        } else {
+            descripcion_register = "";
+        }
+
 
         Equipo_Elemento equipo_elemento = new Equipo_Elemento(
                 "",
-                "",
+                descripcion_register,
                 1,
                 Empresa_Id,
                 Ciudad_Id,
@@ -257,7 +276,7 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
     private void loadListSpinners() {
 
 
-        Usuario userLogued= usuarioController.getLoggedUser();
+        Usuario userLogued = usuarioController.getLoggedUser();
 
         //Listas
         empresaList = sincronizacionGetInformacionController.getListEmpresasByCiudad(userLogued.getCiudad_Id(), true);
@@ -275,8 +294,8 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Empresa_Id = empresaList.get(position).getEmpresa_Id();
                 Nombre_Empresa = empresaList.get(position).getNombre_Empresa();
-                Ciudad_Empresa_Id= empresaList.get(position).getCiudad_Empresa_Id();
-                Ciudad_Id= empresaList.get(position).getCiudad_Id();
+                Ciudad_Empresa_Id = empresaList.get(position).getCiudad_Empresa_Id();
+                Ciudad_Id = empresaList.get(position).getCiudad_Id();
             }
         });
 
@@ -291,6 +310,11 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Tipo_Equipo_Id = tipo_equipos.get(position).getTipo_Equipo_Id();
                 Nombre_Tipo_Equipo = tipo_equipos.get(position).getNombre();
+                if (Nombre_Tipo_Equipo.equals("Otros")) {
+                    textInputLayoutDescripcionOtro.setVisibility(View.VISIBLE);
+                } else {
+                    textInputLayoutDescripcionOtro.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -304,7 +328,9 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
         String title_empresa = String.format(getString(R.string.title_empresa));
         spinnerOperador.setText("");
         spinnerOperador.setHint(title_empresa);
-
+        if (!edtDescripcionOtro.getText().toString().isEmpty()) {
+            edtDescripcionOtro.setText("");
+        }
 
     }
     //endregion
@@ -388,15 +414,14 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
     //region MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       /// getMenuInflater().inflate(R.menu.menu_equipos, menu);
-       /// return super.onCreateOptionsMenu(menu);
+        /// getMenuInflater().inflate(R.menu.menu_equipos, menu);
+        /// return super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_equipos, menu);
-        if (ACCION_UPDATE)
-        {
+        if (ACCION_UPDATE) {
             MenuItem item = menu.findItem(R.id.action_done);
             item.setVisible(false);
-        }else{
+        } else {
             MenuItem item = menu.findItem(R.id.action_done);
             item.setVisible(true);
         }
@@ -408,8 +433,7 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.action_done:
                 final AlertDialog.Builder builder = new AlertDialog.Builder(EquipoActivity.this);
                 builder.setTitle("Notificación");
@@ -429,15 +453,14 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
                 break;
             case R.id.action_update:
 
-                if(checkConnection()){
+                if (checkConnection()) {
                     showProgresss();
                     syncActivity.loadDataAsync(this);
 
-                }else{
+                } else {
                     onMessageError(R.color.orange, getString(R.string.message_not_connection));
                 }
                 break;
-
 
 
             ///Metodo que permite no recargar la pagina al devolverse
@@ -525,7 +548,7 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync,Main
     public void processFinishGetDataAsync(Response_Request_Data_Sync response) {
         syncActivity.processFinishGetDataAsync(response);
         hideProgress();
-        onMessageOk(R.color.orange,"Datos actualizados");
+        onMessageOk(R.color.orange, "Datos actualizados");
         loadListSpinners();
         loadListEquipos();
     }
