@@ -175,6 +175,12 @@ public class NovedadActivity extends AppCompatActivity {
                     spinnerNovedad.setError(getString(R.string.error_field_required));
                     focusView = spinnerNovedad;
                     cancel = true;
+                } else if (spinnerNovedad.getText().toString().equals("Otro") && edtNovedad.getText().toString().isEmpty()) {
+                    boolean cancel = false;
+                    View focusView = null;
+                    edtNovedad.setError(getString(R.string.error_field_required));
+                    focusView = edtNovedad;
+                    cancel = true;
                 } else {
                     registerNovedad();
                 }

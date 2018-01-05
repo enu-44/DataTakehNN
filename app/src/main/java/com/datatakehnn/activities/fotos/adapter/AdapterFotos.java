@@ -67,8 +67,14 @@ public class AdapterFotos extends RecyclerView.Adapter<AdapterFotos.FotosViewHol
     public void onBindViewHolder(FotosViewHolder holder, final int position) {
         // Obtiene el curso ha detallar basado en la posición
         Novedad list = novedades.get(position);
-        holder.tvDescripcionFoto.setText(list.getDetalle_Tipo_Novedad_Nombre());
+        if (list.getDetalle_Tipo_Novedad_Nombre().equals("Otro")) {
+            holder.tvDescripcionFoto.setText(list.getDescripcion());
+        } else {
+            holder.tvDescripcionFoto.setText(list.getDetalle_Tipo_Novedad_Nombre());
+        }
         holder.tvTipoFoto.setText(list.getNombre_Tipo_Novedad());
+
+
         //holder.tvRutaFoto.setText(list.getRuta_Foto());
         try {
 
