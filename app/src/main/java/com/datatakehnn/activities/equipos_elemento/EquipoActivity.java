@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
@@ -13,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -31,26 +31,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.datatakehnn.R;
-import com.datatakehnn.activities.cables_elemento.CablesElementoActivity;
-import com.datatakehnn.activities.cables_elemento.adapter.AdapterCablesElemento;
 import com.datatakehnn.activities.equipos_elemento.adapter.AdapterEquipo;
 import com.datatakehnn.activities.equipos_elemento.adapter.OnItemClickListenerEquipo;
 import com.datatakehnn.activities.fotos.FotosActivity;
 import com.datatakehnn.activities.sync.SyncActivity;
-import com.datatakehnn.controllers.CablesController;
 import com.datatakehnn.controllers.ElementoController;
 import com.datatakehnn.controllers.EquipoController;
 import com.datatakehnn.controllers.SincronizacionGetInformacionController;
 import com.datatakehnn.controllers.UsuarioController;
 import com.datatakehnn.models.ciudad_empresa.Ciudad_Empresa;
-import com.datatakehnn.models.detalle_tipo_cable.Detalle_Tipo_Cable;
-import com.datatakehnn.models.element_model.Elemento;
-import com.datatakehnn.models.elemento_cable.Elemento_Cable;
-import com.datatakehnn.models.empresa_model.Empresa;
 import com.datatakehnn.models.equipo_elemento_model.Equipo_Elemento;
 import com.datatakehnn.models.reponse_generic.Response;
 import com.datatakehnn.models.reponse_generic.data_async.Response_Request_Data_Sync;
-import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.tipo_equipo_model.Tipo_Equipo;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.api_services.data_async_services.IDataAsync;
@@ -90,6 +82,8 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync, Mai
     TextInputLayout textInputLayoutDescripcionOtro;
     @BindView(R.id.edtDescripcionOtro)
     EditText edtDescripcionOtro;
+    @BindView(R.id.edtCodigoEquipo)
+    EditText edtCodigoEquipo;
 
 
     //Variables Gloabals
@@ -100,7 +94,7 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync, Mai
     private long Ciudad_Id;
 
     private long Tipo_Equipo_Id;
-    private String descripcion_register;
+    private String descripcion_register, codigo_equipo;
 
     public String Nombre_Tipo_Equipo;
     public String Nombre_Empresa;
@@ -227,9 +221,14 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync, Mai
             descripcion_register = "";
         }
 
+        if (!edtCodigoEquipo.getText().toString().isEmpty()) {
+            codigo_equipo = edtCodigoEquipo.getText().toString();
+        } else {
+            codigo_equipo = "";
+        }
 
         Equipo_Elemento equipo_elemento = new Equipo_Elemento(
-                "",
+                codigo_equipo,
                 descripcion_register,
                 1,
                 Empresa_Id,
@@ -331,6 +330,7 @@ public class EquipoActivity extends AppCompatActivity implements IDataAsync, Mai
         if (!edtDescripcionOtro.getText().toString().isEmpty()) {
             edtDescripcionOtro.setText("");
         }
+        edtCodigoEquipo.setText("");
 
     }
     //endregion

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainMenuActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
+public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //UI Elements
     @BindView(R.id.toolbar)
@@ -92,6 +94,14 @@ public class MainMenuActivity extends AppCompatActivity  implements NavigationVi
             case R.id.action_sync:
                 Intent j = new Intent(getApplicationContext(), UploadDataActivity.class);
                 startActivity(j);
+                break;
+            case R.id.action_pdf:
+                Uri uri = Uri.parse("http://34.234.94.92/");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+               /* WebView webview = new WebView(this);
+                setContentView(webview);
+                webview.loadUrl("http://34.234.94.92/"); */
                 break;
             ///Metodo que permite no recargar la pagina al devolverse
             case android.R.id.home:
@@ -143,11 +153,11 @@ public class MainMenuActivity extends AppCompatActivity  implements NavigationVi
             startActivity(i);
         } else if (id == R.id.nav_syncronization) {
             startActivity(new Intent(getBaseContext(), SyncActivity.class)
-                    .putExtra("FROM_LOGIN",false)
-                    .putExtra("FROM_MENU",true)
+                    .putExtra("FROM_LOGIN", false)
+                    .putExtra("FROM_MENU", true)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish();
-        }else if(id == R.id.nav_device){
+        } else if (id == R.id.nav_device) {
 
             Intent i = new Intent(this, DeviceMasterActivity.class);
             startActivity(i);
@@ -157,7 +167,6 @@ public class MainMenuActivity extends AppCompatActivity  implements NavigationVi
 
         return true;
     }
-
 
 
     //endregion

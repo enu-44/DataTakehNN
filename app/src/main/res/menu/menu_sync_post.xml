@@ -7,4 +7,14 @@
         android:title="Opciones"
         app:showAsAction="always">
     </item>
+
+    <item
+        android:id="@+id/action_pdf"
+        android:icon="@drawable/ic_pdf"
+        android:orderInCategory="100"
+        android:title="Opciones"
+        app:showAsAction="always">
+    </item>
+
+
 </menu>

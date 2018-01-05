@@ -76,6 +76,7 @@
     <string name="question_conectado_red_electrica">¿Conectado Red Electrica?</string>
     <string name="title_medidor">¿ Medidor ?</string>
     <string name="title_tipo_equipo">Tipo</string>
+    <string name="title_codigo_equipo">Código(opcional)</string>
 
     <!-- PÉRDIDAS -->
     <string name="lampara_adicional">¿Lámpara Adicional?</string>

@@ -12,6 +12,8 @@ import com.datatakehnn.R;
 import com.datatakehnn.activities.cables_elemento.adapter.AdapterCablesElemento;
 import com.datatakehnn.models.equipo_elemento_model.Equipo_Elemento;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,6 +80,9 @@ public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElem
         } else {
             holder.txtDescripcionOtro.setVisibility(View.GONE);
         }
+        if (list.getCodigo() != null) {
+            holder.txtCodigoEquipo.setText(list.getCodigo());
+        }
         //statusIndicator.setBackgroundResource(R.color.GreenColor);
         holder.setOnItemClickListener(list, onItemClickListener);
     }
@@ -100,6 +105,8 @@ public class AdapterEquipo extends RecyclerView.Adapter<AdapterEquipo.EquipoElem
         TextView txtMedidor;
         @BindView(R.id.txtDescripcionOtro)
         TextView txtDescripcionOtro;
+        @BindView(R.id.txtCodigoEquipo)
+        TextView txtCodigoEquipo;
 
 
         //@BindView(R.id.btnEditCable)
