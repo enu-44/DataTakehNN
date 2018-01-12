@@ -141,7 +141,7 @@ public class ElementoController {
         return elemento;
     }
 
-    public Elemento getElementoByIdAndBySync(boolean Is_Sync, long user_id,boolean is_Finished) {
+    public Elemento getElementoByIdAndBySync(boolean Is_Sync, long user_id, boolean is_Finished) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
         Elemento elemento = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(Is_Sync))
                 .and(Elemento_Table.Usuario_Id.eq(user_id))
@@ -149,7 +149,7 @@ public class ElementoController {
         return elemento;
     }
 
-    public List<Elemento> getListElementoSync(boolean Is_Sync, long user_id,boolean is_Finished) {
+    public List<Elemento> getListElementoSync(boolean Is_Sync, long user_id, boolean is_Finished) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
         List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Sync.eq(Is_Sync))
                 .and(Elemento_Table.Usuario_Id.eq(user_id))
@@ -159,8 +159,7 @@ public class ElementoController {
     }
 
 
-
-    public List<Elemento> getElementosByUserAndSync(long user_id, boolean is_sync,boolean is_Finished) {
+    public List<Elemento> getElementosByUserAndSync(long user_id, boolean is_sync, boolean is_Finished) {
         List<Elemento> elementos = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(user_id))
                 .and(Elemento_Table.Is_Sync.eq(is_sync))
                 .and(Elemento_Table.Is_Finished.eq(is_Finished))
@@ -170,11 +169,30 @@ public class ElementoController {
     }
 
 
-    public List<Elemento> getListElementsByUserLogued(long Usuario_Id,boolean is_Finished) {
+    public List<Elemento> getListElementsByUserLogued(long Usuario_Id, boolean is_Finished) {
         //  List<Elemento> elementos = new Select().from(Elemento.class).queryList();
         List<Elemento> elemento = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(Usuario_Id))
                 .and(Elemento_Table.Is_Finished.eq(is_Finished)).orderBy(Elemento_Table.Elemento_Id, false).queryList();
         return elemento;
+    }
+
+    public List<Elemento> getListElementsByFecha(long user_id, boolean is_sync, boolean is_Finished, String fecha) {
+        List<Elemento> elementos = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(user_id))
+                .and(Elemento_Table.Is_Sync.eq(is_sync))
+                .and(Elemento_Table.Is_Finished.eq(is_Finished))
+                .and(Elemento_Table.Fecha_Levantamiento.eq(fecha))
+                .orderBy(Elemento_Table.Elemento_Id, false)
+                .queryList();
+        return elementos;
+    }
+
+    public List<Elemento> getListElementsByFechaWithoutSync(long user_id, boolean is_Finished, String fecha) {
+        List<Elemento> elementos = new Select().from(Elemento.class).where(Elemento_Table.Usuario_Id.eq(user_id))
+                .and(Elemento_Table.Is_Finished.eq(is_Finished))
+                .and(Elemento_Table.Fecha_Levantamiento.eq(fecha))
+                .orderBy(Elemento_Table.Elemento_Id, false)
+                .queryList();
+        return elementos;
     }
 }
 
