@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_listado"
+    android:background="@drawable/fondo_listado_postes"
     android:fitsSystemWindows="true"
     tools:context="com.datatakehnn.activities.poste.lista_postes_usuario.Poste_Usuario_Activity">
 

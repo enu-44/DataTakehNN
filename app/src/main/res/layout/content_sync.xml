@@ -5,16 +5,17 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_primary"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ImageView
         android:id="@+id/imageViewContent"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/fondo_primary"
-        tools:ignore="ContentDescription"></ImageView>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/fondo_sincronizacion_nuevo"
+        tools:ignore="ContentDescription">
+
+    </ImageView>
 
     <!--<ProgressBar
         android:id="@+id/progressBar"
@@ -27,38 +28,38 @@
          />-->
 
 
-   <ImageView
-       android:id="@+id/ivSync"
-       android:layout_width="144dp"
-       android:layout_height="144dp"
-       android:layout_centerInParent="true"
-       android:contentDescription="@null"
-       android:src="@drawable/ic_sincronizacion" />
+    <ImageView
+        android:id="@+id/ivSync"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_centerInParent="true"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_sincronizacion" />
 
     <ProgressBar
 
-        android:layout_below="@+id/ivSync"
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ivSync"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="0dp"
-        android:visibility="gone"
         android:indeterminate="true"
+        android:indeterminateTint="@color/orange_dark"
         android:indeterminateTintMode="src_atop"
-        android:indeterminateTint="@color/orange_dark"/>
+        android:visibility="gone" />
 
 
     <TextView
         android:id="@+id/txtCargando"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar"
         android:gravity="center"
         android:text="Cargando..."
-        android:visibility="gone"
-        android:layout_below="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:visibility="gone" />
 
 
 </RelativeLayout>

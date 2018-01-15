@@ -184,7 +184,7 @@ public class DeviceMasterActivity extends AppCompatActivity {
                             doPermissionGrantedStuffs();
                         }
                     })
-                    .setIcon(R.drawable.logo_datatakeh)
+                    .setIcon(R.drawable.logo_datatakeh_nuevo)
                     .show();
         } else {
             // READ_PHONE_STATE permission has not been granted yet. Request it directly.

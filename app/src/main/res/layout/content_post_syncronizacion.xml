@@ -4,58 +4,62 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_primary"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ImageView
         android:id="@+id/imageViewContent"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/fondo_primary"
-        tools:ignore="ContentDescription"></ImageView>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/fondo_sincronizacion_nuevo"
+        tools:ignore="ContentDescription">
+
+    </ImageView>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <LinearLayout
 
-                android:padding="5dp"
-                android:orientation="horizontal"
-                android:gravity="left"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_wifi"/>
+                    android:src="@drawable/ic_wifi" />
 
                 <RelativeLayout
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:orientation="vertical">
 
                     <TextView
-                        android:textStyle="bold"
                         android:id="@+id/conectao"
-                        android:textColor="@color/black"
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Conexion"/>
+
+                        android:text="Conexion"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <View
-                        android:layout_below="@+id/conectao"
+                        android:id="@+id/viewEstateConect"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
-                        android:background="@drawable/circle"
-                        android:id="@+id/viewEstateConect" />
+                        android:layout_below="@+id/conectao"
+                        android:background="@drawable/circle" />
 
                     <TextView
                         android:id="@+id/txtconectividad"
@@ -66,49 +70,55 @@
                         android:layout_toRightOf="@+id/viewEstateConect"
                         android:text="" />
                 </RelativeLayout>
+
                 <ProgressBar
-                    android:layout_gravity="left"
-                    android:foregroundGravity="left"
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleInverse"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="left"
                     android:layout_marginTop="0dp"
-                    android:visibility="gone"
+                    android:foregroundGravity="left"
                     android:indeterminate="true"
+                    android:indeterminateTint="@color/orange_dark"
                     android:indeterminateTintMode="src_atop"
-                    android:indeterminateTint="@color/orange_dark"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <View
-                android:layout_marginTop="1dp"
                 android:id="@+id/indicator_schedule_status"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="1dp"
                 android:background="@color/colorAccent" />
+
             <LinearLayout
                 android:id="@+id/linearLayout2"
-                android:padding="5dp"
-                android:orientation="horizontal"
-                android:gravity="left"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_cloud_done"/>
+                    android:src="@drawable/ic_cloud_done" />
+
                 <RelativeLayout
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:orientation="vertical">
+
                     <TextView
-                        android:textStyle="bold"
                         android:id="@+id/actividad"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Actividad"/>
+                        android:text="Actividad"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/txt_last_sincronizacion"
                         android:layout_width="wrap_content"
@@ -116,18 +126,19 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/actividad"
-                        android:textColor="@color/black"
-                        android:text=" " />
+                        android:text=" "
+                        android:textColor="@color/black" />
 
                     <TextView
-                        android:layout_marginTop="5dp"
-                        android:textStyle="bold"
                         android:id="@+id/tittle_count_all_datos"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt_last_sincronizacion"
+                        android:layout_marginTop="5dp"
                         android:text="Cantidad Elementos Finalizados"
-                        android:layout_below="@+id/txt_last_sincronizacion"/>
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/txt_count_all_elements"
                         android:layout_width="wrap_content"
@@ -135,18 +146,18 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/tittle_count_all_datos"
-                        android:textColor="@color/black"
-                        android:text="" />
+                        android:text=""
+                        android:textColor="@color/black" />
 
                     <TextView
-                        android:layout_marginTop="5dp"
-                        android:textStyle="bold"
                         android:id="@+id/tittle_count_all_datos_not_finished"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt_count_all_elements"
+                        android:layout_marginTop="5dp"
                         android:text="Elementos sin finalizar"
-                        android:layout_below="@+id/txt_count_all_elements"/>
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txt_count_all_elements_not_finished"
@@ -155,19 +166,20 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/tittle_count_all_datos_not_finished"
+                        android:text=""
                         android:textColor="@color/red"
-                        android:textStyle="bold"
-                        android:text="" />
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:layout_marginTop="5dp"
-                        android:textStyle="bold"
                         android:id="@+id/tittle_count_all_sincronize"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt_count_all_elements_not_finished"
+                        android:layout_marginTop="5dp"
                         android:text="Sincronizados"
-                        android:layout_below="@+id/txt_count_all_elements_not_finished"/>
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/txt_count_all_elements_sincronize"
                         android:layout_width="wrap_content"
@@ -175,18 +187,19 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/tittle_count_all_sincronize"
-                        android:textColor="@color/black"
-                        android:text=" " />
+                        android:text=" "
+                        android:textColor="@color/black" />
 
                     <TextView
-                        android:layout_marginTop="5dp"
-                        android:textStyle="bold"
                         android:id="@+id/tittle_count_all_without_sincronize"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt_count_all_elements_sincronize"
+                        android:layout_marginTop="5dp"
                         android:text="Por Sincronizar"
-                        android:layout_below="@+id/txt_count_all_elements_sincronize"/>
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/txt_count_all_without_sincronize"
                         android:layout_width="wrap_content"
@@ -194,53 +207,49 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_below="@+id/tittle_count_all_without_sincronize"
+                        android:text=""
                         android:textColor="@color/orange_dark"
-                        android:textStyle="bold"
-                        android:text="" />
+                        android:textStyle="bold" />
                 </RelativeLayout>
             </LinearLayout>
 
-        <View
-            android:layout_marginTop="3dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorAccent" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/colorAccent" />
 
-        <LinearLayout
-            android:padding="@dimen/activity_horizontal_margin"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/progress_text"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:fontFamily="sans-serif-thin"
-                android:text="Progreso"
-                android:textColor="@android:color/black"
-                android:textSize="20dp" />
-            <Button
-                android:background="@color/orange_dark"
-                android:textColor="@color/white"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:id="@+id/btnSyncData"
-                android:text="@string/start_sync"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:id="@+id/progress_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="sans-serif-thin"
+                    android:text="Progreso"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp" />
+
+                <Button
+                    android:id="@+id/btnSyncData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/orange_dark"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="@string/start_sync"
+                    android:textColor="@color/white" />
 
 
+            </LinearLayout>
 
 
         </LinearLayout>
-
-
-
-
-        </LinearLayout>
-
 
 
         <!--<ProgressBar
@@ -254,9 +263,7 @@
              />-->
 
 
-
     </ScrollView>
-
 
 
 </RelativeLayout>

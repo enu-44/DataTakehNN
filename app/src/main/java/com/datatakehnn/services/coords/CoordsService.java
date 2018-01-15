@@ -173,7 +173,7 @@ public class CoordsService extends Service implements LocationListener {
                     }
                 });
         builder.setTitle(R.string.gps_disabled);
-        builder.setIcon(R.drawable.logo_datatakeh);
+        builder.setIcon(R.drawable.logo_datatakeh_nuevo);
         // Create the AlertDialog object and return it
         return builder.show();
     }

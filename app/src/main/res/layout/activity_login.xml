@@ -140,7 +140,7 @@
                         android:layout_gravity="center"
                         android:contentDescription="Logo"
                         android:layout_marginTop="20dp"
-                        app:srcCompat="@drawable/logo_datatake_reflejo" />
+                        app:srcCompat="@drawable/logo_datatakeh_reflejo_nuevo" />
 
                     <ImageView
                         android:id="@+id/imageViewInteredes"

@@ -48,7 +48,7 @@ public class IntentIntegrator {
         AlertDialog.Builder downloadDialog = new AlertDialog.Builder(activity);
         downloadDialog.setTitle(title);
         downloadDialog.setMessage(message);
-        downloadDialog.setIcon(R.drawable.logo_datatakeh);
+        downloadDialog.setIcon(R.drawable.logo_datatakeh_nuevo);
         downloadDialog.setPositiveButton(buttonYes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

@@ -276,7 +276,7 @@ public class CiudadActivity extends AppCompatActivity {
                     validacionUpdateCiudadUser();
             }
         });
-        builder.setIcon(R.drawable.logo_datatakeh);
+        builder.setIcon(R.drawable.logo_datatakeh_nuevo);
         return builder.show();
     }
 
