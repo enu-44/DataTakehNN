@@ -17,10 +17,10 @@
         android:background="@color/colorAccent" />
 
     <LinearLayout
-        android:paddingLeft="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -224,10 +224,11 @@
                         android:text=""
                         android:textColor="@color/orange_dark"
                         android:textSize="10dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
 
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -238,8 +239,18 @@
                         android:id="@+id/img_status_sincronized"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_sincronizacion"
-                        />
+                        android:src="@drawable/ic_sincronizacion" />
+
+                    <Switch
+                        android:id="@+id/switchElementSincronizado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_toEndOf="@+id/img_status_sincronized"
+                        android:layout_toRightOf="@+id/img_status_sincronized"
+                        android:checked="true"
+                        android:text=""
+                        android:theme="@style/SCBSwitch" />
 
 
                 </RelativeLayout>

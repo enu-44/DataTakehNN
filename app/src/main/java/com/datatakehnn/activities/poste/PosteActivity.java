@@ -236,6 +236,8 @@ public class PosteActivity extends AppCompatActivity {
             spinnerEstado.setEnabled(false);
             spinnerEstado.setVisibility(View.GONE);*/
 
+            fecha = elementoUpdate.getFecha_Levantamiento();
+
             if (!elementoUpdate.getCodigo_Apoyo().equals("")) {
                 edtCodigoApoyo.setText(elementoUpdate.getCodigo_Apoyo());
                 edtCodigoApoyo.setEnabled(true);
@@ -605,10 +607,10 @@ public class PosteActivity extends AppCompatActivity {
         long id_usuario = usuario.getUsuario_Id();
         elemento.setElemento_Id(elemento_id);
         elemento.setUsuario_Id(id_usuario);
-        elemento.setFecha_Levantamiento(fecha);
         if (ACCION_ADD) {
             elemento.setHora_Inicio(hora);
             elemento.setHora_Fin(hora);
+            elemento.setFecha_Levantamiento(fecha);
         }
         elemento.setCodigo_Apoyo(edtCodigoApoyo.getText().toString());
         elemento.setNumero_Apoyo(elemento_id);

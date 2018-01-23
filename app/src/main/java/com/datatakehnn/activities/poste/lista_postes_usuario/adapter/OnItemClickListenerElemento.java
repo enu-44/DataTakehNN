@@ -8,4 +8,6 @@ import com.datatakehnn.models.element_model.Elemento;
 
 public interface OnItemClickListenerElemento {
     void onItemClick(Elemento elemento);
+
+    void onSwitchChanged(Elemento elemento, boolean isSync);
 }

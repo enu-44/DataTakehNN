@@ -23,6 +23,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +66,6 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     Button btnSeleccionarFecha;
     @BindView(R.id.textViewFecha)
     TextView textViewFecha;
-
 
     private boolean List_Is_Finished = true;
 
@@ -238,6 +238,7 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         }
     }
 
+
     //endregion
 
     //region IMPLEMENTS METHODS MAINVIEWPOSTE
@@ -318,6 +319,14 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         i.putExtra("Elemento", elemento);
         Toast.makeText(this, "Poste: " + elemento.getCodigo_Apoyo(), Toast.LENGTH_SHORT).show();
         startActivity(i);
+    }
+
+    @Override
+    public void onSwitchChanged(Elemento elemento, boolean isSync) {
+        //Toast.makeText(this, "Poste: " + elemento.getCodigo_Apoyo() + " " + isSync, Toast.LENGTH_SHORT).show();
+        elemento.setIs_Sync(isSync);
+        elementoController.update(elemento);
+        onRefresh();
     }
     //endregion
 
