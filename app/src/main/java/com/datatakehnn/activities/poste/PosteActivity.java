@@ -29,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -94,7 +95,7 @@ public class PosteActivity extends AppCompatActivity {
     @BindView(R.id.edtCodigoApoyo)
     EditText edtCodigoApoyo;
     @BindView(R.id.container)
-    RelativeLayout container;
+    LinearLayout container;
     @BindView(R.id.tvCodigoApoyo)
     TextView tvCodigoApoyo;
     @BindView(R.id.radioGroupCodigoApoyo)
@@ -154,6 +155,8 @@ public class PosteActivity extends AppCompatActivity {
     EditText edtAlturaDisponible;
     @BindView(R.id.ibCalcularAltura)
     ImageButton ibCalcularAltura;
+    @BindView(R.id.linearLayoutCoordenadas)
+    LinearLayout linearLayoutCoordenadas;
 
     //Location
     Location location = new Location("Localizacion");
@@ -188,7 +191,8 @@ public class PosteActivity extends AppCompatActivity {
     boolean Is_Sync = false;
     String Token_Elemento;
     String Imei_Device;
-
+    private static boolean tomar_coordenadas = false;
+    private double latitud, longitud;
 
     //Accion
     boolean ACCION_ADD;
@@ -226,9 +230,32 @@ public class PosteActivity extends AppCompatActivity {
     //region METHODS
     private void loadDatosPosteUpdate() {
         if (ACCION_UPDATE) {
-            Elemento elementoUpdate = elementoController.getElementoById(Elemento_Id);
-            titleCoords.setVisibility(View.GONE);
-            tvCoords.setVisibility(View.GONE);
+
+
+            final Elemento elementoUpdate = elementoController.getElementoById(Elemento_Id);
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(PosteActivity.this);
+            builder.setTitle("Notificación");
+            builder.setMessage("¿Desea tomar coordenadas?");
+            builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    tomar_coordenadas = true;
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    tomar_coordenadas = false;
+                    linearLayoutCoordenadas.setVisibility(View.GONE);
+                    latitud = elementoUpdate.getLatitud();
+                    longitud = elementoUpdate.getLongitud();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
             tvCodigoApoyo.setVisibility(View.GONE);
             radioGroupCodigoApoyo.setVisibility(View.GONE);
             /*tvPlaca.setVisibility(View.GONE);
@@ -581,6 +608,12 @@ public class PosteActivity extends AppCompatActivity {
     //Register
     public void registerElemento() {
         //TODO Registrar el poste
+        if (ACCION_UPDATE && tomar_coordenadas == true) {
+            if (location.getLatitude() <= 0) {
+                Snackbar.make(container, "No se pueden obtener las coordenadas", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+        }
 
         Elemento elemento = new Elemento();
         long elemento_id = 0;
@@ -643,8 +676,15 @@ public class PosteActivity extends AppCompatActivity {
         elemento.setCon(Nombre_Detalle_Tipo_Direccion);
         elemento.setDescripcion_Direccion(edtDetalleTipoDireccion.getText().toString());
         elemento.setReferencia_Localizacion(edtReferencia.getText().toString());
-        elemento.setLongitud(location.getLongitude());
-        elemento.setLatitud(location.getLatitude());
+
+        if (ACCION_ADD || (ACCION_UPDATE && tomar_coordenadas == true)) {
+            elemento.setLongitud(location.getLongitude());
+            elemento.setLatitud(location.getLatitude());
+
+        } else {
+            elemento.setLatitud(latitud);
+            elemento.setLongitud(longitud);
+        }
         elemento.setDepartamento_Id(usuario.getDepartamento_Id());
         elemento.setCiudad_Id(usuario.getCiudad_Id());
         elemento.setNombre_Ciudad(usuario.getNombre_Ciudad());
