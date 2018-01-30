@@ -550,7 +550,7 @@ public class PosteActivity extends AppCompatActivity {
             edtCodigoApoyo.setError(getString(R.string.error_field_required));
             focusView = edtCodigoApoyo;
             cancel = true;
-        } else if (spinnerTipoDireccion.getText().toString().isEmpty()) {
+        } else if (spinnerTipoDireccion.getText().toString().isEmpty() || Nombre_Tipo_Direccion.equals("")) {
             spinnerTipoDireccion.setError(getString(R.string.error_field_required));
             focusView = spinnerTipoDireccion;
             cancel = true;
@@ -562,11 +562,11 @@ public class PosteActivity extends AppCompatActivity {
             edtTipoDireccion.setError(getString(R.string.error_field_required));
             focusView = edtTipoDireccion;
             cancel = true;
-        } else if (spinnerMaterial.getText().toString().isEmpty()) {
+        } else if (spinnerMaterial.getText().toString().isEmpty() || Material_Id <= 0) {
             spinnerMaterial.setError(getString(R.string.error_field_required));
             focusView = spinnerMaterial;
             cancel = true;
-        } else if (spinnerLongitudPoste.getText().toString().isEmpty()) {
+        } else if (spinnerLongitudPoste.getText().toString().isEmpty() || Longitud_Elemento_Id <= 0) {
             spinnerLongitudPoste.setError(getString(R.string.error_field_required));
             focusView = spinnerLongitudPoste;
             cancel = true;
@@ -578,7 +578,7 @@ public class PosteActivity extends AppCompatActivity {
             spinnerResistenciaMecanica.setError(getString(R.string.error_field_required));
             focusView = spinnerResistenciaMecanica;
             cancel = true;
-        } else if (spinnerEstado.getText().toString().isEmpty() && spinnerEstado.isEnabled()) {
+        } else if ((spinnerEstado.getText().toString().isEmpty() || Estado_Id <= 0) && spinnerEstado.isEnabled()) {
             spinnerEstado.setError(getString(R.string.error_field_required));
             focusView = spinnerEstado;
             cancel = true;
@@ -586,7 +586,7 @@ public class PosteActivity extends AppCompatActivity {
             spinnerCantidadRetenidas.setError(getString(R.string.error_field_required));
             focusView = spinnerCantidadRetenidas;
             cancel = true;
-        } else if (spinnerNivelTension.getText().toString().isEmpty()) {
+        } else if (spinnerNivelTension.getText().toString().isEmpty() || Nivel_Tension_Elemento_Id <= 0) {
             spinnerNivelTension.setError(getString(R.string.error_field_required));
             focusView = spinnerNivelTension;
             cancel = true;
