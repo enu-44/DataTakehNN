@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.datatakehnn.R;
 import com.datatakehnn.activities.login.LoginActivity;
+import com.datatakehnn.controllers.SettingController;
+import com.datatakehnn.models.configuracion_model.Setting;
+import com.datatakehnn.services.api_client.routes.Const;
 import com.datatakehnn.services.coords.CoordsService;
 
 import butterknife.BindView;
@@ -22,16 +25,17 @@ public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.ivLogo)
     ImageView ivLogo;
 
+    SettingController settingController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-
+        this.settingController = SettingController.getInstance(this);
         loadAnimation();
+        guardarIpRuta();
     }
-
 
 
     public void loadAnimation() {
@@ -54,13 +58,19 @@ public class SplashActivity extends AppCompatActivity {
             };
             timer.start();
 
-        }else{
+        } else {
             Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
             finish();
         }
+    }
 
-
-
+    public void guardarIpRuta() {
+        Setting setting = settingController.getFirst();
+        if (setting == null) {
+            setting = new Setting();
+            setting.setRuta_Servicio(Const.URL_RouteBaseAddress);
+            settingController.registerUpdate(setting);
+        }
     }
 }

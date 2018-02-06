@@ -59,6 +59,7 @@ import com.datatakehnn.models.tipo_direccion_model.Detalle_Tipo_Direccion;
 import com.datatakehnn.models.tipo_direccion_model.Tipo_Direccion;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
 import com.datatakehnn.models.usuario_model.Usuario;
+import com.datatakehnn.services.api_client.retrofit.ApiClient;
 import com.datatakehnn.services.apps_integrator.IntentIntegrator;
 import com.datatakehnn.services.coords.CoordsService;
 import com.datatakehnn.services.data_arrays.Cantidad_Retenidas_List;
@@ -225,6 +226,7 @@ public class PosteActivity extends AppCompatActivity {
         loadInformacionMaster();
         obtenerFechayHora();
         loadDatosPosteUpdate();
+
     }
 
     //region METHODS

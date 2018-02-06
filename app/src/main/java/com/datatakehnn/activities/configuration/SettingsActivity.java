@@ -1,60 +1,45 @@
 package com.datatakehnn.activities.configuration;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.TaskStackBuilder;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.support.annotation.RequiresApi;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.provider.DocumentFile;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.datatakehnn.R;
+import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.controllers.SettingController;
-import com.datatakehnn.controllers.SincronizacionGetInformacionController;
-import com.datatakehnn.controllers.UsuarioController;
 import com.datatakehnn.models.configuracion_model.Setting;
 import com.datatakehnn.models.storage_model.Storage;
+import com.datatakehnn.services.api_client.retrofit.ApiClient;
 import com.datatakehnn.services.data_arrays.Storage_List;
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+import com.google.android.gms.common.api.Api;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "";
@@ -74,8 +59,12 @@ public class SettingsActivity extends AppCompatActivity {
     @BindView(R.id.txtFechaUpdate)
     TextView txtFechaUpdate;
 
+    @BindView(R.id.container)
+    RelativeLayout container;
+
 
     SettingController settingController;
+    ApiClient apiClient;
 
     Setting setting = new Setting();
 
@@ -85,8 +74,22 @@ public class SettingsActivity extends AppCompatActivity {
     boolean Available_Wifi;
     boolean Available_Datos;
 
+    String ip_servicio;
 
     private final static String NOMBRE_DIRECTORIO = "/INMUNIZADOR";
+    @BindView(R.id.edtIpServicios)
+    EditText edtIpServicios;
+    @BindView(R.id.edtContrasenaServicios)
+    EditText edtContrasenaServicios;
+    @BindView(R.id.btnHabilitarServicio)
+    Button btnHabilitarServicio;
+    @BindView(R.id.btnValidarContrasena)
+    Button btnValidarContrasena;
+
+    @BindView(R.id.textInputLayoutIpServicios)
+    TextInputLayout textInputLayoutIpServicios;
+    @BindView(R.id.textInputLayoutContrasenaServicios)
+    TextInputLayout textInputLayoutContrasenaServicios;
 
 
     @Override
@@ -102,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void setupInjection() {
 
         this.settingController = SettingController.getInstance(this);
-
+        this.apiClient = ApiClient.getInstance(this);
 
         spinner_almacenamiento.setEnabled(false);
         spinner_almacenamiento.setClickable(false);
@@ -497,6 +500,11 @@ public class SettingsActivity extends AppCompatActivity {
                     setting.setSigla_Storage(Sigla_Storage);
                     setting.setAvailable_Mobile_Data(Available_Datos);
                     setting.setAvailable_Wifi(Available_Wifi);
+                    if (!edtIpServicios.getText().toString().isEmpty() && (edtIpServicios.getText().toString().startsWith("http://") || edtIpServicios.getText().toString().startsWith("https://"))) {
+                        //ip_servicio = edtIpServicios.getText().toString();
+                        setting.setRuta_Servicio(edtIpServicios.getText().toString());
+                        apiClient.BASE_URL = edtIpServicios.getText().toString();
+                    }
                     settingController.registerUpdate(setting);
                     onMessageOk(R.color.orange, "Guardado Correctamente");
                     onReturnActivity();
@@ -588,5 +596,41 @@ public class SettingsActivity extends AppCompatActivity {
         // textView.setCompoundDrawablePadding(getResources().getDimensionPixelOffset(R.dimen.activity_horizontal_margin));
         textView.setTextColor(color);
         snackbar.show();
+    }
+
+    @OnClick({R.id.btnHabilitarServicio, R.id.btnValidarContrasena})
+    public void onViewClicked(View v) {
+        switch (v.getId()) {
+            case R.id.btnHabilitarServicio:
+                //edtIpServicios.setEnabled(true);
+                textInputLayoutContrasenaServicios.setVisibility(View.VISIBLE);
+                btnValidarContrasena.setVisibility(View.VISIBLE);
+                String ruta_actual = ApiClient.BASE_URL;
+                Toast.makeText(this, ruta_actual, Toast.LENGTH_LONG).show();
+                break;
+            case R.id.btnValidarContrasena:
+                if (edtContrasenaServicios.getText().toString().equals("adecaso-datatake") && !edtContrasenaServicios.getText().toString().isEmpty()) {
+                    edtIpServicios.setEnabled(true);
+                    edtIpServicios.setText("http://");
+                    btnValidarContrasena.setVisibility(View.GONE);
+                    textInputLayoutContrasenaServicios.setVisibility(View.GONE);
+
+                } else {
+                    Snackbar.make(container, "Contraseña Incorrecta", Snackbar.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+
+
+
+
+
+        /*if (!edtIpServicios.getText().toString().isEmpty() && edtIpServicios.getText().toString().startsWith("http://") ) {
+            ip_servicio = edtIpServicios.getText().toString();
+        } else {
+            Snackbar.make(container, "Ip incorrecta, ingresar de nuevo ", Snackbar.LENGTH_SHORT).show();
+        }*/
     }
 }

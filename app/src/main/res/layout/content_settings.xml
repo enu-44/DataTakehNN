@@ -8,148 +8,152 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
-                android:padding="5dp"
-                android:textStyle="bold"
-                android:textColor="@color/orange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Configuración"/>
+                android:padding="5dp"
+                android:text="Configuración"
+                android:textColor="@color/orange"
+                android:textStyle="bold" />
+
             <LinearLayout
 
-                android:padding="5dp"
-                android:orientation="horizontal"
-                android:gravity="left"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <ImageView
 
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:tint="@color/colorAccent"
-                    android:src="@drawable/ic_wifi"/>
+                    android:src="@drawable/ic_wifi"
+                    android:tint="@color/colorAccent" />
 
                 <RelativeLayout
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:textStyle="bold"
                         android:id="@+id/conectado_wifi"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Conectado Wifi"/>
-
-
+                        android:text="Conectado Wifi"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
 
                 </RelativeLayout>
+
                 <Switch
-                    android:theme="@style/SCBSwitch"
-                    android:checked="true"
                     android:id="@+id/switchWifi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="" />
+                    android:checked="true"
+                    android:text=""
+                    android:theme="@style/SCBSwitch" />
 
             </LinearLayout>
 
 
-
-
-
             <LinearLayout
                 android:id="@+id/linearLayout2"
-                android:padding="5dp"
-                android:orientation="horizontal"
-                android:gravity="left"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:tint="@color/colorAccent"
-                    android:src="@drawable/ic_phonelink_ring"/>
+                    android:src="@drawable/ic_phonelink_ring"
+                    android:tint="@color/colorAccent" />
+
                 <RelativeLayout
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:orientation="vertical">
+
                     <TextView
-                        android:textStyle="bold"
                         android:id="@+id/actividad"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Conectado Datos"/>
+                        android:text="Conectado Datos"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
                 </RelativeLayout>
+
                 <Switch
-                    android:theme="@style/SCBSwitch"
                     android:id="@+id/switchDatos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="true"
-                    android:text="" />
+                    android:text=""
+                    android:theme="@style/SCBSwitch" />
             </LinearLayout>
 
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
-                android:padding="5dp"
-                android:orientation="horizontal"
-                android:gravity="left"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:tint="@color/colorAccent"
-                    android:src="@drawable/ic_sd_storage"/>
+                    android:src="@drawable/ic_sd_storage"
+                    android:tint="@color/colorAccent" />
+
                 <RelativeLayout
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:orientation="vertical">
+
                     <TextView
-                        android:textStyle="bold"
                         android:id="@+id/txtAlmacenamiento"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Almacenamiento"/>
+                        android:text="Almacenamiento"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
                 </RelativeLayout>
 
 
-<!--
-                <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                    android:id="@+id/spinner_almacenamiento"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="0.5"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:textSize="13dp"
-                    android:hint="Almacenamiento"
-                    android:textColor="@color/colorAccent"
-                    android:textColorHint="#CFD8DC"
-                    app:met_floatingLabel="normal"/> -->
+                <!--
+                                <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                                    android:id="@+id/spinner_almacenamiento"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_weight="0.5"
+                                    android:clickable="false"
+                                    android:enabled="false"
+                                    android:textSize="13dp"
+                                    android:hint="Almacenamiento"
+                                    android:textColor="@color/colorAccent"
+                                    android:textColorHint="#CFD8DC"
+                                    app:met_floatingLabel="normal"/> -->
 
                 <Spinner
                     android:id="@+id/spinner_almacenamiento"
@@ -160,10 +164,10 @@
                     android:layout_weight="0.5"
                     android:clickable="false"
                     android:enabled="false"
-                    android:textSize="13dp"
                     android:hint="Almacenamiento"
                     android:textColor="@color/colorAccent"
-                    android:textColorHint="#CFD8DC"></Spinner>
+                    android:textColorHint="#CFD8DC"
+                    android:textSize="13dp"></Spinner>
 
             </LinearLayout>
 
@@ -207,84 +211,170 @@
 
 
             <View
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/colorAccent" />
 
             <TextView
-                android:padding="5dp"
-                android:textStyle="bold"
-                android:textColor="@color/orange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Acerca"/>
+                android:padding="5dp"
+                android:text="Acerca"
+                android:textColor="@color/orange"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/linearLayout4"
-                android:padding="5dp"
-                android:orientation="horizontal"
-                android:gravity="left"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:tint="@color/colorAccent"
-                    android:src="@drawable/ic_screen_lock_portrait"/>
+                    android:src="@drawable/ic_screen_lock_portrait"
+                    android:tint="@color/colorAccent" />
+
                 <RelativeLayout
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:orientation="vertical">
+
                     <TextView
-                        android:textStyle="bold"
                         android:id="@+id/txtabout"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="DataTake"/>
+                        android:text="DataTake"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
                     <TextView
-                        android:layout_below="@+id/txtabout"
                         android:id="@+id/txtaboutversion"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Version 1.0.0"/>
+                        android:layout_below="@+id/txtabout"
+                        android:text="Version 1.0.0"
+                        android:textColor="@color/black" />
                 </RelativeLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/linearLayout5"
-                android:padding="5dp"
-                android:orientation="horizontal"
-                android:gravity="left"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_interedes"/>
+                    android:src="@drawable/ic_interedes" />
+
                 <RelativeLayout
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:orientation="vertical">
+
                     <TextView
-                        android:textStyle="bold"
                         android:id="@+id/txtTitleEmpresa"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="DataTake"/>
+                        android:text="DataTake"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
                     <TextView
-                        android:layout_below="@+id/txtTitleEmpresa"
                         android:id="@+id/txtEmpresa"
-                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Interedes"/>
+                        android:layout_below="@+id/txtTitleEmpresa"
+                        android:text="Interedes"
+                        android:textColor="@color/black" />
                 </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutIpServicios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="Ip de los servicios"
+                    app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+
+                    <EditText
+                        android:id="@+id/edtIpServicios"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="text" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutContrasenaServicios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="Contraseña de los servicios"
+                    android:visibility="gone"
+                    app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+
+                    <EditText
+                        android:id="@+id/edtContrasenaServicios"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnHabilitarServicio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:text="Habilitar Servicio" />
+
+                <Button
+                    android:id="@+id/btnValidarContrasena"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:text="Validar Contraseña"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

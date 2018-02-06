@@ -64,7 +64,7 @@ public class Response_Data_Sync {
     public List<Ciudad_Empresa> Ciudad_Empresas;
 
     //Constructor
-    public Response_Data_Sync(){
+    public Response_Data_Sync() {
 
     }
 

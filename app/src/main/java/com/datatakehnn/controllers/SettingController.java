@@ -41,6 +41,7 @@ public class SettingController {
         setting1.setHora(setting.getHora());
         setting1.setDescripcion_Storage_Phone(setting.getDescripcion_Storage_Phone());
         setting1.setSigla_Storage(setting.getSigla_Storage());
+        setting1.setRuta_Servicio(setting.getRuta_Servicio());
         setting1.save();
         return setting1;
     }
@@ -56,7 +57,6 @@ public class SettingController {
         Setting setting = new Select().from(Setting.class).where(Setting_Table.Fecha.eq(Fecha)).querySingle();
         return setting;
     }
-
 
 
 }

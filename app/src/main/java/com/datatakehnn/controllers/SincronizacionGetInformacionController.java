@@ -63,9 +63,9 @@ public class SincronizacionGetInformacionController {
 
     //register History Sincronizacion
 
-    public  Sincronizacion registerUpdateHistorySinconization(Sincronizacion sincronizacionNew){
+    public Sincronizacion registerUpdateHistorySinconization(Sincronizacion sincronizacionNew) {
 
-        Sincronizacion sincronizacion= new Sincronizacion();
+        Sincronizacion sincronizacion = new Sincronizacion();
         sincronizacion.setSincronizacion_Id(sincronizacionNew.getSincronizacion_Id());
         sincronizacion.setHora(sincronizacionNew.getHora());
         sincronizacion.setFecha(sincronizacionNew.getFecha());
@@ -97,7 +97,7 @@ public class SincronizacionGetInformacionController {
         List<Elemento> elementoList = new Select().from(Elemento.class).where(Elemento_Table.Is_Finished.eq(true))
                 .and(Elemento_Table.Usuario_Id.eq(Usuario_Id))
                 .queryList();
-       // List<Elemento> elementoList = new Select().from(Elemento.class).queryList();
+        // List<Elemento> elementoList = new Select().from(Elemento.class).queryList();
         return elementoList;
     }
 
@@ -113,7 +113,6 @@ public class SincronizacionGetInformacionController {
     }
 
 
-
     //Lista de historial d sincronizacion
     public List<Sincronizacion> getAllHistorySincronizacion(long Usuario_Id) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
@@ -125,7 +124,7 @@ public class SincronizacionGetInformacionController {
     }
 
     //Por sincronizar con estado finalizado
-    public  List<Elemento>  getAllElementsWithuotSync(long Usuario_Id) {
+    public List<Elemento> getAllElementsWithuotSync(long Usuario_Id) {
         //List<Elemento> elementos = new Select().from(Elemento.class).queryList();
         List<Elemento> elementoList = new Select().from(Elemento.class)
                 .where(Elemento_Table.Is_Sync.eq(false))
@@ -146,8 +145,6 @@ public class SincronizacionGetInformacionController {
 
         return elementoList;
     }
-
-
 
 
     ///Eliminar Usuarios bd
@@ -312,7 +309,7 @@ public class SincronizacionGetInformacionController {
             }
 
             //CIUDAD EMPRESAS
-            for (Ciudad_Empresa items : ciudad_empresas){
+            for (Ciudad_Empresa items : ciudad_empresas) {
                 Ciudad_Empresa ciudad_empresa = new Ciudad_Empresa();
                 ciudad_empresa.setCiudad_Empresa_Id(items.getCiudad_Empresa_Id());
                 ciudad_empresa.setCiudad_Id(items.getCiudad_Id());

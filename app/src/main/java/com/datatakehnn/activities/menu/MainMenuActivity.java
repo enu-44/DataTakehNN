@@ -39,6 +39,7 @@ import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.activities.sync.post_sync_activity.UploadDataActivity;
 import com.datatakehnn.controllers.UsuarioController;
 import com.datatakehnn.models.usuario_model.Usuario;
+import com.datatakehnn.services.api_client.retrofit.ApiClient;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,6 +68,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         setToolbarInjection();
         setupInjection();
         setNavDrawerInjection();
+
     }
 
     private void setupInjection() {

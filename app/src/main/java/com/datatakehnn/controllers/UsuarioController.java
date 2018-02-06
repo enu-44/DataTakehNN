@@ -22,7 +22,7 @@ import com.raizlabs.android.dbflow.sql.language.Select;
  * Created by user on 11/11/2017.
  */
 
-public class UsuarioController {
+public class    UsuarioController {
 
     private static Context ourcontext;
     private static UsuarioController _instance;

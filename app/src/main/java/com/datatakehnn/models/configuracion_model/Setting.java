@@ -35,6 +35,10 @@ public class Setting extends BaseModel {
     @Column
     public  String Hora;
 
+    @Column
+    public String Ruta_Servicio;
+
+
 
     //Construtor
 
@@ -42,7 +46,7 @@ public class Setting extends BaseModel {
 
     }
 
-    public Setting(long setting_Id, boolean available_Wifi, boolean available_Mobile_Data, String descripcion_Storage_Phone, String sigla_Storage, String fecha, String hora) {
+    public Setting(long setting_Id, boolean available_Wifi, boolean available_Mobile_Data, String descripcion_Storage_Phone, String sigla_Storage, String fecha, String hora,String ruta_Servicio) {
         Setting_Id = setting_Id;
         Available_Wifi = available_Wifi;
         Available_Mobile_Data = available_Mobile_Data;
@@ -50,6 +54,7 @@ public class Setting extends BaseModel {
         Sigla_Storage = sigla_Storage;
         Fecha = fecha;
         Hora = hora;
+        Ruta_Servicio = ruta_Servicio;
     }
 //Methods
 
@@ -111,5 +116,13 @@ public class Setting extends BaseModel {
 
     public void setHora(String hora) {
         Hora = hora;
+    }
+
+    public String getRuta_Servicio() {
+        return Ruta_Servicio;
+    }
+
+    public void setRuta_Servicio(String ruta_Servicio) {
+        Ruta_Servicio = ruta_Servicio;
     }
 }
