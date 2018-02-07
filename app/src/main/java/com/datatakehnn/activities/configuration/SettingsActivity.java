@@ -503,11 +503,14 @@ public class SettingsActivity extends AppCompatActivity {
                     if (!edtIpServicios.getText().toString().isEmpty() && (edtIpServicios.getText().toString().startsWith("http://") || edtIpServicios.getText().toString().startsWith("https://"))) {
                         //ip_servicio = edtIpServicios.getText().toString();
                         setting.setRuta_Servicio(edtIpServicios.getText().toString());
-                        apiClient.BASE_URL = edtIpServicios.getText().toString();
                     }
                     settingController.registerUpdate(setting);
+                    apiClient.setRoute(setting.getRuta_Servicio());
+                    apiClient.BASE_URL = setting.getRuta_Servicio();
                     onMessageOk(R.color.orange, "Guardado Correctamente");
-                    onReturnActivity();
+                    //onReturnActivity();
+                    int pid = android.os.Process.myPid();
+                    android.os.Process.killProcess(pid);
 
                 }
 
@@ -605,7 +608,7 @@ public class SettingsActivity extends AppCompatActivity {
                 //edtIpServicios.setEnabled(true);
                 textInputLayoutContrasenaServicios.setVisibility(View.VISIBLE);
                 btnValidarContrasena.setVisibility(View.VISIBLE);
-                String ruta_actual = ApiClient.BASE_URL;
+                String ruta_actual = apiClient.BASE_URL;
                 Toast.makeText(this, ruta_actual, Toast.LENGTH_LONG).show();
                 break;
             case R.id.btnValidarContrasena:

@@ -44,6 +44,12 @@ public class ApiClient {
 
     public static String BASE_URL = SQLite.select().from(Setting.class).querySingle().getRuta_Servicio();
 
+    public String setRoute(String url) {
+        BASE_URL = url;
+        return BASE_URL;
+    }
+
+
     private static Retrofit retrofitAmazon = null;
     private static Gson gson = null;
 

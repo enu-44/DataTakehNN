@@ -43,6 +43,7 @@ import com.datatakehnn.models.tipo_cable.Tipo_Cable;
 import com.datatakehnn.models.tipo_equipo_model.Tipo_Equipo;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
 import com.datatakehnn.models.tipo_perdida_model.Tipo_Perdida;
+import com.datatakehnn.services.api_client.retrofit.ApiClient;
 import com.datatakehnn.services.api_client.routes.Const;
 import com.datatakehnn.services.api_services.data_async_services.DataSyncApiService;
 import com.datatakehnn.services.api_services.data_async_services.IDataAsync;
@@ -98,6 +99,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     private static Context ourcontext;
     private static SyncActivity _instance;
     DataSyncApiService dataSyncApiService;
+
 
     //Item Menu
     Menu menuGlobal;
@@ -395,6 +397,7 @@ public class SyncActivity extends AppCompatActivity implements IDataAsync, Conne
     // Sincronizar Informacion
     public void getInformationSync() {
         if (checkConnection()) {
+
             loadDataAsync(this);
 
         } else {

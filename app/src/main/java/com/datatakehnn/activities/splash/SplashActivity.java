@@ -14,6 +14,7 @@ import com.datatakehnn.R;
 import com.datatakehnn.activities.login.LoginActivity;
 import com.datatakehnn.controllers.SettingController;
 import com.datatakehnn.models.configuracion_model.Setting;
+import com.datatakehnn.services.api_client.retrofit.ApiClient;
 import com.datatakehnn.services.api_client.routes.Const;
 import com.datatakehnn.services.coords.CoordsService;
 
@@ -26,6 +27,7 @@ public class SplashActivity extends AppCompatActivity {
     ImageView ivLogo;
 
     SettingController settingController;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
