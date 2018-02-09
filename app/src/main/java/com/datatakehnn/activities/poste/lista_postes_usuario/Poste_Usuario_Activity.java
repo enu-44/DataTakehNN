@@ -206,6 +206,13 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
 
     private void loadListElementsRegisterWithFecha() {
         Usuario usuarioLogued = usuarioController.getLoggedUser();
+
+        if(adapter==null){
+            initAdapter();
+            initRecyclerView();
+        }
+
+
         adapter.clear();
         elementosList.clear();
         if (positionSpinner == 1) {

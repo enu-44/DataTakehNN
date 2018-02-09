@@ -78,6 +78,7 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         }
 
         holder.txtDireccion.setText(elemento.getDireccion());
+
         holder.txtArchivo.setText("Almacenamiento Interno/Pictures/DatatakeCamera/" + elemento.getElemento_Id());
 
         try {
@@ -122,34 +123,46 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
             e.printStackTrace();
         }
 
-        Longitud_Elemento longitud_elemento = sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.getLongitud_Elemento_Id());
-        Nivel_Tension_Elemento nivel_tension_elemento = sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id());
-        if (longitud_elemento != null) {
-            holder.txtLongitud.setText(String.valueOf(longitud_elemento.getValor()) + " " + longitud_elemento.getUnidad_Medida());
-        }
-        if (nivel_tension_elemento != null) {
-            holder.txtNivelTension.setText(nivel_tension_elemento.getSigla());
+        try{
+
+            Longitud_Elemento longitud_elemento = sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.getLongitud_Elemento_Id());
+            Nivel_Tension_Elemento nivel_tension_elemento = sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id());
+            if (longitud_elemento != null) {
+                holder.txtLongitud.setText(String.valueOf(longitud_elemento.getValor()) + " " + longitud_elemento.getUnidad_Medida());
+            }
+            if (nivel_tension_elemento != null) {
+                holder.txtNivelTension.setText(nivel_tension_elemento.getSigla());
+            }
+
+            if (elemento.isIs_Sync()) {
+                holder.img_status_sincronized.setImageResource(R.drawable.ic_cloud_sincronized);
+                holder.switchElementSincronizado.setChecked(true);
+            } else {
+                holder.img_status_sincronized.setImageResource(R.drawable.ic_cloud_without_sincronized);
+                holder.switchElementSincronizado.setChecked(false);
+            }
+
+
+            if (elemento.isIs_Finished()) {
+                holder.indicator_element_sincronize_status.setBackgroundResource(R.color.orange);
+            } else {
+                holder.indicator_element_sincronize_status.setBackgroundResource(R.color.red);
+            }
+
+
+
+
+            if (elemento.isIs_Sync()) {
+                holder.switchElementSincronizado.setText("Sincronizado");
+            } else {
+                holder.switchElementSincronizado.setText("Por Sincronizar");
+            }
+
+
+        }catch (Exception ex){
+
         }
 
-        if (elemento.isIs_Sync()) {
-            holder.img_status_sincronized.setImageResource(R.drawable.ic_cloud_sincronized);
-        } else {
-            holder.img_status_sincronized.setImageResource(R.drawable.ic_cloud_without_sincronized);
-        }
-
-
-        if (elemento.isIs_Finished()) {
-            holder.indicator_element_sincronize_status.setBackgroundResource(R.color.orange);
-        } else {
-            holder.indicator_element_sincronize_status.setBackgroundResource(R.color.red);
-        }
-
-        holder.switchElementSincronizado.setChecked(elemento.isIs_Sync());
-        if (elemento.isIs_Sync()) {
-            holder.switchElementSincronizado.setText("Sincronizado");
-        } else {
-            holder.switchElementSincronizado.setText("Por Sincronizar");
-        }
 
 
 /*

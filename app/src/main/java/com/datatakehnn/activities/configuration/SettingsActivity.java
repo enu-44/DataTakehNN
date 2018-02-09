@@ -509,8 +509,8 @@ public class SettingsActivity extends AppCompatActivity {
                     apiClient.BASE_URL = setting.getRuta_Servicio();
                     onMessageOk(R.color.orange, "Guardado Correctamente");
                     //onReturnActivity();
-                    int pid = android.os.Process.myPid();
-                    android.os.Process.killProcess(pid);
+                   /* int pid = android.os.Process.myPid();
+                    android.os.Process.killProcess(pid);*/
 
                 }
 

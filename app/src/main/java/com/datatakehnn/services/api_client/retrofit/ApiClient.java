@@ -22,6 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     //public static final String BASE_URL = Const.URL_RouteBaseAddress;
+    public static String BASE_URL =Const.URL_RouteBaseAddress;
 
     private static Context ourcontext;
     private static ApiClient _instance;
@@ -42,7 +43,8 @@ public class ApiClient {
     }
 
 
-    public static String BASE_URL = SQLite.select().from(Setting.class).querySingle().getRuta_Servicio();
+    ///public static String BASE_URL = SQLite.select().from(Setting.class).querySingle().getRuta_Servicio();
+
 
     public String setRoute(String url) {
         BASE_URL = url;
