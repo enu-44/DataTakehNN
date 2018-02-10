@@ -16,5 +16,14 @@
         app:showAsAction="always">
     </item>
 
+    <item
+        android:id="@+id/action_exportar"
+        android:icon="@android:drawable/btn_plus"
+        android:orderInCategory="100"
+        android:title="Exportar"
+        app:showAsAction="always">
+    </item>
+
+
 
 </menu>

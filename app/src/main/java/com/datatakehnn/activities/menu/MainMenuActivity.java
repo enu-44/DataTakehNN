@@ -1,13 +1,18 @@
 package com.datatakehnn.activities.menu;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,9 +43,16 @@ import com.datatakehnn.activities.poste.PosteActivity;
 import com.datatakehnn.activities.poste.lista_postes_usuario.Poste_Usuario_Activity;
 import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.activities.sync.post_sync_activity.UploadDataActivity;
+import com.datatakehnn.config.DataSource;
 import com.datatakehnn.controllers.UsuarioController;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.api_client.retrofit.ApiClient;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +72,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     //Instances
     UsuarioController usuarioController;
     private Usuario usuarioLogued;
+
+    //Permission
+    //public static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
+    private static final int PERMISSION_REQUEST_CODE = 1;
+    int PERMISSION_ALL = 1;
+    String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,11 +155,171 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                     return true;
                 }
                 break;
+
+            case R.id.action_exportar:
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (!hasPermissions(getApplicationContext(), PERMISSIONS)) {
+                        requestPermission();
+                    } else {
+                        doPermissionGrantedStuffs();
+                    }
+                } else {
+                    doPermissionGrantedStuffs();
+                }
+                break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    ///PERMISOS
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void requestPermission() {
+
+        //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    doPermissionGrantedStuffs();
+                }
+
+                /* else if ((Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(permissions[0])) ||
+                        (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(permissions[1]))) {
+                    //Toast.makeText(MainActivity.this, "Go to Settings and Grant the permission to use this feature.", Toast.LENGTH_SHORT).show();
+                    // User selected the Never Ask Again Option
+                    Intent i = new Intent();
+                    i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    i.addCategory(Intent.CATEGORY_DEFAULT);
+                    i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    getApplicationContext().startActivity(i);
+
+                } */
+                else {
+                    Toast.makeText(MainMenuActivity.this,
+                            "Permiso denegado", Toast.LENGTH_LONG).show();
+
+                }
+                break;
+        }
+    }
+
+    public void doPermissionGrantedStuffs() {
+
+        /// String SIMSerialNumber=tm.getSimSerialNumber();
+        for (String permission : PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        }
+
+        exportDB();
+    }
+
+    private void exportDB() {
+        // TODO Auto-generated method stub
+
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                /*String currentDBPath = "//data//" + "com.datatakehnn"
+                        + "//databases//" + "db_datatake.db";*/
+                String currentDBPath = String.format("%s%s",String.valueOf(getDatabasePath(DataSource.NAME)),".db");
+
+                createDirIfNotExists("BackupDatatake");
+
+                String backupDBPath = "/BackupDatatake/db_datatake.db";
+                File currentDB = new File(currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(getBaseContext(), backupDB.toString(),
+                        Toast.LENGTH_LONG).show();
+
+            }
+        } catch (Exception e) {
+
+            Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG)
+                    .show();
+
+        }
+
+        /*try {
+            final String database = String.format("%s%s",String.valueOf(getDatabasePath(DataSource.NAME)),".db");
+            //final String inFileName = "/data/data/com.datatakehnn/databases/db_datatake";
+            File dbFile = new File(database);
+            FileInputStream fis = new FileInputStream(dbFile);
+
+            //String backupDBPath = "/BackupDataTake";
+
+
+            String outFileName = Environment.getExternalStorageDirectory()  + "/db_datatake_copy.db";
+
+            // Open the empty db as the output stream
+            OutputStream output = new FileOutputStream(outFileName);
+
+            // Transfer bytes from the inputfile to the outputfile
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+
+            // Close the streams
+            output.flush();
+            output.close();
+            fis.close();
+        } catch (Exception e) {
+
+            Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG)
+                    .show();
+
+        } */
+
+    }
+
+    public static boolean createDirIfNotExists(String path) {
+        boolean ret = true;
+
+        File file = new File(Environment.getExternalStorageDirectory(), path);
+        if (!file.exists()) {
+            if (!file.mkdirs()) {
+                Log.e("TravellerLog :: ", "Problem creating Image folder");
+                ret = false;
+            }
+        }else{
+            File folder = new File(Environment.getExternalStorageDirectory().toString()+path);
+            folder.mkdirs();
+        }
+        return ret;
+    }
+
+
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -259,27 +438,27 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         return builder.show();
     }
 
-    //endregion
+//endregion
 
-    //region Binding Drawer Layout
-    protected static class HeaderViewHolder {
+//region Binding Drawer Layout
+protected static class HeaderViewHolder {
 
-        @BindView(R.id.tvNombreUsuario)
-        TextView tvNombreUsuario;
-        @BindView(R.id.tvCCUsuario)
-        TextView tvCCUsuario;
-        @BindView(R.id.tvEmpresaUsuario)
-        TextView tvEmpresaUsuario;
-        @BindView(R.id.tvProyectoUsuario)
-        TextView tvProyectoUsuario;
-        @BindView(R.id.tvCiudadUsuario)
-        TextView tvCiudadUsuario;
+    @BindView(R.id.tvNombreUsuario)
+    TextView tvNombreUsuario;
+    @BindView(R.id.tvCCUsuario)
+    TextView tvCCUsuario;
+    @BindView(R.id.tvEmpresaUsuario)
+    TextView tvEmpresaUsuario;
+    @BindView(R.id.tvProyectoUsuario)
+    TextView tvProyectoUsuario;
+    @BindView(R.id.tvCiudadUsuario)
+    TextView tvCiudadUsuario;
 
-        HeaderViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
+    HeaderViewHolder(View view) {
+        ButterKnife.bind(this, view);
     }
+}
 
-    //endregion
+//endregion
 
 }

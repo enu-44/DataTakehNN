@@ -215,6 +215,7 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
 
         adapter.clear();
         elementosList.clear();
+        adapter.notifyDataSetChanged();
         if (positionSpinner == 1) {
             elementosList = elementoController.getListElementsByFechaWithoutSync(usuarioLogued.getUsuario_Id(), List_Is_Finished, textViewFecha.getText().toString());
         } else if (positionSpinner == 2) {
