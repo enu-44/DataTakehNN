@@ -54,10 +54,16 @@ public class ApiClient {
 
     private static Retrofit retrofitAmazon = null;
     private static Gson gson = null;
-
+/*
     static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .readTimeout(300000, TimeUnit.SECONDS) //Tiempo de respuesta del servicio
             .connectTimeout(30000, TimeUnit.SECONDS)
+
+            .build();*/
+
+    static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            .readTimeout(5, TimeUnit.MINUTES) //Tiempo de respuesta del servicio
+            .connectTimeout(5, TimeUnit.MINUTES)
 
             .build();
 

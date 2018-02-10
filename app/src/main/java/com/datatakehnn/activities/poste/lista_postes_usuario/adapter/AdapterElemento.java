@@ -37,6 +37,8 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
     public Context context;
     public NovedadController novedadController;
     public SincronizacionGetInformacionController sincronizacionGetInformacionController;
+    Longitud_Elemento longitud_elemento;
+    Nivel_Tension_Elemento nivel_tension_elemento;
 
 
     public AdapterElemento(Context context, List<Elemento> dataset, OnItemClickListenerElemento onItemClickListener) {
@@ -123,10 +125,14 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
             e.printStackTrace();
         }
 
-        try{
+        try {
 
-            Longitud_Elemento longitud_elemento = sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.getLongitud_Elemento_Id());
-            Nivel_Tension_Elemento nivel_tension_elemento = sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id());
+            if (sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.getLongitud_Elemento_Id()) != null) {
+                longitud_elemento = sincronizacionGetInformacionController.getLongitudByLongitud_Elemento_Id(elemento.getLongitud_Elemento_Id());
+            }
+            if (sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id()) != null) {
+                nivel_tension_elemento = sincronizacionGetInformacionController.getNivelTensionByNivel_Tension_Elemento_Id(elemento.getNivel_Tension_Elemento_Id());
+            }
             if (longitud_elemento != null) {
                 holder.txtLongitud.setText(String.valueOf(longitud_elemento.getValor()) + " " + longitud_elemento.getUnidad_Medida());
             }
@@ -150,8 +156,6 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
             }
 
 
-
-
             if (elemento.isIs_Sync()) {
                 holder.switchElementSincronizado.setText("Sincronizado");
             } else {
@@ -159,7 +163,7 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
             }
 
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
 
         }
 
