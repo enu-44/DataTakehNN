@@ -17,7 +17,7 @@
     <item  android:title="Menu">
         <menu>
             <item
-                android:iconTint="@color/white"
+                android:iconTint="@color/orange"
                 android:id="@+id/nav_configuration"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="Configuracion" />

@@ -1,7 +1,11 @@
 package com.datatakehnn.activities.menu;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,6 +55,7 @@ import com.datatakehnn.services.api_client.retrofit.ApiClient;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
@@ -60,6 +65,7 @@ import butterknife.OnClick;
 
 public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = "";
     //UI Elements
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -79,6 +85,18 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
+
+    //BACKUP DATABASE
+    private static  String Directori_Backup_DataBase= "BackupDatatake";
+    private static  String Directori_Restore_DataBase= "RestoreDatatake";
+
+    private static final int READ_REQUEST_CODE = 42;
+
+
+    private static  boolean IS_IMPORT = false;
+    private static  boolean IS_EXPORT = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,10 +111,11 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private void setupInjection() {
         this.usuarioController = UsuarioController.getInstance(this);
         usuarioLogued = usuarioController.getLoggedUser();
+
     }
 
 
-    //region MENU
+
 
     //region /*MENU*/
     /*-------------------------------------------------------------------------------------------------------*/
@@ -157,21 +176,115 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 break;
 
             case R.id.action_exportar:
+                IS_IMPORT=false;
+                IS_EXPORT=true;
+
                 if (Build.VERSION.SDK_INT >= 23) {
                     if (!hasPermissions(getApplicationContext(), PERMISSIONS)) {
                         requestPermission();
                     } else {
-                        doPermissionGrantedStuffs();
+                        boolean response= doPermissionGrantedStuffs();
+                        if(response){
+                            startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), READ_REQUEST_CODE);
+                        }
+
                     }
                 } else {
-                    doPermissionGrantedStuffs();
+                    boolean response= doPermissionGrantedStuffs();
+                    if(response){
+                        startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), READ_REQUEST_CODE);
+                    }
                 }
+                break;
+
+            case R.id.action_importar:
+
+                IS_IMPORT=true;
+                IS_EXPORT=false;
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (!hasPermissions(getApplicationContext(), PERMISSIONS)) {
+                        requestPermission();
+                    } else {
+                        boolean response= doPermissionGrantedStuffs();
+                        if(response){
+                            performFileSearch();
+                        }
+
+                    }
+                } else {
+                    boolean response= doPermissionGrantedStuffs();
+                    if(response){
+                        performFileSearch();
+                    }
+                }
+
+
+
+               // startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), READ_REQUEST_CODE);
+
+               // startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), READ_REQUEST_CODE);
+
+                // performFileSearch();
+
+                /*if (Build.VERSION.SDK_INT >= 23) {
+                    if (!hasPermissions(getApplicationContext(), PERMISSIONS)) {
+                        requestPermission();
+                    } else {
+                        boolean response= doPermissionGrantedStuffs();
+                        if(response){
+                            importDB();
+                        }
+                    }
+                } else {
+                    boolean response= doPermissionGrantedStuffs();
+                    if(response){
+                        importDB();
+                    }
+                }*/
                 break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_configuration) {
+            // Handle the camera action
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
+        } else if (id == R.id.nav_syncronization) {
+            startActivity(new Intent(getBaseContext(), SyncActivity.class)
+                    .putExtra("FROM_LOGIN", false)
+                    .putExtra("FROM_MENU", true)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish();
+        } else if (id == R.id.nav_device) {
+
+            Intent i = new Intent(this, DeviceMasterActivity.class);
+            startActivity(i);
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
+
+    //endregion
+
+
+    //region PERMISOS
 
 
     ///PERMISOS
@@ -223,33 +336,119 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
-    public void doPermissionGrantedStuffs() {
+    public boolean  doPermissionGrantedStuffs() {
 
         /// String SIMSerialNumber=tm.getSimSerialNumber();
         for (String permission : PERMISSIONS) {
             if (ActivityCompat.checkSelfPermission(getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
-                return;
+                boolean response= false;
+                return response;
             }
         }
 
-        exportDB();
+
+
+        boolean response= true;
+        return response;
     }
 
-    private void exportDB() {
-        // TODO Auto-generated method stub
+    //endregion
 
+
+    //region METHODS
+
+    public void performFileSearch() {
+
+
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
+        // browser.
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        // Filter to only show results that can be "opened", such as a
+        // file (as opposed to a list of contacts or timezones)
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        // Filter to show only images, using the image MIME data type.
+        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+        // To search for all documents available via installed storage providers,
+        // it would be "*/*".
+        intent.setType("*/*");
+        startActivityForResult(intent, READ_REQUEST_CODE);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
+        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
+        // response to some other intent, and the code below shouldn't run at all.
+
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.
+
+            // Pull that URI using resultData.getData().
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                Log.i(TAG, "Uri: " + uri.toString());
+
+                File file=new File(uri.getPath());
+
+                String path= file.getAbsolutePath();
+
+                if(IS_EXPORT){
+                    exportDB(path);
+                }else{
+                    importDB(path);
+                }
+
+
+              //  Toast.makeText(this,"Uri: "+directory,Toast.LENGTH_LONG).show();
+                //showImage(uri);
+            }
+        }
+    }
+
+
+
+    private void exportDB(String path) {
+        // TODO Auto-generated method stub
         try {
+            String[] posicion;
+            posicion = path.split(":");
+
+            String directory="";
+            if (posicion.length > 1) {
+                directory=posicion[1];
+            }
+
+
             File sd = Environment.getExternalStorageDirectory();
-            File data = Environment.getDataDirectory();
+            //File data = Environment.getDataDirectory();
 
             if (sd.canWrite()) {
                 /*String currentDBPath = "//data//" + "com.datatakehnn"
                         + "//databases//" + "db_datatake.db";*/
                 String currentDBPath = String.format("%s%s",String.valueOf(getDatabasePath(DataSource.NAME)),".db");
 
-                createDirIfNotExists("BackupDatatake");
+                /*
+                File file = new File(currentDBPath);
+                boolean res=false;
 
-                String backupDBPath = "/BackupDatatake/db_datatake.db";
+                if (file.exists()) {
+                    res= true;
+
+                }else{
+                    res= false;
+                }*/
+
+               // createDirIfNotExists(Directori_Backup_DataBase);
+
+                String backupDBPath = directory+"/db_datatake.db";
+
+
                 File currentDB = new File(currentDBPath);
                 File backupDB = new File(sd, backupDBPath);
 
@@ -259,6 +458,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 src.close();
                 dst.close();
                 Toast.makeText(getBaseContext(), backupDB.toString(),
+                        Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getBaseContext(), "Se exporto correctamente en: "+backupDBPath,
                         Toast.LENGTH_LONG).show();
 
             }
@@ -302,6 +504,94 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         } */
 
     }
+    //importing database
+    private void importDB(String path) {
+        // TODO Auto-generated method stub
+
+        /*
+        String backupDBPath = "/BackupDatatake/db_datatake.db";
+        try {
+
+            boolean response= importDatabase(backupDBPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+
+
+        // TODO Auto-generated method stub
+
+        try {
+
+            String[] posicion;
+            posicion = path.split(":");
+
+            String directory="";
+            if (posicion.length > 1) {
+                directory=posicion[1];
+            }
+
+            File sd = Environment.getExternalStorageDirectory();
+            File data  = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+
+                //String currentDBPath= "/data/data/com.datatakehnn/databases/db_datatake.db";
+                String  currentDBPath=  String.format("%s%s",String.valueOf(getDatabasePath(DataSource.NAME)),".db");
+
+                File file = new File(currentDBPath);
+                boolean res=false;
+
+                if (file.exists()) {
+                    res= true;
+
+                }else{
+                    res= false;
+                }
+
+                String backupDBPath = "/"+directory;
+                File  backupDB= new File(currentDBPath);
+                File currentDB  = new File(sd, backupDBPath);
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(getBaseContext(), backupDB.toString(),
+                        Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getBaseContext(),"DB Imported Succesfult",
+                        Toast.LENGTH_LONG).show();
+
+                restart(this,1);
+
+
+            }
+        } catch (Exception e) {
+
+            Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG)
+                    .show();
+
+        }
+
+
+    }
+
+    public static void restart(Context context, int delay) {
+        if (delay == 0) {
+            delay = 1;
+        }
+        Log.e("", "restarting app");
+        Intent restartIntent = context.getPackageManager()
+                .getLaunchIntentForPackage(context.getPackageName() );
+        @SuppressLint("WrongConstant") PendingIntent intent = PendingIntent.getActivity(
+                context, 0,
+                restartIntent, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + delay, intent);
+        System.exit(2);
+    }
 
     public static boolean createDirIfNotExists(String path) {
         boolean ret = true;
@@ -317,36 +607,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             folder.mkdirs();
         }
         return ret;
-    }
-
-
-
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_configuration) {
-            // Handle the camera action
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-        } else if (id == R.id.nav_syncronization) {
-            startActivity(new Intent(getBaseContext(), SyncActivity.class)
-                    .putExtra("FROM_LOGIN", false)
-                    .putExtra("FROM_MENU", true)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-            finish();
-        } else if (id == R.id.nav_device) {
-
-            Intent i = new Intent(this, DeviceMasterActivity.class);
-            startActivity(i);
-        }
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-
-        return true;
     }
 
 
@@ -440,7 +700,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
 //endregion
 
-//region Binding Drawer Layout
+//region  Binding Drawer Layout
 protected static class HeaderViewHolder {
 
     @BindView(R.id.tvNombreUsuario)
