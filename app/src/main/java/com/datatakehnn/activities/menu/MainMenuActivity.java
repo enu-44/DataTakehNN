@@ -431,7 +431,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             if (sd.canWrite()) {
                 /*String currentDBPath = "//data//" + "com.datatakehnn"
                         + "//databases//" + "db_datatake.db";*/
-                String currentDBPath = String.format("%s%s",String.valueOf(getDatabasePath(DataSource.NAME)),".db");
+                String currentDBPath = String.format("%s%s",String.valueOf(getApplicationContext().getDatabasePath(DataSource.NAME)),".db");
 
                 /*
                 File file = new File(currentDBPath);
@@ -537,7 +537,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             if (sd.canWrite()) {
 
                 //String currentDBPath= "/data/data/com.datatakehnn/databases/db_datatake.db";
-                String  currentDBPath=  String.format("%s%s",String.valueOf(getDatabasePath(DataSource.NAME)),".db");
+                String  currentDBPath=  String.format("%s%s",String.valueOf(getApplicationContext().getDatabasePath(DataSource.NAME)),".db");
 
                 File file = new File(currentDBPath);
                 boolean res=false;
