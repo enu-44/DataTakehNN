@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -62,10 +63,10 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.spinner_poste_usuario)
     Spinner spinnerPosteUsuario;
-    @BindView(R.id.btnSeleccionarFecha)
-    Button btnSeleccionarFecha;
-    @BindView(R.id.textViewFecha)
-    TextView textViewFecha;
+    //@BindView(R.id.btnSeleccionarFecha)
+   // Button btnSeleccionarFecha;
+   /* @BindView(R.id.textViewFecha)
+    TextView textViewFecha;*/
 
     private boolean List_Is_Finished = true;
 
@@ -86,6 +87,9 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     DateFormat formatDateTime = DateFormat.getDateTimeInstance();
     Calendar dateTime = Calendar.getInstance();
 
+    private Menu menu;
+    private static  String Date_Selected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +102,7 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         initAdapter();
         initRecyclerView();
         updateDate();
-        loadListElementsRegisterWithFecha();
+    //    loadListElementsRegisterWithFecha();
     }
 
     //region SETUP INJECTION
@@ -143,17 +147,17 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     //endregion
 
     //region METHODS
-    @OnClick(R.id.btnSeleccionarFecha)
+   /* @OnClick(R.id.btnSeleccionarFecha)
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btnSeleccionarFecha:
-                updateDate();
-                break;
+           // case R.id.btnSeleccionarFecha:
+               // updateDate();
+                //break;
             default:
                 break;
         }
     }
-
+*/
     private void updateDate() {
         new DatePickerDialog(this, d, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -171,7 +175,12 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     private void mostrarResultadosFecha() {
         SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yyyy");
         String formatted = format1.format(dateTime.getTime());
-        textViewFecha.setText(formatted);
+
+        MenuItem bedMenuItem = menu.findItem(R.id.action_date);
+        bedMenuItem.setTitle(formatted);
+        Date_Selected=formatted;
+
+        //textViewFecha.setText(formatted);
         loadListElementsRegisterWithFecha();
     }
 
@@ -217,11 +226,11 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         elementosList.clear();
         adapter.notifyDataSetChanged();
         if (positionSpinner == 1) {
-            elementosList = elementoController.getListElementsByFechaWithoutSync(usuarioLogued.getUsuario_Id(), List_Is_Finished, textViewFecha.getText().toString());
+            elementosList = elementoController.getListElementsByFechaWithoutSync(usuarioLogued.getUsuario_Id(), List_Is_Finished, Date_Selected);
         } else if (positionSpinner == 2) {
-            elementosList = elementoController.getListElementsByFecha(usuarioLogued.getUsuario_Id(), true, List_Is_Finished, textViewFecha.getText().toString());
+            elementosList = elementoController.getListElementsByFecha(usuarioLogued.getUsuario_Id(), true, List_Is_Finished, Date_Selected);
         } else if (positionSpinner == 3) {
-            elementosList = elementoController.getListElementsByFecha(usuarioLogued.getUsuario_Id(), false, List_Is_Finished, textViewFecha.getText().toString());
+            elementosList = elementoController.getListElementsByFecha(usuarioLogued.getUsuario_Id(), false, List_Is_Finished, Date_Selected);
         }
         setContent(elementosList);
         resultsList(elementosList);
@@ -307,6 +316,7 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     //region METHODS OVERRIDES
     @Override
     public void onRefresh() {
+        //showProgresss();
         showProgresss();
         loadListElementsRegisterWithFecha();
     }
@@ -329,28 +339,51 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
         startActivity(i);
     }
 
+
+
     @Override
-    public void onSwitchChanged(Elemento elemento, boolean isSync) {
+    public void onSincronizacionSi(Elemento elemento) {
         //Toast.makeText(this, "Poste: " + elemento.getCodigo_Apoyo() + " " + isSync, Toast.LENGTH_SHORT).show();
-        elemento.setIs_Sync(isSync);
+        elemento.setIs_Sync(true);
         elementoController.update(elemento);
-        onRefresh();
+        showProgresss();
+        loadListElementsRegisterWithFecha();
     }
+
+
+    @Override
+    public void onSincronizacionNo(Elemento elemento) {
+        //Toast.makeText(this, "Poste: " + elemento.getCodigo_Apoyo() + " " + isSync, Toast.LENGTH_SHORT).show();
+        elemento.setIs_Sync(false);
+        elementoController.update(elemento);
+        showProgresss();
+        loadListElementsRegisterWithFecha();
+    }
+
+
+
+
+
     //endregion
 
     //region MENU
 
-/*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_poste_usuario, menu);
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
-    }*/
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
+
+            case R.id.action_date:
+                updateDate();
+                break;
 
             ///Metodo que permite no recargar la pagina al devolverse
             case android.R.id.home:

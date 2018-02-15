@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -142,10 +144,11 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
 
             if (elemento.isIs_Sync()) {
                 holder.img_status_sincronized.setImageResource(R.drawable.ic_cloud_sincronized);
-                holder.switchElementSincronizado.setChecked(true);
+                holder.radioGroupSincronizacion.check(R.id.radioButtonSincronizacionSi);
+
             } else {
                 holder.img_status_sincronized.setImageResource(R.drawable.ic_cloud_without_sincronized);
-                holder.switchElementSincronizado.setChecked(false);
+                holder.radioGroupSincronizacion.check(R.id.radioButtonSincronizacionNo);
             }
 
 
@@ -156,11 +159,7 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
             }
 
 
-            if (elemento.isIs_Sync()) {
-                holder.switchElementSincronizado.setText("Sincronizado");
-            } else {
-                holder.switchElementSincronizado.setText("Por Sincronizar");
-            }
+
 
 
         } catch (Exception ex) {
@@ -213,8 +212,14 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         @BindView(R.id.img_status_sincronized)
         ImageView img_status_sincronized;
 
-        @BindView(R.id.switchElementSincronizado)
-        Switch switchElementSincronizado;
+        @BindView(R.id.radioGroupSincronizacion)
+        RadioGroup radioGroupSincronizacion;
+
+        @BindView(R.id.radioButtonSincronizacionSi)
+        RadioButton radioButtonSincronizacionSi;
+
+        @BindView(R.id.radioButtonSincronizacionNo)
+        RadioButton radioButtonSincronizacionNo;
 
 
         @BindView(R.id.indicator_element_sincronize_status)
@@ -242,10 +247,20 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
                 }
             });
 
-            switchElementSincronizado.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+
+            radioButtonSincronizacionSi.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    onItemClickListener.onSwitchChanged(responseNotify, b);
+                public void onClick(View view) {
+                    onItemClickListener.onSincronizacionSi(responseNotify);
+                }
+            });
+
+
+            radioButtonSincronizacionNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemClickListener.onSincronizacionNo(responseNotify);
                 }
             });
         }

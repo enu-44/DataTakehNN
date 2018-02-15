@@ -336,6 +336,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+
     public boolean  doPermissionGrantedStuffs() {
 
         /// String SIMSerialNumber=tm.getSimSerialNumber();

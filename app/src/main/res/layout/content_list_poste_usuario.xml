@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardUseCompatPadding="true">
@@ -241,6 +241,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_sincronizacion" />
 
+<!--
                     <Switch
                         android:id="@+id/switchElementSincronizado"
                         android:layout_width="wrap_content"
@@ -250,7 +251,46 @@
                         android:layout_toRightOf="@+id/img_status_sincronized"
                         android:checked="true"
                         android:text=""
-                        android:theme="@style/SCBSwitch" />
+                        android:theme="@style/SCBSwitch" />-->
+
+
+                    <RadioGroup
+                        android:layout_below="@+id/img_status_sincronized"
+                        android:id="@+id/radioGroupSincronizacion"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/gray_out_line"
+                        android:checkedButton="@+id/radioButtonSincronizacionSi"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonSincronizacionSi"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/toggle_selector_green"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="@string/si"
+                            android:textColor="@color/white" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonSincronizacionNo"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginRight="1dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/toggle_selector_red"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="@string/no"
+                            android:textColor="@color/white" />
+                    </RadioGroup>
 
 
                 </RelativeLayout>

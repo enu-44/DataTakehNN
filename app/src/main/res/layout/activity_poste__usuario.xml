@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/fondo_listado_postes"
     android:fitsSystemWindows="true"
     tools:context="com.datatakehnn.activities.poste.lista_postes_usuario.Poste_Usuario_Activity">
@@ -28,62 +29,66 @@
                 android:orientation="horizontal">
 
                 <Spinner
+
                     android:id="@+id/spinner_poste_usuario"
-                    android:layout_width="match_parent"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content">
 
 
+
+
                 </Spinner>
+
+               <Switch
+                    android:id="@+id/switchElementFinished"
+                    android:layout_width="50dp"
+                   android:gravity="center"
+                   android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:theme="@style/SCBSwitch" />
+
             </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <!--   <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical"
+           app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnSeleccionarFecha"
-                android:layout_margin="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="5dp"
-                android:background="@drawable/custom_button"
-                android:text="Seleccionar Fecha"
-                android:textColor="@color/white" />
+               <Button
+                   android:id="@+id/btnSeleccionarFecha"
+                   android:layout_margin="16dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="center"
+                   android:padding="5dp"
+                   android:background="@drawable/custom_button"
+                   android:text="Seleccionar Fecha"
+                   android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/textViewFecha"
-                android:layout_marginLeft="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+               <TextView
+                   android:id="@+id/textViewFecha"
+                   android:layout_marginLeft="5dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="center" />
 
-        </LinearLayout>
+           </LinearLayout>
 
-        <Switch
-            android:id="@+id/switchElementFinished"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginBottom="0dp"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="Finalizados  "
-            android:theme="@style/SCBSwitch" />
 
-        <include layout="@layout/content_recycler_view" />
-    </LinearLayout>
+
+
+       </LinearLayout>-->
+
+    <include layout="@layout/content_recycler_view" />
 
 </android.support.design.widget.CoordinatorLayout>
