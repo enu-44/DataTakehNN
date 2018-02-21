@@ -149,6 +149,7 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
             } else {
                 holder.img_status_sincronized.setImageResource(R.drawable.ic_cloud_without_sincronized);
                 holder.radioGroupSincronizacion.check(R.id.radioButtonSincronizacionNo);
+                holder.radioButtonSincronizacionSi.setEnabled(false);
             }
 
 

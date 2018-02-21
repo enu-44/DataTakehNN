@@ -344,10 +344,11 @@ public class Poste_Usuario_Activity extends AppCompatActivity implements OnItemC
     @Override
     public void onSincronizacionSi(Elemento elemento) {
         //Toast.makeText(this, "Poste: " + elemento.getCodigo_Apoyo() + " " + isSync, Toast.LENGTH_SHORT).show();
+        /*
         elemento.setIs_Sync(true);
         elementoController.update(elemento);
         showProgresss();
-        loadListElementsRegisterWithFecha();
+        loadListElementsRegisterWithFecha();*/
     }
 
 
