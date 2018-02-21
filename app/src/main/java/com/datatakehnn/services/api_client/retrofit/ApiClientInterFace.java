@@ -30,6 +30,13 @@ public interface ApiClientInterFace {
     @GET("api/Usuario/GetLoginUser/{Cedula}/{Password}")
     Call<Response_Request_Login> getLoginUser(@Path("Cedula") String cedula, @Path("Password") String password);
 
+    @GET("api/ResponseDataSync/getElementoByCiudadAndCodigo/{CodigoApoyo}/{Ciudad_Id}")
+    Call<Response_Request_Login> getElementoByCodigoAndCiudad(@Path("CodigoApoyo") String CodigoApoyo, @Path("Ciudad_Id") long Ciudad_Id);
+
+
+
+
+
     @Headers("Content-Type: application/json")
     @POST("api/Usuario/PostLoginUser")
     Call<Response_Request_Login> postLoginUser(@Body Request_Login body);
