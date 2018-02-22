@@ -1,5 +1,6 @@
 package com.datatakehnn.activities.poste;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +18,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,9 +30,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -54,13 +59,18 @@ import com.datatakehnn.models.longitud_elemento_model.Longitud_Elemento;
 import com.datatakehnn.models.material_model.Material;
 import com.datatakehnn.models.nivel_tension_elemento_model.Nivel_Tension_Elemento;
 import com.datatakehnn.models.novedad_model.Novedad;
+import com.datatakehnn.models.request_data_sync_model.Response_Post_Data_Sync;
 import com.datatakehnn.models.retenidas_model.Cantidad_Retenidas;
 import com.datatakehnn.models.tipo_direccion_model.Detalle_Tipo_Direccion;
 import com.datatakehnn.models.tipo_direccion_model.Tipo_Direccion;
 import com.datatakehnn.models.tipo_noveda_model.Tipo_Novedad;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.api_client.retrofit.ApiClient;
+import com.datatakehnn.services.api_services.elemento_service.GetElementoService;
+import com.datatakehnn.services.api_services.elemento_service.IElementoService;
+import com.datatakehnn.services.aplication.DataTakeApp;
 import com.datatakehnn.services.apps_integrator.IntentIntegrator;
+import com.datatakehnn.services.connection_internet.ConnectivityReceiver;
 import com.datatakehnn.services.coords.CoordsService;
 import com.datatakehnn.services.data_arrays.Cantidad_Retenidas_List;
 import com.datatakehnn.services.data_arrays.Detalle_Tipo_Cable_List;
@@ -69,6 +79,7 @@ import com.datatakehnn.services.data_arrays.Tipo_Direccion_List;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,13 +88,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PosteActivity extends AppCompatActivity {
+public class PosteActivity extends AppCompatActivity implements IElementoService,  ConnectivityReceiver.ConnectivityReceiverListener  {
 
     private static final String TAG = "";
     //UI Elements
@@ -159,6 +171,13 @@ public class PosteActivity extends AppCompatActivity {
     @BindView(R.id.linearLayoutCoordenadas)
     LinearLayout linearLayoutCoordenadas;
 
+
+    @BindView(R.id.btnSearchElemento)
+    Button btnSearchElemento;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.txtResults)
+    TextView txtResults;
     //Location
     Location location = new Location("Localizacion");
 
@@ -213,7 +232,11 @@ public class PosteActivity extends AppCompatActivity {
     ElementoController elementoController;
     UsuarioController usuarioController;
     SyncActivity syncActivity;
+    GetElementoService getElementoService;
     public CoordsService coordsService;
+
+
+    public Response_Post_Data_Sync responseSearchElemento= new Response_Post_Data_Sync();
 
 
     @Override
@@ -737,6 +760,8 @@ public class PosteActivity extends AppCompatActivity {
     }
 
     private void setupInjection() {
+
+        getElementoService=GetElementoService.getInstance(this);
         ACCION_ADD = getIntent().getExtras().getBoolean("ACCION_ADD");
         ACCION_UPDATE = getIntent().getExtras().getBoolean("ACCION_UPDATE");
         Elemento_Id = getIntent().getExtras().getLong("Elemento_Id");
@@ -793,7 +818,7 @@ public class PosteActivity extends AppCompatActivity {
     //endregion
 
     //region EVENTS
-    @OnClick({R.id.radioButtonNoCodigoApoyo, R.id.radioButtonSiCodigoApoyo, R.id.radioButtonNoPlaca, R.id.radioButtonSiPlaca, R.id.ibCalcularAltura})
+    @OnClick({R.id.radioButtonNoCodigoApoyo, R.id.radioButtonSiCodigoApoyo, R.id.radioButtonNoPlaca, R.id.radioButtonSiPlaca, R.id.ibCalcularAltura, R.id.btnSearchElemento, R.id.txtResults})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.radioButtonNoCodigoApoyo:
@@ -845,6 +870,37 @@ public class PosteActivity extends AppCompatActivity {
                     intentIntegrator.showDownloadDialog();
                 }
                 break;
+
+            case R.id.btnSearchElemento:
+
+               if(checkConnection()){
+                   boolean cancel = false;
+                   View focusView = null;
+                   if (edtCodigoApoyo.isEnabled() == true && edtCodigoApoyo.getText().toString().isEmpty()) {
+                       edtCodigoApoyo.setError(getString(R.string.error_field_required));
+                       focusView = edtCodigoApoyo;
+                       cancel = true;
+                   }
+                   if (cancel) {
+                       // There was an error; don't attempt login and focus the first
+                       // form field with an error.
+                       focusView.requestFocus();
+                   } else {
+                       progressBar.setVisibility(View.VISIBLE);
+                       Usuario usuario = new Usuario();
+                       usuario = usuarioController.getLoggedUser();
+                       getElementoService.getElementoAsync(this,edtCodigoApoyo.getText().toString(),usuario.getCiudad_Id());
+                   }
+
+               }else{
+                   showSnakBar(R.color.colorAccent,getString(R.string.message_not_connection) );
+               }
+
+                break;
+
+            case R.id.txtResults:
+                showDialogResponse();
+                break;
         }
     }
 
@@ -867,13 +923,10 @@ public class PosteActivity extends AppCompatActivity {
         }
     }
 
-
     //endregion
 
 
     //region OVERRIDES METHODS
-
-
     @Override
     protected void onDestroy() {
 
@@ -965,14 +1018,129 @@ public class PosteActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        DataTakeApp.getInstance().setConnectivityListener(this);
         registerReceiver(mNotificationReceiver, new IntentFilter("LOCATION"));
 
 
     }
+
     /*----------------------------------------------------------------------------------------------------------------------*/
 
 
     //endregion
+
+
+
+    //region Implemnts Interface Api
+    @Override
+    public void processFinishGetElemento(Response_Post_Data_Sync response) {
+        if (response.isSuccess()) {
+            progressBar.setVisibility(View.GONE);
+            txtResults.setText("El elemento ya existe, click para ver resultado");
+            responseSearchElemento=response;
+            //showConfirmacion(response);
+        } else {
+            responseSearchElemento=response;
+            txtResults.setText(response.getMessage());
+            showSnakBar(R.color.colorAccent, response.getMessage());
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void showSnakBar(int colorPrimary, String message) {
+        int color = Color.WHITE;
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.container), message, Snackbar.LENGTH_LONG);
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(this, colorPrimary));
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        //textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_home_bar, 0, 0, 0);
+        // textView.setCompoundDrawablePadding(getResources().getDimensionPixelOffset(R.dimen.activity_horizontal_margin));
+        textView.setTextColor(color);
+        snackbar.show();
+    }
+
+
+    //endregion
+
+
+    //region UI Elements
+
+    public Dialog showDialogResponse(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Detalle Busqueda");
+
+
+
+        String MessageElemento= "";
+        if(responseSearchElemento.isSuccess()){
+
+            String strDate = responseSearchElemento.getResult().getFechaLevantamiento();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            Date date = null;
+            try {
+                date = dateFormat.parse(strDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            ///System.out.println(date);
+            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
+            String formatted = format1.format(date);
+
+            MessageElemento="Numero Apoyo: "+responseSearchElemento.getResult().getElemento_Id()+"\n"+
+                    "Direccion: "+responseSearchElemento.getResult().getDireccion()+"\n"+
+                    "Coordenadas: "+responseSearchElemento.getResult().getCoordenadas()+"\n"+
+                    "Fecha Levantamiento: "+formatted;
+
+        }else{
+            MessageElemento=responseSearchElemento.getMessage();
+
+        }
+
+
+        builder.setMessage(MessageElemento);
+        builder.setNegativeButton("Descartar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Log.i("Dialogos", "Confirmacion Cancelada.");
+                onReturnActivity();
+            }
+        });
+
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setIcon(R.drawable.logo_datatakeh_nuevo);
+        return builder.show();
+    }
+
+    //endregion
+
+
+    //region CHECK CONNECTION INTERNET
+    // Method to manually check connection status
+    private boolean checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        return isConnected;
+        //showSnack(isConnected);
+    }
+
+
+    /**
+     * Callback will be triggered when there is change in
+     * network connection
+     */
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected) {
+            showSnakBar(R.color.colorAccent, getString(R.string.message_connection));
+        } else {
+            showSnakBar(R.color.colorAccent, getString(R.string.message_not_connection));
+        }
+    }
+
 }
 
 

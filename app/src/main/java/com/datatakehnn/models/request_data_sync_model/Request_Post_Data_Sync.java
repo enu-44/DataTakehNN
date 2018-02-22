@@ -158,8 +158,12 @@ public class Request_Post_Data_Sync {
         Fotos = fotos;
     }
 
+    public Request_Post_Data_Sync() {
 
-//Methods
+    }
+
+
+    //Methods
 
 
     public long getElemento_Id() {

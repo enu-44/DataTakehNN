@@ -31,7 +31,7 @@ public interface ApiClientInterFace {
     Call<Response_Request_Login> getLoginUser(@Path("Cedula") String cedula, @Path("Password") String password);
 
     @GET("api/ResponseDataSync/getElementoByCiudadAndCodigo/{CodigoApoyo}/{Ciudad_Id}")
-    Call<Response_Request_Login> getElementoByCodigoAndCiudad(@Path("CodigoApoyo") String CodigoApoyo, @Path("Ciudad_Id") long Ciudad_Id);
+    Call<Response_Post_Data_Sync> getElementoByCodigoAndCiudad(@Path("CodigoApoyo") String CodigoApoyo, @Path("Ciudad_Id") long Ciudad_Id);
 
 
 
