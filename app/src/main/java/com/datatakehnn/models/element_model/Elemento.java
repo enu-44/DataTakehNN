@@ -20,6 +20,8 @@ import java.util.Date;
 /**
  * Created by user on 11/11/2017.
  */
+
+
 @Table(database = DataSource.class)
 public class Elemento extends BaseModel implements Parcelable {
     //Atributes

@@ -29,6 +29,7 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+
 ext {
     playServicesMapsVersion = '11.4.2'
     minSdkVersion = 16

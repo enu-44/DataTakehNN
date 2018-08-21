@@ -68,17 +68,19 @@ public class NovedadActivity extends AppCompatActivity {
 
         if (getIntent().getExtras().getString("perdida") != null) {
             perdida = true;
+
+        }else{
+            perdida = false;
         }
         loadDetailsNovedad();
 
 
         //TODO Recibir parámetro de qué tipo de novedad es (Si es de código de apoyo, de placa, etc)
-
     }
 
     private void loadDetailsNovedad() {
 
-        listDetalleTipoNovedad = novedadController.getListNovedades(Tipo_Novedad);
+        listDetalleTipoNovedad = novedadController.getListNovedades(Tipo_Novedad,perdida);
 
         spinnerNovedad.setAdapter(null);
         ArrayAdapter<Detalle_Tipo_Novedad> detalle_tipo_novedadArrayAdapter =

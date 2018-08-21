@@ -13,6 +13,7 @@ import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -147,14 +148,22 @@ public class NovedadController {
     }
 
     //Get List detalle novedad
-    public List<Detalle_Tipo_Novedad> getListNovedades(String Nombre) {
+    public List<Detalle_Tipo_Novedad> getListNovedades(String Nombre,Boolean perdida) {
+        List<Detalle_Tipo_Novedad> lis=new ArrayList<Detalle_Tipo_Novedad>();
+        if(perdida){
+            //retorna la lista del tipo de novedad
+            lis = SQLite.select().from(Detalle_Tipo_Novedad.class).where(Detalle_Tipo_Novedad_Table.Nombre.eq(Nombre)).queryList();
 
-        //Busca el id del tipo de novedad
-        Tipo_Novedad tipo_novedad = SQLite.select().from(Tipo_Novedad.class).where(Tipo_Novedad_Table.Nombre.eq(Nombre)).querySingle();
+        }else{
+            //Busca el id del tipo de novedad
+            Tipo_Novedad tipo_novedad = SQLite.select().from(Tipo_Novedad.class).where(Tipo_Novedad_Table.Nombre.eq(Nombre)).querySingle();
+            //retorna la lista del tipo de novedad
+             lis = SQLite.select().from(Detalle_Tipo_Novedad.class).where(Detalle_Tipo_Novedad_Table.Tipo_Novedad_Id.eq(tipo_novedad.getTipo_Novedad_Id())).queryList();
 
-        //retorna la lista del tipo de novedad
-        List<Detalle_Tipo_Novedad> lis = SQLite.select().from(Detalle_Tipo_Novedad.class).where(Detalle_Tipo_Novedad_Table.Tipo_Novedad_Id.eq(tipo_novedad.getTipo_Novedad_Id())).queryList();
+        }
+
         return lis;
+
     }
 
     public Novedad getLast() {

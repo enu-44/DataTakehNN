@@ -10,6 +10,8 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 /**
  * Created by user on 13/11/2017.
  */
+
+
 @Table(database = DataSource.class)
 public class Equipo_Elemento  extends BaseModel {
 

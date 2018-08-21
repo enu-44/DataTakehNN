@@ -187,7 +187,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                         if(response){
                             startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), READ_REQUEST_CODE);
                         }
-
                     }
                 } else {
                     boolean response= doPermissionGrantedStuffs();

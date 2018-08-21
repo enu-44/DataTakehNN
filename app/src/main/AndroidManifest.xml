@@ -54,6 +54,7 @@
             android:name=".activities.sync.SyncActivity"
             android:configChanges="screenSize|orientation"
             android:theme="@style/MiTema.NoActionBar" />
+
         <activity
             android:name=".activities.novedad.NovedadActivity"
             android:configChanges="screenSize|orientation"

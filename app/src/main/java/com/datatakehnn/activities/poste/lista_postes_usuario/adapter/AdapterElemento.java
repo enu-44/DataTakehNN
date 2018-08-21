@@ -86,13 +86,11 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
         holder.txtArchivo.setText("Almacenamiento Interno/Pictures/DatatakeCamera/" + elemento.getElemento_Id());
 
         try {
-
             String hora_inicio = "";
             String hora_fin = "";
             Date dateObjStart = new Date();
             Date dateObjEnd = new Date();
             long minutos = 0;
-
 
             if (elemento.getHora_Inicio() != null) {
                 SimpleDateFormat sdfStart = new SimpleDateFormat("H:mm");
@@ -102,11 +100,9 @@ public class AdapterElemento extends RecyclerView.Adapter<AdapterElemento.Elemen
             }
 
             if (elemento.getHora_Fin() != null) {
-
                 SimpleDateFormat sdfEnd = new SimpleDateFormat("H:mm");
                 dateObjEnd = sdfEnd.parse(elemento.getHora_Fin());
                 hora_fin = new SimpleDateFormat("KK:mm a").format(dateObjEnd);
-
             }
 
             holder.txtHoraInicioFin.setText(hora_inicio + " - " + hora_fin);

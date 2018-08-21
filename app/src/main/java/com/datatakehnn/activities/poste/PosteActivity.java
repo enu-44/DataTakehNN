@@ -313,17 +313,28 @@ public class PosteActivity extends AppCompatActivity implements IElementoService
 
             //Material
             Material_Id = elementoUpdate.getMaterial_Id();
-            int material_id_integer = (int) (long) Material_Id;
-            int positionMaterial = material_id_integer - 1;
-            Material material = materials.get(positionMaterial);
-            spinnerMaterial.setText(material.getNombre());
+           // int material_id_integer = (int) (long) Material_Id;
+           /// int positionMaterial = material_id_integer - 1;
+            for (Material material : materials) {
+                if (material.getMaterial_Id()==Material_Id) {
+                    spinnerMaterial.setText(material.getNombre());
+                }
+            }
 
             //Longitud Poste
             Longitud_Elemento_Id = elementoUpdate.getLongitud_Elemento_Id();
-            int longitud_elemento_id_integer = (int) (long) Longitud_Elemento_Id;
-            int positionLongitudElemento = longitud_elemento_id_integer - 1;
-            Longitud_Elemento longitud_elemento = longitud_elementos.get(positionLongitudElemento);
-            spinnerLongitudPoste.setText(String.valueOf(longitud_elemento.getValor()));
+           /// int longitud_elemento_id_integer = (int) (long) Longitud_Elemento_Id;
+            //int positionLongitudElemento = longitud_elemento_id_integer - 1;
+          //  Longitud_Elemento longitud_elemento = longitud_elementos.get(longitud_elemento_id_integer);
+
+            for (Longitud_Elemento longitud : longitud_elementos) {
+                if (longitud.getLongitud_Elemento_Id()==Longitud_Elemento_Id) {
+                    spinnerLongitudPoste.setText(String.valueOf(longitud.getValor()));
+                }
+            }
+
+
+
 
 
             //Resistencia Mecánica
@@ -354,10 +365,15 @@ public class PosteActivity extends AppCompatActivity implements IElementoService
 
             //Nivel de Tensión
             Nivel_Tension_Elemento_Id = elementoUpdate.getNivel_Tension_Elemento_Id();
-            int nivel_tension_id_integer = (int) (long) Nivel_Tension_Elemento_Id;
-            int positionNivelTension = nivel_tension_id_integer - 1;
-            Nivel_Tension_Elemento nivel_tension_elemento = nivel_tension_elementos.get(positionNivelTension);
-            spinnerNivelTension.setText(nivel_tension_elemento.getNombre());
+            //int nivel_tension_id_integer = (int) (long) Nivel_Tension_Elemento_Id;
+            //int positionNivelTension = nivel_tension_id_integer - 1;
+            //Nivel_Tension_Elemento nivel_tension_elemento = nivel_tension_elementos.get(nivel_tension_id_integer);
+            //spinnerNivelTension.setText(nivel_tension_elemento.getNombre());
+            for (Nivel_Tension_Elemento nivel_tension : nivel_tension_elementos) {
+                if (nivel_tension.getNivel_Tension_Elemento_Id()==Nivel_Tension_Elemento_Id) {
+                    spinnerNivelTension.setText(nivel_tension.getNombre());
+                }
+            }
 
             //Altura Disponible
             Double altura_disponible = elementoUpdate.getAltura_Disponible();
