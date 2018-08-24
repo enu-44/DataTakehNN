@@ -49,6 +49,8 @@ import com.datatakehnn.activities.sync.SyncActivity;
 import com.datatakehnn.activities.sync.post_sync_activity.UploadDataActivity;
 import com.datatakehnn.config.DataSource;
 import com.datatakehnn.controllers.UsuarioController;
+import com.datatakehnn.models.ciudades_model.Ciudad;
+import com.datatakehnn.models.departmentos_model.Departamento;
 import com.datatakehnn.models.usuario_model.Usuario;
 import com.datatakehnn.services.api_client.retrofit.ApiClient;
 
@@ -634,8 +636,16 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         headerViewHolder.tvCCUsuario.setText("C.C " + usuarioLogued.getCedula());
         headerViewHolder.tvEmpresaUsuario.setText(usuarioController.getEmpresaById(empresaId).getNombre());
         if (ciudadId != 0 && departamentoId != 0) {
-            headerViewHolder.tvCiudadUsuario.setText(usuarioController.getCiudadById(ciudadId).getNombre() + ","
-                    + usuarioController.getDepartamentoById(departamentoId).getNombre());
+
+            Ciudad ciudad= usuarioController.getCiudadById(ciudadId);
+            Departamento departamento= usuarioController.getDepartamentoById(departamentoId);
+
+            if(ciudad!=null && departamento!=null){
+                headerViewHolder.tvCiudadUsuario.setText(ciudad.getNombre() + ","
+                        + departamento.getNombre());
+            }
+
+
         }
     }
     //endregion
